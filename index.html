@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boucle de Crise — Frankton</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background:#f5f5f5; color:#1A1A2E; }
+
+/* HEADER */
+.header { background:#1A1A2E; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; }
+.header-title { color:#E84545; font-weight:700; font-size:15px; letter-spacing:.04em; }
+.header-sub { color:#888; font-size:12px; }
+
+/* LAYOUT */
+.layout { display:flex; min-height:calc(100vh - 52px); }
+
+/* MAP */
+.map { width:360px; min-width:360px; background:#fff; border-right:1px solid #e0e0e0; padding:20px 14px; display:flex; flex-direction:column; align-items:center; gap:0; overflow-y:auto; }
+
+/* PANEL */
+.panel { flex:1; background:#fff; padding:28px 32px; overflow-y:auto; display:flex; align-items:center; justify-content:center; }
+.panel-empty { text-align:center; color:#aaa; font-size:14px; }
+.panel-empty span { font-size:32px; display:block; margin-bottom:12px; }
+.panel-content { display:none; max-width:560px; width:100%; }
+.panel-content.active { display:block; }
+
+.panel-tag { font-size:10px; font-weight:700; padding:3px 10px; border-radius:4px; background:#FDF0F0; color:#E84545; display:inline-block; margin-bottom:12px; letter-spacing:.06em; text-transform:uppercase; }
+.panel-title { font-size:20px; font-weight:700; color:#1A1A2E; margin-bottom:20px; }
+.panel-section { font-size:11px; font-weight:700; color:#1A1A2E; margin:18px 0 5px; text-transform:uppercase; letter-spacing:.06em; }
+.panel-body { font-size:14px; color:#555; line-height:1.7; }
+.panel-highlight { background:#FDF0F0; border-left:3px solid #E84545; padding:10px 16px; border-radius:0 6px 6px 0; margin:14px 0; font-size:14px; color:#333; font-style:italic; line-height:1.6; }
+
+/* MAP ELEMENTS */
+.sec { font-size:9px; color:#999; margin:12px 0 4px; text-align:center; letter-spacing:.07em; text-transform:uppercase; width:100%; }
+.arr { width:2px; height:22px; background:#ccc; margin:0 auto; position:relative; }
+.arr::after { content:''; position:absolute; bottom:-6px; left:-4px; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid #ccc; }
+.arr-red { background:#E84545; }
+.arr-red::after { border-top-color:#E84545; }
+.arr-green { background:#1D9E75; }
+.arr-green::after { border-top-color:#1D9E75; }
+
+.box { border-radius:8px; padding:9px 16px; text-align:center; cursor:pointer; transition:all .15s; border:0.5px solid #e0e0e0; background:#f8f8f8; }
+.box:hover { opacity:.8; transform:translateY(-1px); }
+.box.active { outline:2px solid #E84545; }
+.bt { font-size:13px; font-weight:600; color:#1A1A2E; }
+.bs { font-size:11px; color:#888; margin-top:2px; }
+
+.row3 { display:flex; gap:8px; justify-content:center; width:100%; }
+
+.proto-box { border-radius:8px; padding:9px 0; text-align:center; cursor:pointer; transition:all .15s; background:#FDF0F0; border:0.5px solid #f5b5b5; flex:1; }
+.proto-box:hover { opacity:.8; transform:translateY(-1px); }
+.proto-box.active { outline:2px solid #E84545; }
+.proto-box .bt { color:#E84545; }
+
+.entry-label { font-size:10px; color:#E84545; margin-bottom:3px; text-align:center; font-weight:600; }
+
+.step { border-radius:8px; padding:9px 16px; text-align:center; cursor:pointer; transition:all .15s; border:0.5px solid #e0e0e0; background:#f8f8f8; width:100%; border-left-width:4px; }
+.step:hover { opacity:.8; transform:translateY(-1px); }
+.step.active { outline:2px solid #E84545; }
+
+.loop-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; width:100%; }
+.loop-item { border-radius:6px; padding:8px 10px; cursor:pointer; transition:all .15s; background:#f8f8f8; border:0.5px solid #e0e0e0; border-left:3px solid #E84545; }
+.loop-item:hover { opacity:.8; transform:translateY(-1px); }
+.loop-item.active { outline:2px solid #E84545; }
+.loop-item .num { font-size:9px; color:#999; }
+.loop-item .name { font-size:12px; font-weight:600; color:#1A1A2E; margin-top:1px; }
+.loop-item .sub { font-size:10px; color:#888; margin-top:2px; }
+
+.final-box { border-radius:8px; padding:9px 16px; text-align:center; cursor:pointer; transition:all .15s; border:0.5px solid #e0e0e0; background:#f8f8f8; width:280px; }
+.final-box:hover { opacity:.8; transform:translateY(-1px); }
+.final-box.active { outline:2px solid #E84545; }
+.final-box-last { border:1.5px solid #E84545; }
+.final-box-last .bt { color:#E84545; }
+
+.divider { width:80%; height:1px; background:#e0e0e0; margin:14px auto 4px; }
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .layout { flex-direction:column; }
+  .map { width:100%; min-width:unset; border-right:none; border-bottom:1px solid #e0e0e0; }
+  .panel { padding:20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">FRANKTON — BOUCLE DE CRISE</div>
+  <div class="header-sub">Clique sur un element pour le detail</div>
+</div>
+
+<div class="layout">
+
+<!-- MAP -->
+<div class="map">
+
+  <div class="box" style="width:190px;" onclick="show('trigger')">
+    <div class="bt">Situation qui deraille</div>
+  </div>
+  <div class="arr arr-red"></div>
+
+  <div class="sec">Protocole de declenchement</div>
+  <div class="row3">
+    <div class="proto-box" onclick="show('stop')" id="b-stop"><div class="bt">STOP</div><div class="bs">Geste d'arret</div></div>
+    <div class="proto-box" onclick="show('souffle')" id="b-souffle"><div class="bt">SOUFFLE</div><div class="bs">3 cycles 4/6</div></div>
+    <div class="proto-box" onclick="show('boucle')" id="b-boucle"><div class="bt">BOUCLE</div><div class="bs">Question d'entree</div></div>
+  </div>
+  <div class="arr arr-red"></div>
+  <div class="entry-label">Mon equipe est-elle couverte ?</div>
+
+  <div class="sec">Mini-boucle — 4 etapes</div>
+  <div class="step" style="border-left-color:#E84545;" onclick="show('c1')" id="b-c1">
+    <div class="bt">1 — Couvrir et avancer</div>
+    <div class="bs">Securiser l'equipe · Qui fait quoi ?</div>
+  </div>
+  <div class="arr"></div>
+  <div class="step" style="border-left-color:#1D9E75;" onclick="show('c2')" id="b-c2">
+    <div class="bt">2 — Simplifier</div>
+    <div class="bs">Objectif en un mot</div>
+  </div>
+  <div class="arr"></div>
+  <div class="step" style="border-left-color:#1D9E75;" onclick="show('c3')" id="b-c3">
+    <div class="bt">3 — Prioriser</div>
+    <div class="bs">Seule action a fort impact</div>
+  </div>
+  <div class="arr"></div>
+  <div class="step" style="border-left-color:#534AB7;" onclick="show('c4')" id="b-c4">
+    <div class="bt">4 — Deleguer</div>
+    <div class="bs">Qui decide sans moi ?</div>
+  </div>
+
+  <div class="arr arr-green"></div>
+  <div class="divider"></div>
+  <div class="sec">Leadership Loop — items restants</div>
+
+  <div class="loop-grid">
+    <div class="loop-item" onclick="show('l1')" id="b-l1"><div class="num">1</div><div class="name">Temps</div><div class="sub">De combien je dispose ?</div></div>
+    <div class="loop-item" onclick="show('l6')" id="b-l6"><div class="num">6</div><div class="name">Ego et humilite</div><div class="sub">J'impose ou j'adapte ?</div></div>
+    <div class="loop-item" onclick="show('l7')" id="b-l7"><div class="num">7</div><div class="name">Emotions</div><div class="sub">Ca decide a ma place ?</div></div>
+    <div class="loop-item" onclick="show('l8')" id="b-l8"><div class="num">8</div><div class="name">Perspective</div><div class="sub">Ce que je ne vois pas ?</div></div>
+    <div class="loop-item" onclick="show('l9')" id="b-l9"><div class="num">9</div><div class="name">Mission</div><div class="sub">Ca fait encore avancer ?</div></div>
+    <div class="loop-item" onclick="show('l10')" id="b-l10"><div class="num">10</div><div class="name">Capital leadership</div><div class="sub">Ca vaut le coup ?</div></div>
+  </div>
+
+  <div class="arr"></div>
+  <div class="final-box" onclick="show('s3')" id="b-s3"><div class="bt">Etape 3 — Agir</div><div class="bs">Decision strategique post-analyse</div></div>
+  <div class="arr"></div>
+  <div class="final-box" onclick="show('s4')" id="b-s4"><div class="bt">Etape 4 — Debriefer</div><div class="bs">Apprendre de l'iteration</div></div>
+  <div class="arr"></div>
+  <div class="final-box final-box-last" onclick="show('s5')" id="b-s5"><div class="bt">Etape 5 — Relancer</div><div class="bs">Le probleme a-t-il change ?</div></div>
+
+</div>
+
+<!-- PANEL -->
+<div class="panel" id="panel">
+  <div class="panel-empty" id="empty"><span>→</span>Clique sur un element<br>pour voir le detail</div>
+
+  <div class="panel-content" id="p-trigger">
+    <div class="panel-tag">Declencheur</div>
+    <div class="panel-title">Situation qui deraille</div>
+    <div class="panel-section">Ce qui se passe</div>
+    <div class="panel-body">Le plan explose. L'ordre prevu ne peut plus etre respecte. Ton cerveau cherche la prochaine etape et ne la trouve plus — c'est le debut du freeze.</div>
+    <div class="panel-section">Ce que tu fais</div>
+    <div class="panel-body">Tu ne cherches pas a reconstruire le plan. Tu lances le protocole. Dans l'ordre. Toujours.</div>
+    <div class="panel-highlight">Le protocole n'est pas une solution au probleme. C'est une porte d'entree vers ton cerveau decisionnel.</div>
+  </div>
+
+  <div class="panel-content" id="p-stop">
+    <div class="panel-tag">Protocole</div>
+    <div class="panel-title">STOP — Geste d'arret</div>
+    <div class="panel-section">Pourquoi un geste physique</div>
+    <div class="panel-body">Le geste interrompt la spirale cognitive avant qu'elle s'emballe. Ton cerveau sous pression ne peut pas s'arreter sur une intention — il faut un signal physique, ancre dans le corps, qui coupe le flux.</div>
+    <div class="panel-section">Criteres du geste</div>
+    <div class="panel-body">Discret — utilisable en groupe sans attirer l'attention.<br>Physique — ancre dans le corps, pas dans la tete.<br>Unique — non utilise dans un autre contexte du quotidien.</div>
+    <div class="panel-section">Options possibles</div>
+    <div class="panel-body">Poser la main sur la cuisse. Serrer le poing 2 secondes. Appuyer un doigt sur la table. Poser les deux pieds a plat au sol.</div>
+    <div class="panel-highlight">Le geste doit venir de toi — pas d'un modele impose. A definir et valider en seance.</div>
+  </div>
+
+  <div class="panel-content" id="p-souffle">
+    <div class="panel-tag">Protocole</div>
+    <div class="panel-title">SOUFFLE — 3 cycles 4/6</div>
+    <div class="panel-section">Ce que ca fait neurologiquement</div>
+    <div class="panel-body">4 temps inspiration / 6 temps expiration. L'expiration plus longue active plus fortement ton systeme nerveux parasympathique — elle descend plus efficacement le niveau de stress que le 4/4 symetrique.</div>
+    <div class="panel-section">Pourquoi 4/6</div>
+    <div class="panel-body">L'expiration prolongee accentue la regulation parasympathique et favorise un retour au calme plus marque — adapte a un pattern de freeze sous pression.</div>
+    <div class="panel-section">Pourquoi 3 cycles</div>
+    <div class="panel-body">Un cycle ne suffit pas. Cinq, c'est trop long en situation operationnelle. Trois cycles representent environ 30 secondes — le minimum efficace.</div>
+    <div class="panel-highlight">Le souffle n'est pas optionnel. C'est ta porte d'entree neurologique vers la boucle.</div>
+  </div>
+
+  <div class="panel-content" id="p-boucle">
+    <div class="panel-tag">Protocole</div>
+    <div class="panel-title">BOUCLE — Question d'entree</div>
+    <div class="panel-section">Le role de la question d'entree</div>
+    <div class="panel-body">La question d'entree est l'ancre cognitive qui declenche la mini-boucle. Elle doit etre toujours la meme — repetee assez souvent pour devenir un reflexe automatique.</div>
+    <div class="panel-section">La question retenue</div>
+    <div class="panel-body" style="font-weight:600; color:#1A1A2E; font-size:16px; padding:12px 0;">Mon equipe est-elle couverte et alerte ?</div>
+    <div class="panel-section">Pourquoi celle-ci</div>
+    <div class="panel-body">C'est ton premier reflexe naturel sous pression. On part de ce qui te revient spontanement — pas de ce qui devrait logiquement venir en premier.</div>
+    <div class="panel-highlight">Si cette question ne resonne pas, explorer quelle question te revient naturellement quand la pression monte.</div>
+  </div>
+
+  <div class="panel-content" id="p-c1">
+    <div class="panel-tag">Mini-boucle</div>
+    <div class="panel-title">1 — Couvrir et avancer</div>
+    <div class="panel-section">La question d'entree</div>
+    <div class="panel-body">Ton equipe est-elle couverte et alerte ? Qui fait quoi si ca deraille ?</div>
+    <div class="panel-section">Si la reponse est NON</div>
+    <div class="panel-body">Tu ne passes pas a l'etape 2. Trois actions immediates :<br><br>
+    <b>Repositionner</b> — mettre l'equipe hors de la ligne de danger.<br>
+    <b>Signaler</b> — s'assurer que tout le monde sait ou sont les autres.<br>
+    <b>Proteger</b> — identifier qui est expose et qui peut absorber.</div>
+    <div class="panel-section">Le seuil minimal acceptable</div>
+    <div class="panel-body">Pas "l'equipe est parfaitement en securite". Mais "l'equipe est assez couverte pour qu'on puisse avancer". La nuance est critique si tu as tendance a freezer sur le controle.</div>
+    <div class="panel-section">Coordination minimale pre-mission</div>
+    <div class="panel-body">Tout le monde connait l'objectif en une phrase. Les roles de repli sont assignes. Le signal de ralliement est connu de tous.</div>
+    <div class="panel-highlight">Si ces trois elements sont valides avant le depart, l'etape 1 devient une verification — pas une negociation.</div>
+  </div>
+
+  <div class="panel-content" id="p-c2">
+    <div class="panel-tag">Mini-boucle</div>
+    <div class="panel-title">2 — Simplifier</div>
+    <div class="panel-section">La structure</div>
+    <div class="panel-body">Verbe + Cible + Contrainte. Un seul verbe. Une seule cible. Une seule contrainte non negociable.</div>
+    <div class="panel-section">Exemples</div>
+    <div class="panel-body">Securiser le perimetre nord avant le lever du jour.<br>Extraire le groupe 2 sans contact ennemi.<br>Tenir la position jusqu'a la releve.</div>
+    <div class="panel-section">Ce qui tue la formulation sous pression</div>
+    <div class="panel-body">Commencer par "il faudrait que..." — signe que ton cerveau cherche encore. Mettre deux verbes — c'est deux objectifs. Choisis-en un seul.</div>
+    <div class="panel-highlight">Formule l'objectif en moins de 10 secondes sur une situation fictive. Ton premier jet est souvent le bon.</div>
+  </div>
+
+  <div class="panel-content" id="p-c3">
+    <div class="panel-tag">Mini-boucle</div>
+    <div class="panel-title">3 — Prioriser</div>
+    <div class="panel-section">La question unique</div>
+    <div class="panel-body">Si je ne peux faire qu'une chose dans les 5 prochaines minutes, laquelle change le plus la situation ?</div>
+    <div class="panel-section">Le filtre en 3 secondes</div>
+    <div class="panel-body">Est-ce que ca change l'etat de l'equipe ? → Priorite haute.<br>Est-ce que ca change l'etat de la mission ? → Priorite haute.<br>Est-ce que ca regle un probleme de confort ou de process ? → Attendre.</div>
+    <div class="panel-section">Le piege principal</div>
+    <div class="panel-body">Confondre urgent et important. Ton cerveau traite l'urgence en premier. L'action a fort impact est souvent silencieuse.</div>
+    <div class="panel-highlight">Exercice : on te presente 5 actions possibles. Laquelle tu elimines en premier ? Eliminer est cognitivement plus simple que choisir sous stress.</div>
+  </div>
+
+  <div class="panel-content" id="p-c4">
+    <div class="panel-tag">Mini-boucle</div>
+    <div class="panel-title">4 — Deleguer</div>
+    <div class="panel-section">Le principe</div>
+    <div class="panel-body">Chaque decision que tu gardes pour toi coute de la bande passante. Deleguer, c'est liberer de l'espace mental pour les decisions qui ne peuvent venir que de toi.</div>
+    <div class="panel-section">Ce que tu delegues vs ce que tu gardes</div>
+    <div class="panel-body">Tu delegues : le <b>comment</b>.<br>Tu gardes : le <b>quoi</b> et le <b>pourquoi</b>.<br>L'objectif reste le tien. La facon de l'atteindre peut appartenir a quelqu'un d'autre.</div>
+    <div class="panel-section">Le filtre de delegation</div>
+    <div class="panel-body">Est-ce que quelqu'un d'autre a l'information pour decider ?<br>Est-ce que l'erreur est reversible ?<br>Est-ce que ca bloque ta capacite a voir la situation globale ?<br>Si oui a l'une de ces questions — deleguer.</div>
+    <div class="panel-highlight">Exercice : reprendre une situation passee ou tu as tout garde. Qu'est-ce qui aurait pu etre delegue sans risque ?</div>
+  </div>
+
+  <div class="panel-content" id="p-l1">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">1 — Temps</div>
+    <div class="panel-section">Pourquoi verifier le temps maintenant</div>
+    <div class="panel-body">Ton plan temporel initial est obsolete. La mini-boucle a pris du temps. Les actions d'urgence aussi. Verifier le temps maintenant remet ton cerveau dans la realite actuelle. C'est une remise a zero de la contrainte.</div>
+    <div class="panel-section">Ce que ca change concretement</div>
+    <div class="panel-body"><b>Temps court</b> : traiter les items 6 a 10 en version condensee — une question par item, pas deux.<br><b>Temps suffisant</b> : traiter la boucle complete, y compris les items de profondeur.</div>
+    <div class="panel-section">Ce que ca demande</div>
+    <div class="panel-body">Ton reflexe naturel est de vouloir tout controler — y compris le temps. Ce n'est pas "j'ai perdu du temps". C'est "voila ce que j'ai maintenant — qu'est-ce que je fais avec ?"</div>
+    <div class="panel-highlight">Le temps disponible calibre la profondeur de toute la boucle restante. C'est ton premier ancrage dans la realite post-crise.</div>
+  </div>
+
+  <div class="panel-content" id="p-l6">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">6 — Ego et humilite</div>
+    <div class="panel-section">Le probleme avec l'ego sous pression</div>
+    <div class="panel-body">Ton ego ne se presente pas comme de l'ego. Il se presente comme de la certitude. "Je sais ce qu'il faut faire" est souvent ton ego qui parle, pas ta lucidite.</div>
+    <div class="panel-section">Les 3 signaux</div>
+    <div class="panel-body">Tu n'ecoutes plus — les informations qui arrivent ne changent plus tes decisions.<br>Tu cherches a avoir raison plutot qu'a avoir la bonne reponse.<br>Tu parles plus que tu n'ecoutes.</div>
+    <div class="panel-section">La question de Jocko</div>
+    <div class="panel-body" style="font-weight:600; color:#1A1A2E;">Est-ce que tu imposes ton plan a la situation, ou est-ce que tu adaptes ton plan a la situation ?</div>
+    <div class="panel-highlight">En seance : decris une situation ou tu as maintenu ton plan malgre des signaux contraires. Pas pour te juger — pour reconnaitre le signal interieur.</div>
+  </div>
+
+  <div class="panel-content" id="p-l7">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">7 — Emotions</div>
+    <div class="panel-section">La distinction importante</div>
+    <div class="panel-body">Tes emotions ne sont pas le probleme. Elles transportent de l'information. Le probleme c'est quand elles prennent le volant a la place de ton cerveau decisionnel.</div>
+    <div class="panel-section">Les 3 signaux</div>
+    <div class="panel-body">Tes decisions deviennent reactives — tu reponds aux evenements au lieu de les anticiper.<br>Ton tunnel attentionnel se retrecit.<br>Ton ton change — voix plus courte, reponses plus tranchees.</div>
+    <div class="panel-section">L'outil de verification</div>
+    <div class="panel-body">Qu'est-ce que je ressens en ce moment ?<br>Est-ce que cette emotion m'aide a decider, ou est-ce qu'elle decide a ma place ?<br><br>Nommer l'emotion suffit souvent a reprendre le dessus.</div>
+    <div class="panel-highlight">Le SOUFFLE du protocole est deja une reponse physiologique. Ici, c'est une verification consciente : la regulation a-t-elle suffi ?</div>
+  </div>
+
+  <div class="panel-content" id="p-l8">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">8 — Perspective</div>
+    <div class="panel-section">Pourquoi c'est contre-intuitif</div>
+    <div class="panel-body">Sous pression, ton cerveau cherche la convergence — une seule reponse, vite. Chercher d'autres perspectives va exactement a l'encontre de ce reflexe. C'est un effort delibere.</div>
+    <div class="panel-section">Mouvement 1 — La question unique</div>
+    <div class="panel-body">Pose a un membre de ton equipe : <b>"Qu'est-ce que tu vois que je ne vois pas ?"</b><br>La reponse prend 10 secondes. Elle peut changer une decision.</div>
+    <div class="panel-section">Mouvement 2 — Le test de contradiction</div>
+    <div class="panel-body">Avant d'agir : "Qu'est-ce qui pourrait me prouver que j'ai tort ?"<br>Si aucune reponse ne vient, c'est souvent ton ego de l'item 6 qui est encore la.</div>
+    <div class="panel-highlight">La perspective n'invalide pas ta decision. Elle l'enrichit.</div>
+  </div>
+
+  <div class="panel-content" id="p-l9">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">9 — Mission</div>
+    <div class="panel-section">La question centrale</div>
+    <div class="panel-body">Ce que tu es en train de faire fait-il encore avancer la mission globale ? Pas la mission de la derniere heure. Pas le plan initial. La mission — celle qui existait avant que la situation deraille.</div>
+    <div class="panel-section">Pourquoi en position 9</div>
+    <div class="panel-body">Tu ne peux pas repondre honnetement a cette question si ego et emotions n'ont pas ete traites. Un cerveau encore sous influence va deformer la reponse pour justifier ce qu'il a deja fait.</div>
+    <div class="panel-section">Les 3 verifications</div>
+    <div class="panel-body">Ton objectif immediat sert encore l'objectif global.<br>Les ressources consommees sont justifiees.<br>Ton equipe est encore alignee sur le meme objectif.</div>
+    <div class="panel-highlight">Le plan n'est pas la mission. Le plan est un moyen. La mission, elle, tient.</div>
+  </div>
+
+  <div class="panel-content" id="p-l10">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">10 — Capital de leadership</div>
+    <div class="panel-section">Ce que c'est</div>
+    <div class="panel-body">La confiance accumulee ou depensee avec chaque personne de ton equipe. Elle se construit lentement et se perd vite. En situation de crise, les deux mouvements s'accelerent.</div>
+    <div class="panel-section">Ce qui genere du capital en crise</div>
+    <div class="panel-body">Prendre une decision difficile clairement.<br>Assumer une erreur sans chercher un responsable.<br>Proteger un membre de ton equipe au detriment du plan.</div>
+    <div class="panel-section">Ce qui consomme du capital</div>
+    <div class="panel-body">Imposer ton plan malgre les signaux — item 6.<br>Perdre le controle emotionnel devant l'equipe — item 7.<br>Ne pas demander de perspectives — item 8.</div>
+    <div class="panel-highlight">Ce qui compte plus que le freeze lui-meme, c'est ce que tu fais apres. Un protocole clair genere plus de capital qu'un chef qui n'a jamais freeze mais dont les decisions sont floues.</div>
+  </div>
+
+  <div class="panel-content" id="p-s3">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">Etape 3 — Agir</div>
+    <div class="panel-section">Ce que c'est</div>
+    <div class="panel-body">Ce n'est pas une action d'urgence — ca, c'etait la mini-boucle. C'est la decision strategique qui decoule de ton analyse complete des 10 items. Tu as pris du recul — ego, emotions, perspectives, mission, capital. L'action qui sort de la est plus reflechie, plus alignee.</div>
+    <div class="panel-section">La question</div>
+    <div class="panel-body" style="font-weight:600; color:#1A1A2E;">Quelle est l'action prioritaire a prendre sur la base de cette iteration de la boucle ?</div>
+    <div class="panel-highlight">Mini-boucle = gerer la crise. Etape 3 = decider apres analyse complete. Ce sont deux niveaux distincts.</div>
+  </div>
+
+  <div class="panel-content" id="p-s4">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">Etape 4 — Debriefer</div>
+    <div class="panel-section">Ce que c'est</div>
+    <div class="panel-body">Ce n'est pas un debrief de la crise. C'est un debrief de l'iteration de la boucle elle-meme. Qu'est-ce que cette passe complete t'a appris ? Que ferais-tu differemment la prochaine fois que tu la lances ?</div>
+    <div class="panel-section">Les questions</div>
+    <div class="panel-body">Quel retour tu obtiens maintenant que tu as agi ?<br>Que te dit ce retour ?<br>Que faire differemment ?</div>
+    <div class="panel-highlight">Trois niveaux distincts : mini-boucle = gerer la crise / etape 3 = decider / etape 4 = apprendre du systeme lui-meme.</div>
+  </div>
+
+  <div class="panel-content" id="p-s5">
+    <div class="panel-tag">Leadership Loop</div>
+    <div class="panel-title">Etape 5 — Relancer la boucle</div>
+    <div class="panel-section">La question avant chaque iteration</div>
+    <div class="panel-body">Suis-je bloque dans la boucle ?<br>Le probleme a-t-il change ?<br>Que devrais-je faire differemment ?</div>
+    <div class="panel-section">Quand relancer</div>
+    <div class="panel-body">Si la situation a evolue. Si une action prise a genere de nouveaux problemes. Si ton equipe ou tes ressources ont change.</div>
+    <div class="panel-highlight">La boucle n'a pas de fin fixe. Elle tourne jusqu'a ce que la mission soit accomplie ou que le probleme soit resolu.</div>
+  </div>
+
+</div>
+</div>
+
+<script>
+let current = null;
+const ids = ['trigger','stop','souffle','boucle','c1','c2','c3','c4','l1','l6','l7','l8','l9','l10','s3','s4','s5'];
+
+function show(id) {
+  if (current) {
+    const prev = document.getElementById('b-' + current);
+    if (prev) prev.classList.remove('active');
+    const prevP = document.getElementById('p-' + current);
+    if (prevP) prevP.classList.remove('active');
+  }
+  current = id;
+  const el = document.getElementById('b-' + id);
+  if (el) el.classList.add('active');
+  const p = document.getElementById('p-' + id);
+  if (p) p.classList.add('active');
+  document.getElementById('empty').style.display = 'none';
+  // scroll panel to top
+  document.getElementById('panel').scrollTop = 0;
+  // on mobile, scroll to panel
+  if (window.innerWidth <= 700) {
+    document.getElementById('panel').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+</script>
+</body>
+</html>
