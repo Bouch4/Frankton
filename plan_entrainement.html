@@ -681,5 +681,54 @@ function updateProgress(week) {
   else { wi.classList.remove('done'); }
 }
 </script>
-</body>
+<!-- ==== ENVOI PREPARATEUR (Frankton) — coller juste avant </body> ==== -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+.fk-sendbar{position:fixed;left:0;right:0;bottom:0;background:#1A1A2E;border-top:2px solid #E84545;padding:9px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;z-index:9999;box-shadow:0 -4px 16px rgba(0,0,0,.25);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;}
+.fk-sendbar input{flex:0 1 190px;padding:9px 11px;border:1px solid #3a3a5c;border-radius:8px;background:#fff;font-size:14px;color:#1A1A2E;}
+.fk-sendbar button{background:#E84545;color:#fff;border:none;border-radius:8px;padding:10px 15px;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;}
+.fk-sendbar button.ghost{background:transparent;color:#a9a6c4;text-decoration:underline;padding:8px;font-weight:500;text-transform:none;letter-spacing:0;}
+.fk-sendbar .st{color:#EDEAF6;font-size:12px;width:100%;text-align:center;min-height:13px;}
+.fk-sendbar .st.ok{color:#7ee0b8;}.fk-sendbar .st.err{color:#F5A623;}
+.panel,.timeline{padding-bottom:130px;}
+</style>
+<div class="fk-sendbar">
+  <input id="fkName" autocomplete="off" placeholder="Ton prenom">
+  <button onclick="fkSend()">Envoyer mon suivi a mon preparateur</button>
+  <button class="ghost" onclick="fkCopy()">Copier</button>
+  <span class="st" id="fkStatus"></span>
+</div>
+<script>
+var FK_EMAILJS={publicKey:"0MtCqya8qs7Xxmls3",serviceId:"service_qiyusj5",templateId:"template_cx5bh3d",toEmail:"contact@franktontactical.fr"};
+try{if(typeof emailjs!=="undefined")emailjs.init({publicKey:FK_EMAILJS.publicKey});}catch(e){}
+function fkStatus(m,c){var s=document.getElementById("fkStatus");s.textContent=m;s.className="st"+(c?" "+c:"");}
+function fkSummary(){
+  var name=((document.getElementById("fkName")||{}).value||"").trim()||"(sans nom)";
+  var out="FRANKTON - Plan d'entrainement (Boucle de crise)\nAthlete : "+name+"\nDate : "+new Date().toLocaleDateString("fr-FR")+"\n";
+  var done={};
+  if(typeof taskState!=="undefined"){Object.keys(taskState).forEach(function(k){if(taskState[k]){var w=k.split("-")[0];(done[w]=done[w]||[]).push(k);}});}
+  out+="\n=== Taches validees ===";
+  var ws=Object.keys(done).sort(function(a,b){return a-b;});
+  if(!ws.length)out+="\n(aucune tache cochee)";
+  ws.forEach(function(w){out+="\n\n[Semaine "+w+"]";done[w].forEach(function(k){var el=document.getElementById("t-"+k),t=el?el.querySelector(".task-title"):null;out+="\n- "+(t?t.textContent.trim():k);});});
+  out+="\n\n=== Notes de l'athlete ===";var any=false;
+  for(var i=1;i<=12;i++){var ta=document.getElementById("notes-"+i);if(ta&&ta.value.trim()){any=true;var lbl="Semaine "+i;try{var st=ta.closest(".debrief-box").previousElementSibling;if(st&&st.classList.contains("section-title"))lbl="Semaine "+i+" - "+st.textContent.trim();}catch(e){}out+="\n\n["+lbl+"]\n"+ta.value.trim();}}
+  if(!any)out+="\n(aucune note)";
+  return out;
+}
+function fkSend(){
+  var name=((document.getElementById("fkName")||{}).value||"").trim();
+  if(!name){fkStatus("Ecris ton prenom avant d'envoyer.","err");return;}
+  if(typeof emailjs==="undefined"){fkStatus("EmailJS non charge (page pas hebergee ?).","err");return;}
+  fkStatus("Envoi en cours...","");
+  emailjs.send(FK_EMAILJS.serviceId,FK_EMAILJS.templateId,{athlete:name,date:new Date().toLocaleDateString("fr-FR"),summary:fkSummary(),to_email:FK_EMAILJS.toEmail}).then(function(){fkStatus("Suivi envoye a ton preparateur.","ok");},function(){fkStatus("Echec de l'envoi. Utilise Copier.","err");});
+}
+function fkCopy(){
+  var txt=fkSummary();
+  function ok(){fkStatus("Suivi copie - colle-le ou tu veux.","ok");}
+  function fb(){var t=document.createElement("textarea");t.value=txt;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");ok();}catch(e){fkStatus("Copie impossible.","err");}document.body.removeChild(t);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,fb);}else fb();
+}
+</script>
+<!-- ==== fin ENVOI PREPARATEUR ==== --></body>
 </html>
