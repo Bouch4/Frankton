@@ -195,13 +195,15 @@
   .sendstatus{text-align:center;font-size:13px;min-height:16px;color:var(--ink-2);}
   .sendstatus.ok{color:var(--green,#639922);}
   .sendstatus.err{color:var(--amber);}
+  .radardl{width:100%;margin:2px 0 6px;background:var(--navy-2);border:1px solid var(--teal);color:var(--teal);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:14px;padding:12px;border-radius:11px;cursor:pointer;}
+  .radardl:hover{background:var(--teal);color:#0f1220;}
   .foot{margin-top:22px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.2em;font-size:11px;color:var(--ink-3);}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
   @media print{
     @page{margin:14mm;}
     body{background:#fff!important;color:#111!important;display:block!important;padding:0!important;}
     .wrap{max-width:none!important;display:block!important;}
-    #cover,#game,.topbar,.sendbox,.btnrow,.foot,.taphint{display:none!important;}
+    #cover,#game,.topbar,.sendbox,.btnrow,.foot,.taphint,.radardl{display:none!important;}
     #result{display:block!important;}
     .eyebrow{color:#E84545!important;}
     h1{color:#111!important;}
@@ -247,6 +249,7 @@
     <h1 style="font-size:clamp(24px,6vw,34px)">Pour qui tu joues</h1>
     <div class="constell" id="constell"></div>
     <div class="dotinfo" id="dotinfo"></div>
+    <button class="radardl" onclick="downloadRadar()">⬇ Télécharger le radar (image PNG)</button>
     <div class="ranktitle" id="ranktitle">Ce pour quoi tu joues le plus</div>
     <div class="rank" id="ranklist"></div>
     <div class="sendbox">
@@ -553,6 +556,34 @@ function copyResume(){
   else fbCopy(txt);
 }
 function fbCopy(txt){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");setStatus("Resume copie.","ok");}catch(e){setStatus("Copie impossible - imprime en PDF.","err");}document.body.removeChild(ta);}
+function downloadRadar(){
+  var host=document.getElementById("constell"), svgEl=host?host.querySelector("svg"):null;
+  if(!svgEl){setStatus("Radar introuvable.","err");return;}
+  var vb=(svgEl.getAttribute("viewBox")||"0 0 300 300").split(/\s+/).map(Number);
+  var scale=2.4, W=Math.round(vb[2]*scale), H=Math.round(vb[3]*scale);
+  var clone=svgEl.cloneNode(true);
+  clone.setAttribute("width",W);clone.setAttribute("height",H);
+  var bg=document.createElementNS("http://www.w3.org/2000/svg","rect");
+  bg.setAttribute("x",vb[0]);bg.setAttribute("y",vb[1]);bg.setAttribute("width",vb[2]);bg.setAttribute("height",vb[3]);bg.setAttribute("fill","#1A1A2E");
+  clone.insertBefore(bg,clone.firstChild);
+  var xml=new XMLSerializer().serializeToString(clone);
+  var src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(xml);
+  var img=new Image();
+  img.onload=function(){
+    try{
+      var c=document.createElement("canvas");c.width=W;c.height=H;
+      var ctx=c.getContext("2d");ctx.fillStyle="#1A1A2E";ctx.fillRect(0,0,W,H);ctx.drawImage(img,0,0,W,H);
+      var url=c.toDataURL("image/png");
+      var name=((document.getElementById("athleteName")||{}).value||"").trim();
+      var a=document.createElement("a");
+      a.download="radar-pour-qui-je-joue"+(name?("-"+name.replace(/[^\w-]/g,"")):"")+".png";
+      a.href=url;document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setStatus("Radar telecharge (image PNG).","ok");
+    }catch(err){setStatus("Telechargement bloque par le navigateur - fais un Imprimer/PDF a la place.","err");}
+  };
+  img.onerror=function(){setStatus("Impossible de generer l'image - fais un Imprimer/PDF.","err");};
+  img.src=src;
+}
 try{if(typeof emailjs!=="undefined"&&EMAILJS.publicKey.indexOf("TA_")!==0){emailjs.init({publicKey:EMAILJS.publicKey});}}catch(e){}
 document.getElementById("constell").addEventListener("click",onDotClick);
 </script>
