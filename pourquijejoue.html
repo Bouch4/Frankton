@@ -546,7 +546,7 @@ function sendResults(){
   if(typeof emailjs==="undefined"){setStatus("Librairie EmailJS non chargee (page pas encore hebergee ?).","err");return;}
   if(EMAILJS.publicKey.indexOf("TA_")===0||EMAILJS.serviceId.indexOf("TON_")===0){setStatus("EmailJS pas encore configure (colle tes 3 identifiants dans le code).","err");return;}
   setStatus("Envoi en cours...","");
-  emailjs.send(EMAILJS.serviceId,EMAILJS.templateId,{athlete:name,date:new Date().toLocaleDateString("fr-FR"),summary:buildSummary(),to_email:EMAILJS.toEmail}).then(function(){
+  emailjs.send(EMAILJS.serviceId,EMAILJS.templateId,{athlete:name,date:new Date().toLocaleDateString("fr-FR"),summary:buildSummary(),to_email:EMAILJS.toEmail,sujet:"Pour qui je joue - "+name}).then(function(){
     setStatus("Resultats envoyes a ton preparateur.","ok");
   },function(){setStatus("Echec de l'envoi. Reessaie, ou utilise Copier le resume.","err");});
 }
