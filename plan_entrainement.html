@@ -721,7 +721,7 @@ function fkSend(){
   if(!name){fkStatus("Ecris ton prenom avant d'envoyer.","err");return;}
   if(typeof emailjs==="undefined"){fkStatus("EmailJS non charge (page pas hebergee ?).","err");return;}
   fkStatus("Envoi en cours...","");
-  emailjs.send(FK_EMAILJS.serviceId,FK_EMAILJS.templateId,{athlete:name,date:new Date().toLocaleDateString("fr-FR"),summary:fkSummary(),to_email:FK_EMAILJS.toEmail}).then(function(){fkStatus("Suivi envoye a ton preparateur.","ok");},function(){fkStatus("Echec de l'envoi. Utilise Copier.","err");});
+  emailjs.send(FK_EMAILJS.serviceId,FK_EMAILJS.templateId,{athlete:name,date:new Date().toLocaleDateString("fr-FR"),summary:fkSummary(),to_email:FK_EMAILJS.toEmail,sujet:"Plan d'entrainement - "+name}).then(function(){fkStatus("Suivi envoye a ton preparateur.","ok");},function(){fkStatus("Echec de l'envoi. Utilise Copier.","err");});
 }
 function fkCopy(){
   var txt=fkSummary();
