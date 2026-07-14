@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frankton — Préparation mentale</title>
+<title>Leadership Loop — Frankton Préparation Mentale</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -18,15 +18,16 @@
   body{min-height:100vh;padding:34px 18px 70px}
   .wrap{max-width:920px;margin:0 auto}
 
-  .top{display:flex;align-items:center;gap:14px;margin-bottom:44px}
-  .logo{width:44px;height:44px;border-radius:12px;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;color:#fff}
-  .top .brandtxt{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.14em;font-size:13px;color:var(--muted);text-transform:uppercase}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:40px;flex-wrap:wrap}
+  .brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.14em;font-size:14px;color:var(--muted);text-transform:uppercase}
+  .brand b{color:var(--ink)}
+  .back{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:9px 16px;border-radius:10px;transition:.15s}
+  .back:hover{border-color:var(--ink);color:var(--ink)}
 
-  .hero{margin-bottom:38px}
+  .hero{margin-bottom:34px}
   .eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:13px;color:var(--amber)}
-  h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(56px,13vw,120px);line-height:.86;letter-spacing:.01em;text-transform:uppercase;margin:8px 0 10px}
-  .tagline{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(20px,3vw,26px);color:var(--ink)}
-  .hero .lead{color:var(--muted);font-size:16px;margin-top:14px}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(44px,9vw,84px);line-height:.9;letter-spacing:.01em;text-transform:uppercase;margin:6px 0 12px}
+  .hero p{color:var(--muted);font-size:16px;line-height:1.55;max-width:56ch}
 
   .tools{display:flex;flex-direction:column;gap:14px}
   .tool{display:flex;align-items:center;gap:20px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 24px;text-decoration:none;color:var(--ink);transition:.18s;position:relative;overflow:hidden}
@@ -39,14 +40,8 @@
   .tool:hover .arrow{color:var(--accent,var(--red));transform:translateX(3px)}
   .tool::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--red))}
 
-  .tool.feature{background:linear-gradient(120deg,var(--surface) 0%,#312a52 100%)}
-  .t-jeux{--accent:var(--amber)}
-  .t-leadership{--accent:var(--red)}
-  .t-obj{--accent:var(--green)}
-  .t-pourqui{--accent:var(--blue)}
-
-  .sep{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--muted);margin:26px 0 10px;display:flex;align-items:center;gap:10px}
-  .sep::after{content:"";flex:1;height:1px;background:var(--line)}
+  .t-boucle{--accent:var(--red)}
+  .t-plan{--accent:var(--amber)}
 
   .foot{margin-top:48px;color:var(--muted);font-size:12.5px;letter-spacing:.03em;text-align:center;line-height:1.7}
   .foot a{color:var(--muted);text-decoration:none}
@@ -56,54 +51,31 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="logo">F</div>
-    <div class="brandtxt">Préparation mentale</div>
+    <div class="brand"><b>FRANKTON</b> · Préparation Mentale</div>
+    <a class="back" href="index.html">← Accueil</a>
   </div>
 
   <div class="hero">
-    <div class="eyebrow">Préparation mentale</div>
-    <h1>Frankton</h1>
-    <div class="tagline">Prêt à performer</div>
-    <div class="lead">Choisis ton outil.</div>
+    <div class="eyebrow">Leadership Loop</div>
+    <h1>Reprendre<br>le contrôle</h1>
+    <p>Gérer l'urgence, puis structurer la suite. La boucle qui te ramène du pic de pression vers un plan d'action clair.</p>
   </div>
 
   <div class="tools">
-    <a class="tool feature t-jeux" href="jeux.html">
-      <div class="glyph">✦</div>
-      <div class="body">
-        <div class="tname">Outils / Jeux</div>
-        <div class="tdesc">Les 4 outils interactifs&nbsp;: Pour qui je joue, Ego / Tâche, Stress, Motivations profondes.</div>
-      </div>
-      <div class="arrow">›</div>
-    </a>
-
-    <a class="tool feature t-leadership" href="leadership_loop.html">
+    <a class="tool t-boucle" href="boucle-crise.html">
       <div class="glyph">◆</div>
       <div class="body">
-        <div class="tname">Leadership Loop</div>
-        <div class="tdesc">Boucle de crise et Plan d'entraînement&nbsp;: gérer l'urgence, puis structurer la suite.</div>
-      </div>
-      <div class="arrow">›</div>
-    </a>
-  </div>
-
-  <div class="sep">Accès rapides</div>
-
-  <div class="tools">
-    <a class="tool t-obj" href="objectifs.html">
-      <div class="glyph">●</div>
-      <div class="body">
-        <div class="tname">Objectifs</div>
-        <div class="tdesc">Poser tes objectifs et garder le cap.</div>
+        <div class="tname">Boucle de crise</div>
+        <div class="tdesc">Reprendre le contrôle dans l'urgence, puis enchaîner vers ton plan.</div>
       </div>
       <div class="arrow">›</div>
     </a>
 
-    <a class="tool t-pourqui" href="pourquijejoue.html">
-      <div class="glyph">♥</div>
+    <a class="tool t-plan" href="plan_entrainement.html">
+      <div class="glyph">▲</div>
       <div class="body">
-        <div class="tname">Pour qui je joue</div>
-        <div class="tdesc">Cartographie tes moteurs et pour qui tu joues vraiment.</div>
+        <div class="tname">Plan d'entraînement</div>
+        <div class="tdesc">Ton plan mental structuré, étape par étape.</div>
       </div>
       <div class="arrow">›</div>
     </a>
