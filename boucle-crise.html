@@ -88,7 +88,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
 
 <div class="header">
   <div class="header-title">FRANKTON — BOUCLE DE CRISE</div>
-  <div class="header-sub">Clique sur un element pour le detail</div>
+  <div class="header-sub">Clique sur un élément pour le détail</div>
 </div>
 
 <div class="layout">
@@ -101,19 +101,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   </div>
   <div class="arr arr-red"></div>
 
-  <div class="sec">Protocole de declenchement</div>
+  <div class="sec">Protocole de déclenchement</div>
   <div class="row3">
     <div class="proto-box" onclick="show('stop')" id="b-stop"><div class="bt">STOP</div><div class="bs">Geste d'arret</div></div>
     <div class="proto-box" onclick="show('souffle')" id="b-souffle"><div class="bt">SOUFFLE</div><div class="bs">3 cycles 4/6</div></div>
-    <div class="proto-box" onclick="show('boucle')" id="b-boucle"><div class="bt">BOUCLE</div><div class="bs">Question d'entree</div></div>
+    <div class="proto-box" onclick="show('boucle')" id="b-boucle"><div class="bt">BOUCLE</div><div class="bs">Question d'entrée</div></div>
   </div>
   <div class="arr arr-red"></div>
-  <div class="entry-label">Mon equipe est-elle couverte ?</div>
+  <div class="entry-label">Mon équipe est-elle couverte ?</div>
 
-  <div class="sec">Mini-boucle — 4 etapes</div>
+  <div class="sec">Mini-boucle — 4 étapes</div>
   <div class="step" style="border-left-color:#E84545;" onclick="show('c1')" id="b-c1">
     <div class="bt">1 — Couvrir et avancer</div>
-    <div class="bs">Securiser l'equipe · Qui fait quoi ?</div>
+    <div class="bs">Securiser l'équipe · Qui fait quoi ?</div>
   </div>
   <div class="arr"></div>
   <div class="step" style="border-left-color:#1D9E75;" onclick="show('c2')" id="b-c2">
@@ -127,7 +127,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   </div>
   <div class="arr"></div>
   <div class="step" style="border-left-color:#534AB7;" onclick="show('c4')" id="b-c4">
-    <div class="bt">4 — Deleguer</div>
+    <div class="bt">4 — Déléguer</div>
     <div class="bs">Qui decide sans moi ?</div>
   </div>
 
@@ -138,86 +138,86 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   <div class="loop-grid">
     <div class="loop-item" onclick="show('l1')" id="b-l1"><div class="num">1</div><div class="name">Temps</div><div class="sub">De combien je dispose ?</div></div>
     <div class="loop-item" onclick="show('l6')" id="b-l6"><div class="num">6</div><div class="name">Ego et humilite</div><div class="sub">J'impose ou j'adapte ?</div></div>
-    <div class="loop-item" onclick="show('l7')" id="b-l7"><div class="num">7</div><div class="name">Emotions</div><div class="sub">Ca decide a ma place ?</div></div>
+    <div class="loop-item" onclick="show('l7')" id="b-l7"><div class="num">7</div><div class="name">Émotions</div><div class="sub">Ca décide à ma place ?</div></div>
     <div class="loop-item" onclick="show('l8')" id="b-l8"><div class="num">8</div><div class="name">Perspective</div><div class="sub">Ce que je ne vois pas ?</div></div>
     <div class="loop-item" onclick="show('l9')" id="b-l9"><div class="num">9</div><div class="name">Mission</div><div class="sub">Ca fait encore avancer ?</div></div>
     <div class="loop-item" onclick="show('l10')" id="b-l10"><div class="num">10</div><div class="name">Capital leadership</div><div class="sub">Ca vaut le coup ?</div></div>
   </div>
 
   <div class="arr"></div>
-  <div class="final-box" onclick="show('s3')" id="b-s3"><div class="bt">Etape 3 — Agir</div><div class="bs">Decision strategique post-analyse</div></div>
+  <div class="final-box" onclick="show('s3')" id="b-s3"><div class="bt">Étape 3 — Agir</div><div class="bs">Décision stratégique post-analyse</div></div>
   <div class="arr"></div>
-  <div class="final-box" onclick="show('s4')" id="b-s4"><div class="bt">Etape 4 — Debriefer</div><div class="bs">Apprendre de l'iteration</div></div>
+  <div class="final-box" onclick="show('s4')" id="b-s4"><div class="bt">Étape 4 — Débriefer</div><div class="bs">Apprendre de l'itération</div></div>
   <div class="arr"></div>
-  <div class="final-box final-box-last" onclick="show('s5')" id="b-s5"><div class="bt">Etape 5 — Relancer</div><div class="bs">Le probleme a-t-il change ?</div></div>
+  <div class="final-box final-box-last" onclick="show('s5')" id="b-s5"><div class="bt">Étape 5 — Relancer</div><div class="bs">Le problème a-t-il change ?</div></div>
 
 </div>
 
 <!-- PANEL -->
 <div class="panel" id="panel">
-  <div class="panel-empty" id="empty"><span>→</span>Clique sur un element<br>pour voir le detail</div>
+  <div class="panel-empty" id="empty"><span>→</span>Clique sur un élément<br>pour voir le détail</div>
 
   <div class="panel-content" id="p-trigger">
-    <div class="panel-tag">Declencheur</div>
+    <div class="panel-tag">Déclencheur</div>
     <div class="panel-title">Situation qui deraille</div>
     <div class="panel-section">Ce qui se passe</div>
-    <div class="panel-body">Le plan explose. L'ordre prevu ne peut plus etre respecte. Ton cerveau cherche la prochaine etape et ne la trouve plus — c'est le debut du freeze.</div>
+    <div class="panel-body">Le plan explose. L'ordre prevu ne peut plus etre respecte. Ton cerveau cherche la prochaine étape et ne la trouve plus — c'est le début du freeze.</div>
     <div class="panel-section">Ce que tu fais</div>
     <div class="panel-body">Tu ne cherches pas a reconstruire le plan. Tu lances le protocole. Dans l'ordre. Toujours.</div>
-    <div class="panel-highlight">Le protocole n'est pas une solution au probleme. C'est une porte d'entree vers ton cerveau decisionnel.</div>
+    <div class="panel-highlight">Le protocole n'est pas une solution au problème. C'est une porte d'entrée vers ton cerveau décisionnel.</div>
   </div>
 
   <div class="panel-content" id="p-stop">
     <div class="panel-tag">Protocole</div>
     <div class="panel-title">STOP — Geste d'arret</div>
     <div class="panel-section">Pourquoi un geste physique</div>
-    <div class="panel-body">Le geste interrompt la spirale cognitive avant qu'elle s'emballe. Ton cerveau sous pression ne peut pas s'arreter sur une intention — il faut un signal physique, ancre dans le corps, qui coupe le flux.</div>
+    <div class="panel-body">Le geste interrompt la spirale cognitive avant qu'elle s'emballe. Ton cerveau sous pression ne peut pas s'arreter sur une intention — il faut un signal physique, ancré dans le corps, qui coupe le flux.</div>
     <div class="panel-section">Criteres du geste</div>
-    <div class="panel-body">Discret — utilisable en groupe sans attirer l'attention.<br>Physique — ancre dans le corps, pas dans la tete.<br>Unique — non utilise dans un autre contexte du quotidien.</div>
+    <div class="panel-body">Discret — utilisable en groupe sans attirer l'attention.<br>Physique — ancré dans le corps, pas dans la tête.<br>Unique — non utilise dans un autre contexte du quotidien.</div>
     <div class="panel-section">Options possibles</div>
-    <div class="panel-body">Poser la main sur la cuisse. Serrer le poing 2 secondes. Appuyer un doigt sur la table. Poser les deux pieds a plat au sol.</div>
-    <div class="panel-highlight">Le geste doit venir de toi — pas d'un modele impose. A definir et valider en seance.</div>
+    <div class="panel-body">Poser la main sur la cuisse. Serrer le poing 2 secondes. Appuyer un doigt sur là table. Poser les deux pieds à plat au sol.</div>
+    <div class="panel-highlight">Le geste doit venir de toi — pas d'un modele impose. A definir et valider en séance.</div>
   </div>
 
   <div class="panel-content" id="p-souffle">
     <div class="panel-tag">Protocole</div>
     <div class="panel-title">SOUFFLE — 3 cycles 4/6</div>
-    <div class="panel-section">Ce que ca fait neurologiquement</div>
-    <div class="panel-body">4 temps inspiration / 6 temps expiration. L'expiration plus longue active plus fortement ton systeme nerveux parasympathique — elle descend plus efficacement le niveau de stress que le 4/4 symetrique.</div>
+    <div class="panel-section">Ce que ça fait neurologiquement</div>
+    <div class="panel-body">4 temps inspiration / 6 temps expiration. L'expiration plus longue active plus fortement ton système nerveux parasympathique — elle descend plus efficacement le niveau de stress que le 4/4 symetrique.</div>
     <div class="panel-section">Pourquoi 4/6</div>
-    <div class="panel-body">L'expiration prolongee accentue la regulation parasympathique et favorise un retour au calme plus marque — adapte a un pattern de freeze sous pression.</div>
+    <div class="panel-body">L'expiration prolongee accentue la régulation parasympathique et favorise un retour au calme plus marque — adapte à un pattern de freeze sous pression.</div>
     <div class="panel-section">Pourquoi 3 cycles</div>
-    <div class="panel-body">Un cycle ne suffit pas. Cinq, c'est trop long en situation operationnelle. Trois cycles representent environ 30 secondes — le minimum efficace.</div>
-    <div class="panel-highlight">Le souffle n'est pas optionnel. C'est ta porte d'entree neurologique vers la boucle.</div>
+    <div class="panel-body">Un cycle ne suffit pas. Cinq, c'est trop long en situation opérationnelle. Trois cycles représentent environ 30 secondes — le minimum efficace.</div>
+    <div class="panel-highlight">Le souffle n'est pas optionnel. C'est ta porte d'entrée neurologique vers la boucle.</div>
   </div>
 
   <div class="panel-content" id="p-boucle">
     <div class="panel-tag">Protocole</div>
-    <div class="panel-title">BOUCLE — Question d'entree</div>
-    <div class="panel-section">Le role de la question d'entree</div>
-    <div class="panel-body">La question d'entree est l'ancre cognitive qui declenche la mini-boucle. Elle doit etre toujours la meme — repetee assez souvent pour devenir un reflexe automatique.</div>
+    <div class="panel-title">BOUCLE — Question d'entrée</div>
+    <div class="panel-section">Le role de la question d'entrée</div>
+    <div class="panel-body">La question d'entrée est l'ancre cognitive qui déclenche la mini-boucle. Elle doit etre toujours la même — repetee assez souvent pour devenir un réflexe automatique.</div>
     <div class="panel-section">La question retenue</div>
-    <div class="panel-body" style="font-weight:600; color:#1A1A2E; font-size:16px; padding:12px 0;">Mon equipe est-elle couverte et alerte ?</div>
+    <div class="panel-body" style="font-weight:600; color:#1A1A2E; font-size:16px; padding:12px 0;">Mon équipe est-elle couverte et alerte ?</div>
     <div class="panel-section">Pourquoi celle-ci</div>
-    <div class="panel-body">C'est ton premier reflexe naturel sous pression. On part de ce qui te revient spontanement — pas de ce qui devrait logiquement venir en premier.</div>
+    <div class="panel-body">C'est ton premier réflexe naturel sous pression. On part de ce qui te revient spontanément — pas de ce qui devrait logiquement venir en premier.</div>
     <div class="panel-highlight">Si cette question ne resonne pas, explorer quelle question te revient naturellement quand la pression monte.</div>
   </div>
 
   <div class="panel-content" id="p-c1">
     <div class="panel-tag">Mini-boucle</div>
     <div class="panel-title">1 — Couvrir et avancer</div>
-    <div class="panel-section">La question d'entree</div>
-    <div class="panel-body">Ton equipe est-elle couverte et alerte ? Qui fait quoi si ca deraille ?</div>
+    <div class="panel-section">La question d'entrée</div>
+    <div class="panel-body">Ton équipe est-elle couverte et alerte ? Qui fait quoi si ça deraille ?</div>
     <div class="panel-section">Si la reponse est NON</div>
-    <div class="panel-body">Tu ne passes pas a l'etape 2. Trois actions immediates :<br><br>
-    <b>Repositionner</b> — mettre l'equipe hors de la ligne de danger.<br>
+    <div class="panel-body">Tu ne passes pas a l'étape 2. Trois actions immédiates :<br><br>
+    <b>Repositionner</b> — mettre l'équipe hors de la ligne de danger.<br>
     <b>Signaler</b> — s'assurer que tout le monde sait ou sont les autres.<br>
     <b>Proteger</b> — identifier qui est expose et qui peut absorber.</div>
     <div class="panel-section">Le seuil minimal acceptable</div>
-    <div class="panel-body">Pas "l'equipe est parfaitement en securite". Mais "l'equipe est assez couverte pour qu'on puisse avancer". La nuance est critique si tu as tendance a freezer sur le controle.</div>
+    <div class="panel-body">Pas "l'équipe est parfaitement en securite". Mais "l'équipe est assez couverte pour qu'on puisse avancer". La nuance est critique si tu as tendance a freezer sur le controle.</div>
     <div class="panel-section">Coordination minimale pre-mission</div>
     <div class="panel-body">Tout le monde connait l'objectif en une phrase. Les roles de repli sont assignes. Le signal de ralliement est connu de tous.</div>
-    <div class="panel-highlight">Si ces trois elements sont valides avant le depart, l'etape 1 devient une verification — pas une negociation.</div>
+    <div class="panel-highlight">Si ces trois éléments sont valides avant le départ, l'étape 1 devient une verification — pas une negociation.</div>
   </div>
 
   <div class="panel-content" id="p-c2">
@@ -226,7 +226,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     <div class="panel-section">La structure</div>
     <div class="panel-body">Verbe + Cible + Contrainte. Un seul verbe. Une seule cible. Une seule contrainte non negociable.</div>
     <div class="panel-section">Exemples</div>
-    <div class="panel-body">Securiser le perimetre nord avant le lever du jour.<br>Extraire le groupe 2 sans contact ennemi.<br>Tenir la position jusqu'a la releve.</div>
+    <div class="panel-body">Securiser le perimetre nord avant le lever du jour.<br>Extraire le groupe 2 sans contact ennemi.<br>Tenir la position jusqu'à la releve.</div>
     <div class="panel-section">Ce qui tue la formulation sous pression</div>
     <div class="panel-body">Commencer par "il faudrait que..." — signe que ton cerveau cherche encore. Mettre deux verbes — c'est deux objectifs. Choisis-en un seul.</div>
     <div class="panel-highlight">Formule l'objectif en moins de 10 secondes sur une situation fictive. Ton premier jet est souvent le bon.</div>
@@ -238,81 +238,81 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     <div class="panel-section">La question unique</div>
     <div class="panel-body">Si je ne peux faire qu'une chose dans les 5 prochaines minutes, laquelle change le plus la situation ?</div>
     <div class="panel-section">Le filtre en 3 secondes</div>
-    <div class="panel-body">Est-ce que ca change l'etat de l'equipe ? → Priorite haute.<br>Est-ce que ca change l'etat de la mission ? → Priorite haute.<br>Est-ce que ca regle un probleme de confort ou de process ? → Attendre.</div>
+    <div class="panel-body">Est-ce que ça change l'état de l'équipe ? → Priorité haute.<br>Est-ce que ça change l'état de la mission ? → Priorité haute.<br>Est-ce que ça règle un problème de confort ou de process ? → Attendre.</div>
     <div class="panel-section">Le piege principal</div>
     <div class="panel-body">Confondre urgent et important. Ton cerveau traite l'urgence en premier. L'action a fort impact est souvent silencieuse.</div>
-    <div class="panel-highlight">Exercice : on te presente 5 actions possibles. Laquelle tu elimines en premier ? Eliminer est cognitivement plus simple que choisir sous stress.</div>
+    <div class="panel-highlight">Exercice : on te présente 5 actions possibles. Laquelle tu elimines en premier ? Eliminer est cognitivement plus simple que choisir sous stress.</div>
   </div>
 
   <div class="panel-content" id="p-c4">
     <div class="panel-tag">Mini-boucle</div>
-    <div class="panel-title">4 — Deleguer</div>
+    <div class="panel-title">4 — Déléguer</div>
     <div class="panel-section">Le principe</div>
-    <div class="panel-body">Chaque decision que tu gardes pour toi coute de la bande passante. Deleguer, c'est liberer de l'espace mental pour les decisions qui ne peuvent venir que de toi.</div>
+    <div class="panel-body">Chaque décision que tu gardes pour toi coute de la bande passante. Déléguer, c'est liberer de l'espace mental pour les décisions qui ne peuvent venir que de toi.</div>
     <div class="panel-section">Ce que tu delegues vs ce que tu gardes</div>
-    <div class="panel-body">Tu delegues : le <b>comment</b>.<br>Tu gardes : le <b>quoi</b> et le <b>pourquoi</b>.<br>L'objectif reste le tien. La facon de l'atteindre peut appartenir a quelqu'un d'autre.</div>
-    <div class="panel-section">Le filtre de delegation</div>
-    <div class="panel-body">Est-ce que quelqu'un d'autre a l'information pour decider ?<br>Est-ce que l'erreur est reversible ?<br>Est-ce que ca bloque ta capacite a voir la situation globale ?<br>Si oui a l'une de ces questions — deleguer.</div>
-    <div class="panel-highlight">Exercice : reprendre une situation passee ou tu as tout garde. Qu'est-ce qui aurait pu etre delegue sans risque ?</div>
+    <div class="panel-body">Tu delegues : le <b>comment</b>.<br>Tu gardes : le <b>quoi</b> et le <b>pourquoi</b>.<br>L'objectif reste le tien. La façon de l'atteindre peut appartenir à quelqu'un d'autre.</div>
+    <div class="panel-section">Le filtre de délégation</div>
+    <div class="panel-body">Est-ce que quelqu'un d'autre a l'information pour decider ?<br>Est-ce que l'erreur est reversible ?<br>Est-ce que ça bloque ta capacite à voir la situation globale ?<br>Si oui a l'une de ces questions — déléguer.</div>
+    <div class="panel-highlight">Exercice : reprendre une situation passée où tu as tout garde. Qu'est-ce qui aurait pu etre delegue sans risque ?</div>
   </div>
 
   <div class="panel-content" id="p-l1">
     <div class="panel-tag">Leadership Loop</div>
     <div class="panel-title">1 — Temps</div>
-    <div class="panel-section">Pourquoi verifier le temps maintenant</div>
-    <div class="panel-body">Ton plan temporel initial est obsolete. La mini-boucle a pris du temps. Les actions d'urgence aussi. Verifier le temps maintenant remet ton cerveau dans la realite actuelle. C'est une remise a zero de la contrainte.</div>
-    <div class="panel-section">Ce que ca change concretement</div>
+    <div class="panel-section">Pourquoi vérifier le temps maintenant</div>
+    <div class="panel-body">Ton plan temporel initial est obsolete. La mini-boucle a pris du temps. Les actions d'urgence aussi. Vérifier le temps maintenant remet ton cerveau dans la réalité actuelle. C'est une remise a zero de la contrainte.</div>
+    <div class="panel-section">Ce que ça change concretement</div>
     <div class="panel-body"><b>Temps court</b> : traiter les items 6 a 10 en version condensee — une question par item, pas deux.<br><b>Temps suffisant</b> : traiter la boucle complete, y compris les items de profondeur.</div>
-    <div class="panel-section">Ce que ca demande</div>
-    <div class="panel-body">Ton reflexe naturel est de vouloir tout controler — y compris le temps. Ce n'est pas "j'ai perdu du temps". C'est "voila ce que j'ai maintenant — qu'est-ce que je fais avec ?"</div>
-    <div class="panel-highlight">Le temps disponible calibre la profondeur de toute la boucle restante. C'est ton premier ancrage dans la realite post-crise.</div>
+    <div class="panel-section">Ce que ça demande</div>
+    <div class="panel-body">Ton réflexe naturel est de vouloir tout contrôler — y compris le temps. Ce n'est pas "j'ai perdu du temps". C'est "voilà ce que j'ai maintenant — qu'est-ce que je fais avec ?"</div>
+    <div class="panel-highlight">Le temps disponible calibre la profondeur de toute la boucle restante. C'est ton premier ancrage dans la réalité post-crise.</div>
   </div>
 
   <div class="panel-content" id="p-l6">
     <div class="panel-tag">Leadership Loop</div>
     <div class="panel-title">6 — Ego et humilite</div>
-    <div class="panel-section">Le probleme avec l'ego sous pression</div>
-    <div class="panel-body">Ton ego ne se presente pas comme de l'ego. Il se presente comme de la certitude. "Je sais ce qu'il faut faire" est souvent ton ego qui parle, pas ta lucidite.</div>
+    <div class="panel-section">Le problème avec l'ego sous pression</div>
+    <div class="panel-body">Ton ego ne se présente pas comme de l'ego. Il se présente comme de là certitude. "Je sais ce qu'il faut faire" est souvent ton ego qui parle, pas ta lucidité.</div>
     <div class="panel-section">Les 3 signaux</div>
-    <div class="panel-body">Tu n'ecoutes plus — les informations qui arrivent ne changent plus tes decisions.<br>Tu cherches a avoir raison plutot qu'a avoir la bonne reponse.<br>Tu parles plus que tu n'ecoutes.</div>
+    <div class="panel-body">Tu n'écoutes plus — les informations qui arrivent ne changent plus tes décisions.<br>Tu cherches a avoir raison plutot qu'a avoir la bonne reponse.<br>Tu parles plus que tu n'écoutes.</div>
     <div class="panel-section">La question de Jocko</div>
-    <div class="panel-body" style="font-weight:600; color:#1A1A2E;">Est-ce que tu imposes ton plan a la situation, ou est-ce que tu adaptes ton plan a la situation ?</div>
-    <div class="panel-highlight">En seance : decris une situation ou tu as maintenu ton plan malgre des signaux contraires. Pas pour te juger — pour reconnaitre le signal interieur.</div>
+    <div class="panel-body" style="font-weight:600; color:#1A1A2E;">Est-ce que tu imposes ton plan à la situation, ou est-ce que tu adaptes ton plan à la situation ?</div>
+    <div class="panel-highlight">En séance : decris une situation où tu as maintenu ton plan malgre des signaux contraires. Pas pour te juger — pour reconnaître le signal intérieur.</div>
   </div>
 
   <div class="panel-content" id="p-l7">
     <div class="panel-tag">Leadership Loop</div>
-    <div class="panel-title">7 — Emotions</div>
+    <div class="panel-title">7 — Émotions</div>
     <div class="panel-section">La distinction importante</div>
-    <div class="panel-body">Tes emotions ne sont pas le probleme. Elles transportent de l'information. Le probleme c'est quand elles prennent le volant a la place de ton cerveau decisionnel.</div>
+    <div class="panel-body">Tes émotions ne sont pas le problème. Elles transportent de l'information. Le problème c'est quand elles prennent le volant à la place de ton cerveau décisionnel.</div>
     <div class="panel-section">Les 3 signaux</div>
-    <div class="panel-body">Tes decisions deviennent reactives — tu reponds aux evenements au lieu de les anticiper.<br>Ton tunnel attentionnel se retrecit.<br>Ton ton change — voix plus courte, reponses plus tranchees.</div>
+    <div class="panel-body">Tes décisions deviennent reactives — tu reponds aux evenements au lieu de les anticiper.<br>Ton tunnel attentionnel se retrecit.<br>Ton ton change — voix plus courte, reponses plus tranchees.</div>
     <div class="panel-section">L'outil de verification</div>
-    <div class="panel-body">Qu'est-ce que je ressens en ce moment ?<br>Est-ce que cette emotion m'aide a decider, ou est-ce qu'elle decide a ma place ?<br><br>Nommer l'emotion suffit souvent a reprendre le dessus.</div>
-    <div class="panel-highlight">Le SOUFFLE du protocole est deja une reponse physiologique. Ici, c'est une verification consciente : la regulation a-t-elle suffi ?</div>
+    <div class="panel-body">Qu'est-ce que je ressens en ce moment ?<br>Est-ce que cette émotion m'aide a decider, ou est-ce qu'elle décide à ma place ?<br><br>Nommer l'émotion suffit souvent a reprendre le dessus.</div>
+    <div class="panel-highlight">Le SOUFFLE du protocole est déjà une reponse physiologique. Ici, c'est une verification consciente : la régulation a-t-elle suffi ?</div>
   </div>
 
   <div class="panel-content" id="p-l8">
     <div class="panel-tag">Leadership Loop</div>
     <div class="panel-title">8 — Perspective</div>
     <div class="panel-section">Pourquoi c'est contre-intuitif</div>
-    <div class="panel-body">Sous pression, ton cerveau cherche la convergence — une seule reponse, vite. Chercher d'autres perspectives va exactement a l'encontre de ce reflexe. C'est un effort delibere.</div>
+    <div class="panel-body">Sous pression, ton cerveau cherche la convergence — une seule reponse, vite. Chercher d'autres perspectives va exactement a l'encontre de ce réflexe. C'est un effort delibere.</div>
     <div class="panel-section">Mouvement 1 — La question unique</div>
-    <div class="panel-body">Pose a un membre de ton equipe : <b>"Qu'est-ce que tu vois que je ne vois pas ?"</b><br>La reponse prend 10 secondes. Elle peut changer une decision.</div>
+    <div class="panel-body">Pose à un membre de ton équipe : <b>"Qu'est-ce que tu vois que je ne vois pas ?"</b><br>La reponse prend 10 secondes. Elle peut changer une décision.</div>
     <div class="panel-section">Mouvement 2 — Le test de contradiction</div>
     <div class="panel-body">Avant d'agir : "Qu'est-ce qui pourrait me prouver que j'ai tort ?"<br>Si aucune reponse ne vient, c'est souvent ton ego de l'item 6 qui est encore la.</div>
-    <div class="panel-highlight">La perspective n'invalide pas ta decision. Elle l'enrichit.</div>
+    <div class="panel-highlight">La perspective n'invalide pas ta décision. Elle l'enrichit.</div>
   </div>
 
   <div class="panel-content" id="p-l9">
     <div class="panel-tag">Leadership Loop</div>
     <div class="panel-title">9 — Mission</div>
     <div class="panel-section">La question centrale</div>
-    <div class="panel-body">Ce que tu es en train de faire fait-il encore avancer la mission globale ? Pas la mission de la derniere heure. Pas le plan initial. La mission — celle qui existait avant que la situation deraille.</div>
+    <div class="panel-body">Ce que tu es en train de faire fait-il encore avancer la mission globale ? Pas la mission de la dernière heure. Pas le plan initial. La mission — celle qui existait avant que la situation deraille.</div>
     <div class="panel-section">Pourquoi en position 9</div>
-    <div class="panel-body">Tu ne peux pas repondre honnetement a cette question si ego et emotions n'ont pas ete traites. Un cerveau encore sous influence va deformer la reponse pour justifier ce qu'il a deja fait.</div>
+    <div class="panel-body">Tu ne peux pas repondre honnetement à cette question si ego et émotions n'ont pas été traites. Un cerveau encore sous influence va deformer la reponse pour justifier ce qu'il a déjà fait.</div>
     <div class="panel-section">Les 3 verifications</div>
-    <div class="panel-body">Ton objectif immediat sert encore l'objectif global.<br>Les ressources consommees sont justifiees.<br>Ton equipe est encore alignee sur le meme objectif.</div>
+    <div class="panel-body">Ton objectif immédiat sert encore l'objectif global.<br>Les ressources consommees sont justifiees.<br>Ton équipe est encore alignee sur le même objectif.</div>
     <div class="panel-highlight">Le plan n'est pas la mission. Le plan est un moyen. La mission, elle, tient.</div>
   </div>
 
@@ -320,42 +320,42 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     <div class="panel-tag">Leadership Loop</div>
     <div class="panel-title">10 — Capital de leadership</div>
     <div class="panel-section">Ce que c'est</div>
-    <div class="panel-body">La confiance accumulee ou depensee avec chaque personne de ton equipe. Elle se construit lentement et se perd vite. En situation de crise, les deux mouvements s'accelerent.</div>
-    <div class="panel-section">Ce qui genere du capital en crise</div>
-    <div class="panel-body">Prendre une decision difficile clairement.<br>Assumer une erreur sans chercher un responsable.<br>Proteger un membre de ton equipe au detriment du plan.</div>
+    <div class="panel-body">La confiance accumulee ou depensee avec chaque personne de ton équipe. Elle se construit lentement et se perd vite. En situation de crise, les deux mouvements s'accelerent.</div>
+    <div class="panel-section">Ce qui génère du capital en crise</div>
+    <div class="panel-body">Prendre une décision difficile clairement.<br>Assumer une erreur sans chercher un responsable.<br>Proteger un membre de ton équipe au detriment du plan.</div>
     <div class="panel-section">Ce qui consomme du capital</div>
-    <div class="panel-body">Imposer ton plan malgre les signaux — item 6.<br>Perdre le controle emotionnel devant l'equipe — item 7.<br>Ne pas demander de perspectives — item 8.</div>
-    <div class="panel-highlight">Ce qui compte plus que le freeze lui-meme, c'est ce que tu fais apres. Un protocole clair genere plus de capital qu'un chef qui n'a jamais freeze mais dont les decisions sont floues.</div>
+    <div class="panel-body">Imposer ton plan malgre les signaux — item 6.<br>Perdre le controle émotionnel devant l'équipe — item 7.<br>Ne pas demander de perspectives — item 8.</div>
+    <div class="panel-highlight">Ce qui compte plus que le freeze lui-même, c'est ce que tu fais apres. Un protocole clair génère plus de capital qu'un chef qui n'a jamais freeze mais dont les décisions sont floues.</div>
   </div>
 
   <div class="panel-content" id="p-s3">
     <div class="panel-tag">Leadership Loop</div>
-    <div class="panel-title">Etape 3 — Agir</div>
+    <div class="panel-title">Étape 3 — Agir</div>
     <div class="panel-section">Ce que c'est</div>
-    <div class="panel-body">Ce n'est pas une action d'urgence — ca, c'etait la mini-boucle. C'est la decision strategique qui decoule de ton analyse complete des 10 items. Tu as pris du recul — ego, emotions, perspectives, mission, capital. L'action qui sort de la est plus reflechie, plus alignee.</div>
+    <div class="panel-body">Ce n'est pas une action d'urgence — ça, c'était la mini-boucle. C'est la décision stratégique qui decoule de ton analyse complete des 10 items. Tu as pris du recul — ego, émotions, perspectives, mission, capital. L'action qui sort de la est plus reflechie, plus alignee.</div>
     <div class="panel-section">La question</div>
-    <div class="panel-body" style="font-weight:600; color:#1A1A2E;">Quelle est l'action prioritaire a prendre sur la base de cette iteration de la boucle ?</div>
-    <div class="panel-highlight">Mini-boucle = gerer la crise. Etape 3 = decider apres analyse complete. Ce sont deux niveaux distincts.</div>
+    <div class="panel-body" style="font-weight:600; color:#1A1A2E;">Quelle est l'action prioritaire à prendre sur la base de cette itération de la boucle ?</div>
+    <div class="panel-highlight">Mini-boucle = gerer la crise. Étape 3 = decider apres analyse complete. Ce sont deux niveaux distincts.</div>
   </div>
 
   <div class="panel-content" id="p-s4">
     <div class="panel-tag">Leadership Loop</div>
-    <div class="panel-title">Etape 4 — Debriefer</div>
+    <div class="panel-title">Étape 4 — Débriefer</div>
     <div class="panel-section">Ce que c'est</div>
-    <div class="panel-body">Ce n'est pas un debrief de la crise. C'est un debrief de l'iteration de la boucle elle-meme. Qu'est-ce que cette passe complete t'a appris ? Que ferais-tu differemment la prochaine fois que tu la lances ?</div>
+    <div class="panel-body">Ce n'est pas un débrief de la crise. C'est un débrief de l'itération de la boucle elle-même. Qu'est-ce que cette passe complete t'a appris ? Que ferais-tu differemment la prochaine fois que tu là lances ?</div>
     <div class="panel-section">Les questions</div>
     <div class="panel-body">Quel retour tu obtiens maintenant que tu as agi ?<br>Que te dit ce retour ?<br>Que faire differemment ?</div>
-    <div class="panel-highlight">Trois niveaux distincts : mini-boucle = gerer la crise / etape 3 = decider / etape 4 = apprendre du systeme lui-meme.</div>
+    <div class="panel-highlight">Trois niveaux distincts : mini-boucle = gerer la crise / étape 3 = decider / étape 4 = apprendre du système lui-même.</div>
   </div>
 
   <div class="panel-content" id="p-s5">
     <div class="panel-tag">Leadership Loop</div>
-    <div class="panel-title">Etape 5 — Relancer la boucle</div>
-    <div class="panel-section">La question avant chaque iteration</div>
-    <div class="panel-body">Suis-je bloque dans la boucle ?<br>Le probleme a-t-il change ?<br>Que devrais-je faire differemment ?</div>
+    <div class="panel-title">Étape 5 — Relancer la boucle</div>
+    <div class="panel-section">La question avant chaque itération</div>
+    <div class="panel-body">Suis-je bloque dans la boucle ?<br>Le problème a-t-il change ?<br>Que devrais-je faire differemment ?</div>
     <div class="panel-section">Quand relancer</div>
-    <div class="panel-body">Si la situation a evolue. Si une action prise a genere de nouveaux problemes. Si ton equipe ou tes ressources ont change.</div>
-    <div class="panel-highlight">La boucle n'a pas de fin fixe. Elle tourne jusqu'a ce que la mission soit accomplie ou que le probleme soit resolu.</div>
+    <div class="panel-body">Si la situation a evolue. Si une action prise a génère de nouveaux problèmes. Si ton équipe ou tes ressources ont change.</div>
+    <div class="panel-highlight">La boucle n'a pas de fin fixe. Elle tourne jusqu'à ce que la mission soit accomplie ou que le problème soit resolu.</div>
   </div>
 
 </div>
