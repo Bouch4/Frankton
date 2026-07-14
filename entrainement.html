@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Échauffement mental — Frankton Préparation Mentale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#1A1A2E; --dark-2:#20203a; --surface:#26264a; --surface-2:#2f2f57;
+    --red:#E84545; --amber:#F5A623; --green:#639922; --blue:#5b8def;
+    --ink:#eef0f8; --muted:#9a9ec4; --line:rgba(255,255,255,.10); --ok:#39c07a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--dark);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{min-height:100vh;padding:34px 18px 70px}
+  .wrap{max-width:920px;margin:0 auto}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:36px;flex-wrap:wrap}
+  .brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.14em;font-size:14px;color:var(--muted);text-transform:uppercase}
+  .brand b{color:var(--ink)}
+  .back{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:9px 16px;border-radius:10px;transition:.15s;cursor:pointer;background:none}
+  .back:hover{border-color:var(--ink);color:var(--ink)}
+
+  .screen{display:none} .screen.active{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:13px;color:var(--amber)}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(40px,8vw,76px);line-height:.9;letter-spacing:.01em;text-transform:uppercase;margin:6px 0 12px}
+  .lead{color:var(--muted);font-size:15px;line-height:1.55;max-width:60ch}
+  .disclaimer{margin-top:14px;font-size:12.5px;color:var(--muted);border-left:2px solid var(--amber);padding-left:12px;max-width:62ch;line-height:1.5;opacity:.9}
+
+  .games{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}
+  .slabel{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--muted);margin:28px 0 4px;display:flex;align-items:center;gap:12px}
+  .slabel::after{content:"";flex:1;height:1px;background:var(--line)}
+  .slabel span{color:var(--ink)}
+  .gcard{flex:1 1 210px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;cursor:pointer;transition:.18s;position:relative;overflow:hidden;text-align:left}
+  .gcard:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .gcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+  .gcard .gi{font-size:26px;margin-bottom:12px}
+  .gcard .gt{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px;letter-spacing:.02em;line-height:1}
+  .gcard .gtag{color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11.5px;margin:4px 0 8px}
+  .gcard .gd{color:var(--muted);font-size:13.5px;line-height:1.45}
+  .gcard .best{margin-top:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--muted)}
+  .gcard .best b{color:var(--ink)}
+  .g-stroop{--accent:var(--red)} .g-simon{--accent:var(--green)} .g-simem{--accent:#b06fd6} .g-pvt{--accent:var(--amber)} .g-gng{--accent:var(--blue)}
+  .g-nback{--accent:#e07b9a} .g-switch{--accent:#3fbfb0} .g-corsi{--accent:#5b8def}
+
+  /* n-back */
+  .nbletter{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(90px,22vw,180px);line-height:1;color:var(--ink)}
+  .nbletter.hit{color:var(--green)} .nbletter.miss{color:var(--red)}
+  .nbbtn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:22px;padding:18px 40px;border-radius:14px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer}
+  .nbbtn:active{transform:scale(.97)}
+
+  /* task switching */
+  .swrule{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:22px;letter-spacing:.04em;padding:8px 18px;border-radius:10px}
+  .swrule.parity{background:rgba(63,191,176,.18);color:#5fded0} .swrule.magnitude{background:rgba(224,123,154,.18);color:#f19ab5}
+  .swnum{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(90px,22vw,170px);line-height:1}
+  .swbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:460px}
+  .swbtn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:20px;padding:18px;border-radius:14px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer}
+  .swbtn:active{transform:scale(.97)}
+
+  /* corsi */
+  .corsigrid{position:relative;width:min(360px,84vw);height:min(360px,84vw)}
+  .corsicell{position:absolute;width:64px;height:64px;border-radius:12px;background:var(--surface-2);border:2px solid rgba(255,255,255,.12);cursor:pointer;transition:background .1s,transform .08s}
+  .corsicell.lit{background:var(--blue)} .corsicell.ok{background:var(--green)} .corsicell.bad{background:var(--red)} .corsicell:active{transform:scale(.96)}
+
+  /* simon mémoire */
+  .simem{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(340px,80vw);aspect-ratio:1}
+  .pad{border-radius:16px;cursor:pointer;opacity:.42;transition:opacity .12s,transform .08s;border:2px solid rgba(255,255,255,.12)}
+  .pad.lit{opacity:1} .pad:active{transform:scale(.98)}
+  .pad.p0{background:var(--red)} .pad.p1{background:var(--green)} .pad.p2{background:var(--blue)} .pad.p3{background:var(--amber)}
+
+  .gamehead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .gamehead .gname{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;letter-spacing:.02em}
+  .hud{display:flex;gap:22px;flex-wrap:wrap}
+  .hud .h{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:var(--muted)}
+  .hud .h b{display:block;font-size:30px;color:var(--ink);letter-spacing:0}
+  .stage{background:var(--surface);border:1px solid var(--line);border-radius:22px;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:34px 22px;text-align:center;position:relative;overflow:hidden}
+  .stage .instr{color:var(--muted);font-size:15px;line-height:1.6;max-width:48ch}
+  .btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:17px;padding:15px 34px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:.18s}
+  .btn:hover{border-color:var(--ink)}
+  .btn.primary{background:var(--amber);border-color:var(--amber);color:var(--dark)}
+  .btn.primary:hover{filter:brightness(1.06)}
+
+  /* stroop */
+  .stbar-wrap{width:100%;max-width:520px;height:14px;border-radius:8px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+  .stbar{height:100%;width:100%;background:var(--green);transition:width 1s linear, background .4s}
+  .stbar.warn{background:var(--amber)} .stbar.crit{background:var(--red)}
+  .sttime{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(40px,9vw,64px);line-height:1;color:var(--ink)}
+  .sttime.warn{color:var(--amber)} .sttime.crit{color:var(--red);animation:pulse .6s infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+  .stroopword{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(56px,14vw,110px);line-height:1;letter-spacing:.02em}
+  .stroopbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px}
+  .cbtn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:22px;letter-spacing:.04em;padding:18px;border-radius:14px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:.1s}
+  .cbtn:hover{border-color:var(--muted)} .cbtn:active{transform:scale(.97)}
+  .flash-ok{animation:fok .25s} .flash-no{animation:fno .3s}
+  @keyframes fok{0%{background:rgba(57,192,122,.35)}100%{background:var(--surface-2)}}
+  @keyframes fno{0%,60%{background:rgba(232,69,69,.4)}100%{background:var(--surface-2)}}
+
+  /* simon task (interférence spatiale) */
+  .mapkey{display:flex;gap:26px;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:18px;letter-spacing:.04em}
+  .mapkey .mk{display:flex;align-items:center;gap:8px}
+  .mapkey .dot{width:18px;height:18px;border-radius:50%}
+  .simfield{position:relative;width:100%;max-width:560px;height:180px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);display:flex;align-items:center}
+  .simfield .mid{position:absolute;left:50%;top:8px;bottom:8px;width:1px;background:var(--line)}
+  .simstim{position:absolute;top:50%;transform:translateY(-50%);width:74px;height:74px;border-radius:50%;transition:opacity .05s}
+  .simbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px}
+  .sidebtn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:22px;padding:20px;border-radius:14px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer}
+  .sidebtn:active{transform:scale(.98)}
+
+  /* go nogo */
+  .gngstim{width:200px;height:200px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;color:#0d0d18;transition:background .05s}
+  .gngstim.go{background:var(--green)} .gngstim.nogo{background:var(--red)} .gngstim.idle{background:var(--surface-2);color:var(--muted)}
+  .tap{margin-top:6px;font-size:13px;color:var(--muted)}
+
+  /* pvt */
+  .pvtbox{width:100%;max-width:520px;height:260px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;user-select:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;transition:background .05s}
+  .pvtbox.wait{background:#2a2a44;color:var(--muted);font-size:22px}
+  .pvtbox.go{background:var(--dark-2);color:var(--amber)}
+  .pvtbox.early{background:var(--red);color:#fff;font-size:26px}
+  .pvtbox .cnt{font-size:64px;line-height:1}
+  .pvtbox small{font-size:14px;font-weight:600;opacity:.85}
+
+  .result{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px;line-height:1.3}
+  .result span{color:var(--amber)}
+  .subresult{color:var(--muted);font-size:14px;margin-top:2px}
+  .foot{margin-top:40px;color:var(--muted);font-size:12px;letter-spacing:.04em;text-align:center;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><b>FRANKTON</b> · Préparation Mentale</div>
+    <a class="back" href="index.html">← Accueil</a>
+  </div>
+
+  <!-- MENU -->
+  <section class="screen active" id="menu">
+    <div class="eyebrow">Entraînement · Cognitif</div>
+    <h1>Échauffement<br>mental</h1>
+    <p class="lead">Quatre exercices pour activer l'attention, l'inhibition, la vitesse et la vigilance. Trois sont inspirés des tests cognitifs de référence (Stroop, Simon, PVT), à utiliser en échauffement avant une séance ou une performance.</p>
+    <p class="disclaimer">Ces exercices sont une activation ludique, pas un test diagnostique ni un entraînement cérébral validé. Le « brain-training » n'a pas d'effet transférable démontré&nbsp;: prends-les comme un échauffement, pas comme une mesure de tes capacités.</p>
+
+    <div class="slabel"><span>Attention &amp; vitesse</span></div>
+    <div class="games">
+      <button class="gcard g-pvt" onclick="openGame('pvt')">
+        <div class="gi">⏱️</div>
+        <div class="gt">Vigilance · PVT</div>
+        <div class="gtag">Réactivité · Fatigue</div>
+        <div class="gd">Dès que le compteur démarre, réagis au plus vite. Ton score = ton pire temps&nbsp;: reste régulier, ne décroche jamais.</div>
+        <div class="best">Record&nbsp;: <b id="best-pvt">—</b></div>
+      </button>
+      <button class="gcard g-gng" onclick="openGame('gng')">
+        <div class="gi">⚡</div>
+        <div class="gt">Go / No-Go</div>
+        <div class="gtag">Attention · Inhibition</div>
+        <div class="gd">Agis sur le vert, bloque sur le rouge. Reste vigilant sans te faire piéger.</div>
+        <div class="best">Record&nbsp;: <b id="best-gng">—</b></div>
+      </button>
+    </div>
+
+    <div class="slabel"><span>Inhibition &amp; flexibilité</span></div>
+    <div class="games">
+      <button class="gcard g-stroop" onclick="openGame('stroop')">
+        <div class="gi">🎨</div>
+        <div class="gt">Stroop</div>
+        <div class="gtag">Inhibition · Sélection</div>
+        <div class="gd">Clique la couleur de l'encre, pas le mot écrit. Sélectionne l'info pertinente malgré le distracteur.</div>
+        <div class="best">Record&nbsp;: <b id="best-stroop">—</b></div>
+      </button>
+      <button class="gcard g-simon" onclick="openGame('simon')">
+        <div class="gi">↔️</div>
+        <div class="gt">Simon Task</div>
+        <div class="gtag">Interférence spatiale</div>
+        <div class="gd">Réponds selon la couleur, pas la position. Résiste au conflit quand les deux se contredisent.</div>
+        <div class="best">Record&nbsp;: <b id="best-simon">—</b></div>
+      </button>
+      <button class="gcard g-switch" onclick="openGame('switch')">
+        <div class="gi">🔀</div>
+        <div class="gt">Task Switching</div>
+        <div class="gtag">Flexibilité mentale</div>
+        <div class="gd">La règle change sans prévenir&nbsp;: pair/impair, puis plus/moins que 5. Bascule vite, sans rester collé.</div>
+        <div class="best">Record&nbsp;: <b id="best-switch">—</b></div>
+      </button>
+    </div>
+
+    <div class="slabel"><span>Mémoire de travail</span></div>
+    <div class="games">
+      <button class="gcard g-nback" onclick="openGame('nback')">
+        <div class="gi">🔁</div>
+        <div class="gt">N-Back</div>
+        <div class="gtag">Mémoire de travail</div>
+        <div class="gd">Signale quand la lettre est identique à celle d'il y a 2 coups. Maintiens et mets à jour en continu.</div>
+        <div class="best">Record&nbsp;: <b id="best-nback">—</b></div>
+      </button>
+      <button class="gcard g-simem" onclick="openGame('simem')">
+        <div class="gi">🧠</div>
+        <div class="gt">Simon Mémoire</div>
+        <div class="gtag">Mémoire séquentielle</div>
+        <div class="gd">Reproduis la séquence de couleurs qui s'allonge à chaque tour, jusqu'à l'erreur.</div>
+        <div class="best">Record&nbsp;: <b id="best-simem">—</b></div>
+      </button>
+      <button class="gcard g-corsi" onclick="openGame('corsi')">
+        <div class="gi">🟦</div>
+        <div class="gt">Corsi</div>
+        <div class="gtag">Mémoire spatiale</div>
+        <div class="gd">Reproduis l'ordre dans lequel les cases s'illuminent. La séquence s'allonge à chaque tour.</div>
+        <div class="best">Record&nbsp;: <b id="best-corsi">—</b></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- STROOP -->
+  <section class="screen" id="s-stroop">
+    <div class="gamehead">
+      <div class="gname" style="color:var(--red)">Stroop</div>
+      <div class="hud">
+        <div class="h">Score<b id="st-score">0</b></div>
+        <div class="h">Temps<b id="st-time">45</b></div>
+        <div class="h">Record<b id="st-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="st-stage">
+      <div class="instr">Un mot de couleur va s'afficher, écrit dans une <b>encre d'une autre couleur</b>. Clique la couleur de <b>l'encre</b>, jamais le mot. 45&nbsp;secondes, un maximum de bonnes réponses.</div>
+      <button class="btn primary" onclick="Stroop.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- SIMON TASK -->
+  <section class="screen" id="s-simon">
+    <div class="gamehead">
+      <div class="gname" style="color:var(--green)">Simon Task</div>
+      <div class="hud">
+        <div class="h">Bonnes<b id="sm-score">0</b></div>
+        <div class="h">Essai<b id="sm-trial">0/28</b></div>
+        <div class="h">Record<b id="sm-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="sm-stage">
+      <div class="instr">Réponds selon la <b>couleur</b> du rond, en ignorant sa <b>position</b>.<br>Le mapping s'affiche à l'écran. Clique le bon côté (ou flèches ← →). Précision et vitesse comptent.</div>
+      <button class="btn primary" onclick="SimonTask.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- SIMON MEMOIRE -->
+  <section class="screen" id="s-simem">
+    <div class="gamehead">
+      <div class="gname" style="color:#b06fd6">Simon Mémoire</div>
+      <div class="hud">
+        <div class="h">Niveau<b id="me-level">0</b></div>
+        <div class="h">Record<b id="me-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="me-stage">
+      <div class="instr">Mémorise la séquence de couleurs qui s'illumine, puis reproduis-la dans l'ordre. Elle s'allonge d'un cran à chaque tour, jusqu'à l'erreur.</div>
+      <button class="btn primary" onclick="SimonMem.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- PVT -->
+  <section class="screen" id="s-pvt">
+    <div class="gamehead">
+      <div class="gname" style="color:var(--amber)">Vigilance · PVT</div>
+      <div class="hud">
+        <div class="h">Essai<b id="pv-trial">0/12</b></div>
+        <div class="h">Moyenne<b id="pv-avg">—</b></div>
+        <div class="h">Record<b id="pv-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="pv-stage">
+      <div class="instr">Fixe la zone. À un moment imprévisible, un <b>compteur en millisecondes</b> se déclenche&nbsp;: tape le plus vite possible pour l'arrêter. Ne tape pas avant, sinon l'essai est raté. 12&nbsp;essais.<br><b>Ton score = ton temps le plus lent</b>&nbsp;: il faut être rapide à chaque fois, un seul décrochage plombe tout.</div>
+      <button class="btn primary" onclick="PVT.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- GO NO GO -->
+  <section class="screen" id="s-gng">
+    <div class="gamehead">
+      <div class="gname" style="color:var(--blue)">Go / No-Go</div>
+      <div class="hud">
+        <div class="h">Bonnes<b id="gng-score">0</b></div>
+        <div class="h">Essai<b id="gng-trial">0</b></div>
+        <div class="h">Record<b id="gng-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="gng-stage">
+      <div class="instr">Un cercle apparaît. <b style="color:var(--green)">Vert</b> = tape (clic ou barre espace). <b style="color:var(--red)">Rouge</b> = ne fais rien. 30&nbsp;essais. Vise la précision, pas la précipitation.</div>
+      <button class="btn primary" onclick="GNG.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- N-BACK -->
+  <section class="screen" id="s-nback">
+    <div class="gamehead">
+      <div class="gname" style="color:#e07b9a">N-Back (2-back)</div>
+      <div class="hud">
+        <div class="h">Score<b id="nb-score">0</b></div>
+        <div class="h">Coup<b id="nb-trial">0/24</b></div>
+        <div class="h">Record<b id="nb-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="nb-stage">
+      <div class="instr">Des lettres défilent une par une. Clique <b>« Identique »</b> (ou barre espace) quand la lettre affichée est <b>la même que celle d'il y a 2 coups</b>. 24 lettres. Bonne détection ou bon rejet = +1.</div>
+      <button class="btn primary" onclick="NBack.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- TASK SWITCHING -->
+  <section class="screen" id="s-switch">
+    <div class="gamehead">
+      <div class="gname" style="color:#3fbfb0">Task Switching</div>
+      <div class="hud">
+        <div class="h">Bonnes<b id="sw-score">0</b></div>
+        <div class="h">Essai<b id="sw-trial">0/24</b></div>
+        <div class="h">Record<b id="sw-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="sw-stage">
+      <div class="instr">Un chiffre s'affiche avec une <b>consigne qui change</b>&nbsp;: soit <b>Pair / Impair</b>, soit <b>Plus grand / Plus petit que 5</b>. Lis bien la règle à chaque fois, elle bascule sans prévenir. 24 essais.</div>
+      <button class="btn primary" onclick="Switch.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <!-- CORSI -->
+  <section class="screen" id="s-corsi">
+    <div class="gamehead">
+      <div class="gname" style="color:#5b8def">Corsi</div>
+      <div class="hud">
+        <div class="h">Niveau<b id="co-level">0</b></div>
+        <div class="h">Record<b id="co-best">—</b></div>
+      </div>
+    </div>
+    <div class="stage" id="co-stage">
+      <div class="instr">Des cases s'illuminent dans un certain ordre. Mémorise-le, puis reproduis-le en cliquant les cases dans le <b>même ordre</b>. La séquence s'allonge d'un cran à chaque réussite.</div>
+      <button class="btn primary" onclick="Corsi.start()">Démarrer</button>
+    </div>
+    <div class="gamehead" style="margin-top:16px"><button class="back" onclick="closeGame()">← Menu</button></div>
+  </section>
+
+  <div class="foot">Frankton Préparation Mentale · Livraison de mental · Prêt à performer</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const _mem={};
+function getBest(k){ try{ const v=localStorage.getItem('frankton_best_'+k); return v==null?(_mem[k]??null):JSON.parse(v); }catch(e){ return _mem[k]??null; } }
+function setBest(k,v){ try{ localStorage.setItem('frankton_best_'+k, JSON.stringify(v)); }catch(e){ _mem[k]=v; } }
+function refreshBests(){
+  const s=getBest('stroop'); $('best-stroop').textContent=s!=null?s+' pts':'—'; $('st-best').textContent=s!=null?s:'—';
+  const sm=getBest('simon'); $('best-simon').textContent=sm!=null?sm+'/28':'—'; $('sm-best').textContent=sm!=null?sm+'/28':'—';
+  const me=getBest('simem'); $('best-simem').textContent=me!=null?'niv. '+me:'—'; $('me-best').textContent=me!=null?me:'—';
+  const p=getBest('pvt'); $('best-pvt').textContent=p!=null?p+' ms':'—'; $('pv-best').textContent=p!=null?p+' ms':'—';
+  const g=getBest('gng'); $('best-gng').textContent=g!=null?g+'/30':'—'; $('gng-best').textContent=g!=null?g+'/30':'—';
+  const nb=getBest('nback'); $('best-nback').textContent=nb!=null?nb+'/24':'—'; $('nb-best').textContent=nb!=null?nb+'/24':'—';
+  const sw=getBest('switch'); $('best-switch').textContent=sw!=null?sw+'/24':'—'; $('sw-best').textContent=sw!=null?sw+'/24':'—';
+  const co=getBest('corsi'); $('best-corsi').textContent=co!=null?'niv. '+co:'—'; $('co-best').textContent=co!=null?co:'—';
+}
+let current=null;
+function openGame(id){ current=id; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $('s-'+id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+function closeGame(){ stopAll(); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $('menu').classList.add('active'); refreshBests(); window.scrollTo({top:0,behavior:'smooth'}); }
+function stopAll(){ Stroop.stop(); SimonTask.stop(); SimonMem.stop(); PVT.stop(); GNG.stop(); NBack.stop(); Switch.stop(); Corsi.stop(); }
+
+let AC=null;
+function beep(freq,dur){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); const o=AC.createOscillator(),g=AC.createGain(); o.frequency.value=freq; o.connect(g); g.connect(AC.destination); g.gain.setValueAtTime(.0001,AC.currentTime); g.gain.exponentialRampToValueAtTime(.15,AC.currentTime+.01); g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+dur); o.start(); o.stop(AC.currentTime+dur);}catch(e){} }
+
+/* ================= STROOP ================= */
+const COLORS=[{n:'ROUGE',c:'#E84545'},{n:'VERT',c:'#639922'},{n:'BLEU',c:'#5b8def'},{n:'JAUNE',c:'#F5A623'}];
+const Stroop={
+  timer:null,score:0,left:45,dur:45,answer:null,
+  start(){ this.score=0;this.left=this.dur;$('st-score').textContent=0;$('st-time').textContent=this.dur; this.render(); this.next(); this.tickUI();
+    clearInterval(this.timer); this.timer=setInterval(()=>{ this.left--; if(this.left<=0){ this.left=0; this.tickUI(); this.end(); return;} this.tickUI(); },1000); },
+  render(){ $('st-stage').innerHTML=`<div class="sttime" id="st-big">${this.dur}</div><div class="stbar-wrap"><div class="stbar" id="st-bar"></div></div><div class="stroopword" id="st-word">—</div><div class="stroopbtns" id="st-btns"></div>`;
+    const b=$('st-btns'); b.innerHTML=''; COLORS.forEach(col=>{ const el=document.createElement('button'); el.className='cbtn'; el.textContent=col.n; el.onclick=()=>this.pick(col.n,el); b.appendChild(el); }); },
+  tickUI(){ $('st-time').textContent=this.left; const big=$('st-big'),bar=$('st-bar'); if(big)big.textContent=this.left; if(bar)bar.style.width=(this.left/this.dur*100)+'%';
+    const warn=this.left<=10,crit=this.left<=5; if(big){big.classList.toggle('warn',warn&&!crit);big.classList.toggle('crit',crit);} if(bar){bar.classList.toggle('warn',warn&&!crit);bar.classList.toggle('crit',crit);} },
+  next(){ const word=COLORS[Math.floor(Math.random()*4)]; let ink; do{ ink=COLORS[Math.floor(Math.random()*4)]; }while(ink.n===word.n); this.answer=ink.n; const w=$('st-word'); w.textContent=word.n; w.style.color=ink.c; },
+  pick(name,el){ if(this.left<=0)return; if(name===this.answer){ this.score++; $('st-score').textContent=this.score; el.classList.add('flash-ok'); beep(660,.08);} else { this.score=Math.max(0,this.score-1);$('st-score').textContent=this.score; el.classList.add('flash-no'); beep(180,.12);} setTimeout(()=>el.classList.remove('flash-ok','flash-no'),300); this.next(); },
+  end(){ clearInterval(this.timer); const best=getBest('stroop'); const nr=(best==null||this.score>best); if(nr)setBest('stroop',this.score); $('st-stage').innerHTML=`<div class="result">Score&nbsp;: <span>${this.score} pts</span></div><div class="subresult">${nr?'Nouveau record !':''}</div><button class="btn primary" onclick="Stroop.start()">Rejouer</button>`; $('st-best').textContent=getBest('stroop'); },
+  stop(){ clearInterval(this.timer); }
+};
+
+/* ================= SIMON TASK (interférence spatiale) ================= */
+const SimonTask={
+  // bleu -> gauche, orange -> droite
+  MAP:{blue:'left',orange:'right'},
+  COL:{blue:'#5b8def',orange:'#F5A623'},
+  total:28,trial:0,score:0,rtC:[],rtI:[],armed:false,t0:0,cur:null,to:null,
+  start(){ this.trial=0;this.score=0;this.rtC=[];this.rtI=[];$('sm-score').textContent=0;$('sm-trial').textContent='0/'+this.total;
+    $('sm-stage').innerHTML=`
+      <div class="mapkey">
+        <div class="mk"><span class="dot" style="background:${this.COL.blue}"></span>← Gauche</div>
+        <div class="mk">Droite →<span class="dot" style="background:${this.COL.orange}"></span></div>
+      </div>
+      <div class="simfield" id="sm-field"><div class="mid"></div><div class="simstim" id="sm-stim" style="opacity:0"></div></div>
+      <div class="simbtns"><button class="sidebtn" onclick="SimonTask.answer('left')">◀ Gauche</button><button class="sidebtn" onclick="SimonTask.answer('right')">Droite ▶</button></div>`;
+    this.next(); },
+  next(){ if(this.trial>=this.total){ this.end(); return; } this.trial++; $('sm-trial').textContent=this.trial+'/'+this.total;
+    const stim=$('sm-stim'); stim.style.opacity=0; this.armed=false;
+    this.to=setTimeout(()=>{ const color=Math.random()<.5?'blue':'orange'; const side=Math.random()<.5?'left':'right';
+      this.cur={color,side,correct:this.MAP[color],congruent:this.MAP[color]===side};
+      stim.style.background=this.COL[color]; stim.style.left = side==='left' ? '14%' : 'auto'; stim.style.right = side==='right' ? '14%' : 'auto';
+      stim.style.opacity=1; this.armed=true; this.t0=performance.now(); },450+Math.random()*550); },
+  answer(side){ if(!this.armed)return; this.armed=false; const rt=Math.round(performance.now()-this.t0); const ok=side===this.cur.correct;
+    if(ok){ this.score++; $('sm-score').textContent=this.score; (this.cur.congruent?this.rtC:this.rtI).push(rt); beep(660,.07);} else { beep(170,.12); }
+    const f=$('sm-field'); f.style.outline='3px solid '+(ok?'rgba(57,192,122,.7)':'rgba(232,69,69,.7)'); setTimeout(()=>f.style.outline='',160);
+    $('sm-stim').style.opacity=0; setTimeout(()=>this.next(),260); },
+  end(){ clearTimeout(this.to); const best=getBest('simon'); const nr=(best==null||this.score>best); if(nr)setBest('simon',this.score);
+    const mean=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):null; const mc=mean(this.rtC),mi=mean(this.rtI);
+    const eff=(mc!=null&&mi!=null)?(mi-mc):null;
+    $('sm-stage').innerHTML=`<div class="result">Bonnes réponses&nbsp;: <span>${this.score}/${this.total}</span></div>
+      <div class="subresult">${mc!=null?'Congruent '+mc+' ms':''}${mi!=null?' · Incongruent '+mi+' ms':''}${eff!=null?'<br>Effet Simon&nbsp;: '+eff+' ms':''}</div>
+      <div class="subresult">${nr?'Nouveau record !':''}</div>
+      <button class="btn primary" onclick="SimonTask.start()">Rejouer</button>`;
+    $('sm-best').textContent=getBest('simon')+'/'+this.total; },
+  stop(){ clearTimeout(this.to); this.armed=false; }
+};
+
+/* ================= SIMON MÉMOIRE ================= */
+const SimonMem={
+  seq:[],pos:0,playing:false,pads:[],
+  start(){ this.seq=[];$('me-level').textContent=0; $('me-stage').innerHTML=`<div class="simem" id="me-grid"></div><div class="instr" id="me-msg">Observe…</div>`;
+    const g=$('me-grid'); g.innerHTML=''; this.pads=[];
+    for(let i=0;i<4;i++){ const p=document.createElement('div'); p.className='pad p'+i; p.onclick=()=>this.input(i); g.appendChild(p); this.pads.push(p); }
+    this.addStep(); },
+  addStep(){ this.seq.push(Math.floor(Math.random()*4)); $('me-level').textContent=this.seq.length; this.pos=0; this.playing=true; const m=$('me-msg'); if(m)m.textContent='Observe…'; this.playback(); },
+  playback(){ let i=0; const step=()=>{ if(i>=this.seq.length){ this.playing=false; const m=$('me-msg'); if(m)m.innerHTML='À toi&nbsp;!'; return; } this.lit(this.seq[i]); i++; setTimeout(step,620); }; setTimeout(step,500); },
+  lit(idx){ const p=this.pads[idx]; if(!p)return; p.classList.add('lit'); beep([330,392,494,587][idx],.25); setTimeout(()=>p.classList.remove('lit'),360); },
+  input(idx){ if(this.playing)return; this.lit(idx); if(idx===this.seq[this.pos]){ this.pos++; if(this.pos===this.seq.length){ this.playing=true; setTimeout(()=>this.addStep(),700);} } else { this.end(); } },
+  end(){ const reached=this.seq.length-1; const best=getBest('simem'); const nr=(best==null||reached>best); if(nr&&reached>0)setBest('simem',reached);
+    $('me-stage').innerHTML=`<div class="result">Niveau atteint&nbsp;: <span>${reached}</span></div><div class="subresult">${nr&&reached>0?'Nouveau record !':''}</div><button class="btn primary" onclick="SimonMem.start()">Rejouer</button>`; $('me-best').textContent=getBest('simem')??'—'; },
+  stop(){ this.playing=false; }
+};
+
+/* ================= PVT ================= */
+const PVT={
+  total:12,trial:0,times:[],state:'idle',t0:0,raf:null,to:null,
+  start(){ this.trial=0;this.times=[];$('pv-trial').textContent='0/'+this.total;$('pv-avg').textContent='—'; this.round(); },
+  round(){ if(this.trial>=this.total){ this.end(); return; }
+    $('pv-stage').innerHTML=`<div class="pvtbox wait" id="pv-box">Reste prêt…<small>ne tape pas avant le compteur</small></div>`;
+    $('pv-box').onclick=()=>this.tap(); this.state='wait';
+    this.to=setTimeout(()=>{ this.state='go'; this.t0=performance.now(); const b=$('pv-box'); if(b){ b.className='pvtbox go'; b.innerHTML=`<div class="cnt" id="pv-cnt">0</div><small>tape&nbsp;!</small>`; } this.loop(); },1800+Math.random()*3200); },
+  loop(){ const c=$('pv-cnt'); if(!c||this.state!=='go')return; c.textContent=Math.round(performance.now()-this.t0); this.raf=requestAnimationFrame(()=>this.loop()); },
+  tap(){ const b=$('pv-box');
+    if(this.state==='wait'){ clearTimeout(this.to); this.state='idle'; if(b){ b.className='pvtbox early'; b.innerHTML='Trop tôt&nbsp;!<small>on recommence cet essai</small>'; } setTimeout(()=>this.round(),950); return; }
+    if(this.state==='go'){ cancelAnimationFrame(this.raf); const ms=Math.round(performance.now()-this.t0); this.times.push(ms); this.trial++; $('pv-trial').textContent=this.trial+'/'+this.total; this.state='idle';
+      const avg=Math.round(this.times.reduce((a,c)=>a+c,0)/this.times.length); $('pv-avg').textContent=avg+' ms';
+      if(b){ b.className='pvtbox go'; b.innerHTML=`<div class="cnt" style="color:var(--amber)">${ms}</div><small>ms · essai suivant…</small>`; } setTimeout(()=>this.round(),850); } },
+  end(){ const worst=Math.max(...this.times); const best=Math.min(...this.times); const avg=Math.round(this.times.reduce((a,c)=>a+c,0)/this.times.length); const lapses=this.times.filter(t=>t>500).length;
+    const prev=getBest('pvt'); const nr=(prev==null||worst<prev); if(nr)setBest('pvt',worst);
+    $('pv-stage').innerHTML=`<div class="result">Pire temps&nbsp;: <span>${worst} ms</span></div><div class="subresult">Meilleur ${best} ms · Moyenne ${avg} ms · Lapses (&gt;500ms)&nbsp;: ${lapses}</div><div class="subresult">${nr?'Nouveau record de régularité !':''}</div><button class="btn primary" onclick="PVT.start()">Rejouer</button>`;
+    $('pv-best').textContent=getBest('pvt')+' ms'; },
+  stop(){ clearTimeout(this.to); cancelAnimationFrame(this.raf); this.state='idle'; }
+};
+
+/* ================= GO / NO-GO ================= */
+const GNG={
+  trial:0,score:0,total:30,armed:false,responded:false,isGo:false,to1:null,to2:null,
+  start(){ this.trial=0;this.score=0;$('gng-score').textContent=0;$('gng-trial').textContent='0';
+    $('gng-stage').innerHTML=`<div class="gngstim idle" id="gng-stim">Prêt</div><div class="tap">Clic ou barre espace</div>`; $('gng-stim').onclick=()=>this.respond(); this.next(); },
+  next(){ if(this.trial>=this.total){ this.end(); return; } this.trial++; $('gng-trial').textContent=this.trial;
+    const stim=$('gng-stim'); stim.className='gngstim idle'; stim.textContent=''; this.armed=false;
+    this.to1=setTimeout(()=>{ this.isGo=Math.random()<0.68; stim.className='gngstim '+(this.isGo?'go':'nogo'); stim.textContent=this.isGo?'GO':'STOP'; this.armed=true; this.responded=false;
+      this.to2=setTimeout(()=>{ if(!this.responded && !this.isGo){ this.score++; $('gng-score').textContent=this.score; } this.armed=false; stim.className='gngstim idle'; stim.textContent=''; setTimeout(()=>this.next(),350); },850);
+    },500+Math.random()*900); },
+  respond(){ if(!this.armed||this.responded)return; this.responded=true; const stim=$('gng-stim'); if(this.isGo){ this.score++; $('gng-score').textContent=this.score; beep(660,.08);} else { beep(160,.14); stim.style.outline='3px solid #fff'; setTimeout(()=>stim.style.outline='',150);} },
+  end(){ clearTimeout(this.to1);clearTimeout(this.to2); const best=getBest('gng'); const nr=(best==null||this.score>best); if(nr)setBest('gng',this.score);
+    $('gng-stage').innerHTML=`<div class="result">Bonnes réponses&nbsp;: <span>${this.score}/30</span></div><div class="subresult">${nr?'Nouveau record !':''}</div><button class="btn primary" onclick="GNG.start()">Rejouer</button>`; $('gng-best').textContent=(getBest('gng')??'—')+(getBest('gng')!=null?'/30':''); },
+  stop(){ clearTimeout(this.to1);clearTimeout(this.to2); this.armed=false; }
+};
+
+/* ================= N-BACK (2-back) ================= */
+const NBack={
+  N:2,total:24,seq:[],i:-1,score:0,responded:false,to:null,LET:'ABCDEFGHJKLMNPRT'.split(''),
+  start(){ this.seq=[];this.i=-1;this.score=0;$('nb-score').textContent=0;$('nb-trial').textContent='0/'+this.total;
+    for(let k=0;k<this.total;k++){ if(k>=this.N && Math.random()<0.32){ this.seq.push(this.seq[k-this.N]); } else { let c; do{ c=this.LET[Math.floor(Math.random()*this.LET.length)]; }while(k>=this.N && c===this.seq[k-this.N]); this.seq.push(c); } }
+    $('nb-stage').innerHTML=`<div class="nbletter" id="nb-let">•</div><button class="nbbtn" id="nb-btn" onclick="NBack.mark()">Identique (␣)</button>`;
+    this.i=-1; this.step(); },
+  step(){ this.i++; if(this.i>=this.total){ this.end(); return; } $('nb-trial').textContent=this.i+1+'/'+this.total; this.responded=false;
+    const el=$('nb-let'); el.className='nbletter'; el.textContent=this.seq[this.i];
+    this.to=setTimeout(()=>{ const isTarget=this.i>=this.N && this.seq[this.i]===this.seq[this.i-this.N];
+      if(!this.responded){ if(!isTarget){ this.score++; $('nb-score').textContent=this.score; } else { el.classList.add('miss'); } }
+      setTimeout(()=>this.step(),260);
+    },2000); },
+  mark(){ if(this.responded||this.i<0||this.i>=this.total)return; this.responded=true; clearTimeout(this.to);
+    const el=$('nb-let'); const isTarget=this.i>=this.N && this.seq[this.i]===this.seq[this.i-this.N];
+    if(isTarget){ this.score++; $('nb-score').textContent=this.score; el.classList.add('hit'); beep(660,.08);} else { el.classList.add('miss'); beep(170,.12);}
+    setTimeout(()=>this.step(),450); },
+  end(){ clearTimeout(this.to); const best=getBest('nback'); const nr=(best==null||this.score>best); if(nr)setBest('nback',this.score);
+    $('nb-stage').innerHTML=`<div class="result">Score&nbsp;: <span>${this.score}/${this.total}</span></div><div class="subresult">${nr?'Nouveau record !':''}</div><button class="btn primary" onclick="NBack.start()">Rejouer</button>`; $('nb-best').textContent=getBest('nback')+'/'+this.total; },
+  stop(){ clearTimeout(this.to); }
+};
+
+/* ================= TASK SWITCHING ================= */
+const Switch={
+  total:24,trial:0,score:0,rule:null,num:0,armed:false,
+  start(){ this.trial=0;this.score=0;$('sw-score').textContent=0;$('sw-trial').textContent='0/'+this.total;
+    $('sw-stage').innerHTML=`<div class="swrule" id="sw-rule">—</div><div class="swnum" id="sw-num">—</div><div class="swbtns" id="sw-btns"></div>`;
+    this.next(); },
+  next(){ if(this.trial>=this.total){ this.end(); return; } this.trial++; $('sw-trial').textContent=this.trial+'/'+this.total;
+    this.rule=Math.random()<.5?'parity':'magnitude';
+    do{ this.num=1+Math.floor(Math.random()*9); }while(this.num===5);
+    const r=$('sw-rule'),n=$('sw-num'),b=$('sw-btns');
+    r.className='swrule '+this.rule; r.textContent=this.rule==='parity'?'Pair ou impair ?':'Plus ou moins que 5 ?';
+    n.textContent=this.num; b.innerHTML='';
+    const opts=this.rule==='parity'?[['Pair',this.num%2===0],['Impair',this.num%2!==0]]:[['< 5',this.num<5],['> 5',this.num>5]];
+    opts.forEach(o=>{ const el=document.createElement('button'); el.className='swbtn'; el.textContent=o[0]; el.onclick=()=>this.pick(o[1],el); b.appendChild(el); });
+    this.armed=true; },
+  pick(correct,el){ if(!this.armed)return; this.armed=false;
+    if(correct){ this.score++; $('sw-score').textContent=this.score; el.classList.add('flash-ok'); beep(660,.07);} else { el.classList.add('flash-no'); beep(170,.12);}
+    setTimeout(()=>{ el.classList.remove('flash-ok','flash-no'); this.next(); },300); },
+  end(){ const best=getBest('switch'); const nr=(best==null||this.score>best); if(nr)setBest('switch',this.score);
+    $('sw-stage').innerHTML=`<div class="result">Bonnes réponses&nbsp;: <span>${this.score}/${this.total}</span></div><div class="subresult">${nr?'Nouveau record !':''}</div><button class="btn primary" onclick="Switch.start()">Rejouer</button>`; $('sw-best').textContent=getBest('switch')+'/'+this.total; },
+  stop(){ this.armed=false; }
+};
+
+/* ================= CORSI (mémoire spatiale) ================= */
+const Corsi={
+  cells:9,seq:[],pos:0,playing:false,els:[],
+  start(){ this.seq=[];$('co-level').textContent=0;
+    $('co-stage').innerHTML=`<div class="corsigrid" id="co-grid"></div><div class="instr" id="co-msg">Observe…</div>`;
+    const g=$('co-grid'); g.innerHTML=''; this.els=[];
+    const size=g.clientWidth||340, cell=64;
+    for(let r=0;r<3;r++)for(let c=0;c<3;c++){ const jx=(Math.random()-.5)*28, jy=(Math.random()-.5)*28;
+      let x=(c*(size-cell)/2)+jx, y=(r*(size-cell)/2)+jy; x=Math.max(0,Math.min(size-cell,x)); y=Math.max(0,Math.min(size-cell,y));
+      const el=document.createElement('div'); el.className='corsicell'; el.style.left=x+'px'; el.style.top=y+'px'; const idx=this.els.length; el.onclick=()=>this.input(idx); g.appendChild(el); this.els.push(el); }
+    this.addStep(); },
+  addStep(){ this.seq.push(Math.floor(Math.random()*this.cells)); $('co-level').textContent=this.seq.length; this.pos=0; this.playing=true; const m=$('co-msg'); if(m)m.textContent='Observe…'; this.playback(); },
+  playback(){ let i=0; const step=()=>{ if(i>=this.seq.length){ this.playing=false; const m=$('co-msg'); if(m)m.innerHTML='À toi&nbsp;!'; return; } this.lit(this.seq[i]); i++; setTimeout(step,700); }; setTimeout(step,500); },
+  lit(idx,cls='lit'){ const el=this.els[idx]; if(!el)return; el.classList.add(cls); beep(300+idx*40,.22); setTimeout(()=>el.classList.remove(cls),420); },
+  input(idx){ if(this.playing)return; if(idx===this.seq[this.pos]){ this.lit(idx,'ok'); this.pos++; if(this.pos===this.seq.length){ this.playing=true; setTimeout(()=>this.addStep(),700);} } else { this.lit(idx,'bad'); this.end(); } },
+  end(){ const reached=this.seq.length-1; const best=getBest('corsi'); const nr=(best==null||reached>best); if(nr&&reached>0)setBest('corsi',reached);
+    $('co-stage').innerHTML=`<div class="result">Niveau atteint&nbsp;: <span>${reached}</span></div><div class="subresult">${nr&&reached>0?'Nouveau record !':''}</div><button class="btn primary" onclick="Corsi.start()">Rejouer</button>`; $('co-best').textContent=getBest('corsi')??'—'; },
+  stop(){ this.playing=false; }
+};
+
+document.addEventListener('keydown',e=>{
+  if(current==='gng'&&e.code==='Space'){ e.preventDefault(); GNG.respond(); }
+  else if(current==='pvt'&&e.code==='Space'){ e.preventDefault(); PVT.tap(); }
+  else if(current==='nback'&&e.code==='Space'){ e.preventDefault(); NBack.mark(); }
+  else if(current==='simon'){ if(e.code==='ArrowLeft'){ e.preventDefault(); SimonTask.answer('left'); } else if(e.code==='ArrowRight'){ e.preventDefault(); SimonTask.answer('right'); } }
+});
+
+refreshBests();
+</script>
+</body>
+</html>
