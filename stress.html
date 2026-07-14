@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STRESS — Frankton Préparation Mentale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  :root{
+    --dark:#1A1A2E; --dark-2:#20203a; --surface:#26264a; --surface-2:#2f2f57;
+    --red:#E84545; --amber:#F5A623; --green:#639922; --blue:#5b8def;
+    --ink:#eef0f8; --muted:#9a9ec4; --line:rgba(255,255,255,.10); --ok:#39c07a;
+    --soma:#E84545; --emo:#F5A623; --comp:#639922; --cogn:#5b8def;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--dark);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{min-height:100vh;padding:24px 16px 64px}
+  .wrap{max-width:1000px;margin:0 auto}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+  .brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.14em;font-size:14px;color:var(--muted);text-transform:uppercase}
+  .brand b{color:var(--ink)}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(38px,7vw,72px);line-height:.92;letter-spacing:.01em;text-transform:uppercase}
+  h1 .q{color:var(--red)}
+  .subtitle{color:var(--muted);font-size:15px;margin-top:10px;max-width:60ch;line-height:1.55}
+  .step{display:none} .step.active{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .startcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-top:28px}
+  .startcard ol{margin:14px 0 0 20px;color:var(--muted);font-size:14.5px;line-height:1.8}
+  .startcard b{color:var(--ink)}
+
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--muted);margin:26px 0 12px;display:flex;align-items:center;gap:10px}
+  .section-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* contexts */
+  .ctx{display:flex;flex-direction:column;gap:14px}
+  .ctxcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .ctxhead{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:19px;letter-spacing:.02em;margin-bottom:12px}
+  .ctxhead input{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:18px;letter-spacing:.02em;padding:6px 12px;border-radius:9px;width:min(320px,80%)}
+  .levels{display:flex;flex-wrap:wrap;gap:7px}
+  .lv{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;cursor:pointer;transition:.12s}
+  .lv:hover{border-color:var(--muted)}
+  .lv.on{color:#fff;border-color:transparent}
+  .ctxfoot{color:var(--muted);font-size:12.5px;margin-top:10px}
+
+  /* selection grid */
+  .count{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:var(--muted);margin:4px 0 14px}
+  .count b{color:var(--amber);font-size:20px}
+  .grid{display:flex;flex-wrap:wrap;gap:10px}
+  .gcard{flex:1 1 180px;max-width:230px;min-height:66px;background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:12px 14px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.02em;line-height:1.1;cursor:pointer;transition:.15s;user-select:none;position:relative}
+  .gcard:hover{transform:translateY(-2px);border-color:var(--muted)}
+  .gcard.sel{background:var(--red);border-color:var(--red);color:#fff}
+  .gcard.sel::after{content:"✓";position:absolute;top:6px;right:9px;font-size:12px;opacity:.85}
+
+  /* reveal families */
+  .dominant{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin-bottom:22px;border-left:4px solid var(--red)}
+  .dominant .k{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--muted)}
+  .dominant .v{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:40px;line-height:1;margin:4px 0 10px}
+  .dominant p{color:var(--ink);font-size:14.5px;line-height:1.6}
+
+  .fambars{display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
+  .fbrow{display:flex;align-items:center;gap:14px}
+  .fbrow .fn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:16px;width:150px;flex:none}
+  .fbrow .fbar{flex:1;height:20px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+  .fbrow .fbar i{display:block;height:100%;border-radius:6px}
+  .fbrow .fc{font-family:'Barlow Condensed',sans-serif;font-weight:800;min-width:40px;text-align:right}
+
+  .famcols{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+  .famcol{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 16px 18px;border-top:3px solid var(--muted)}
+  .famcol h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:18px;letter-spacing:.03em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+  .famcol h4 span{font-size:22px}
+  .famcol ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .famcol li{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.02em}
+  .famcol .none{color:var(--muted);font-size:12.5px;font-style:italic}
+
+  .ctxrecap{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+  .ctxrecap .cr{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:14px}
+  .ctxrecap .cr b{font-size:18px;margin-left:6px}
+
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:16px;padding:14px 26px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:.18s}
+  .btn:hover{border-color:var(--ink)}
+  .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--surface-2);border:1px solid var(--line);color:var(--ink);padding:14px 22px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{border-color:var(--red)}
+  .foot{margin-top:40px;color:var(--muted);font-size:12px;letter-spacing:.04em;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><b>FRANKTON</b> · Préparation Mentale</div>
+    <div class="brand">4 fronts du stress</div>
+  </div>
+
+  <!-- STEP 0 -->
+  <section class="step active" id="step0">
+    <h1><span class="q">STRESS</span></h1>
+    <p class="subtitle">Le mot « stress » est devenu un fourre-tout. Pourtant il ne s'exprime jamais d'une seule façon, mais sur quatre fronts distincts : somatique (le corps), émotionnel (les émotions), comportemental (les actes) et cognitif (les pensées). Mieux définir son stress, c'est le premier pas pour mieux le réguler.</p>
+    <div class="startcard">
+      <div class="section-label" style="margin-top:0">Déroulé</div>
+      <ol>
+        <li>La personne évalue son <b>niveau de stress (1 à 10)</b> dans chaque contexte.</li>
+        <li>Elle parcourt tous les symptômes, <b>sans voir les familles</b>, et retient ceux qu'elle ressent.</li>
+        <li>On <b>révèle</b> : les symptômes se regroupent en quatre familles.</li>
+        <li>La famille dominante indique la <b>porte d'entrée</b> de son stress — par où commencer.</li>
+      </ol>
+    </div>
+    <div class="actions"><button class="btn primary" onclick="startGame()">Commencer →</button></div>
+  </section>
+
+  <!-- STEP 1 : CONTEXTES + NIVEAU -->
+  <section class="step" id="step1">
+    <h1 style="font-size:clamp(30px,5vw,52px)">Ton <span class="q">niveau</span> de stress</h1>
+    <p class="subtitle">Pour chaque situation, place ton niveau de stress de 1 (très bas) à 10 (très haut). Tu peux n'en remplir que certaines.</p>
+    <div class="ctx" id="ctxBox" style="margin-top:20px"></div>
+    <div class="actions">
+      <button class="btn ghost" onclick="goStep(0)">← Retour</button>
+      <button class="btn primary" onclick="goStep(2)">Passer aux symptômes →</button>
+    </div>
+  </section>
+
+  <!-- STEP 2 : SYMPTOMES (familles masquées) -->
+  <section class="step" id="step2">
+    <h1 style="font-size:clamp(30px,5vw,52px)">Quels <span class="q">symptômes</span>&nbsp;?</h1>
+    <p class="subtitle">Parcours toutes les cartes et sélectionne les symptômes que tu ressens dans les contextes évalués. Ne cherche pas à les classer — on le fera ensemble ensuite.</p>
+    <div class="count" style="margin-top:18px"><b id="selCount">0</b> symptôme(s) sélectionné(s)</div>
+    <div class="grid" id="grid"></div>
+    <div class="actions">
+      <button class="btn ghost" onclick="goStep(1)">← Niveau</button>
+      <button class="btn primary" id="revealBtn" onclick="reveal()" disabled>Révéler les familles →</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 : REVEAL -->
+  <section class="step" id="step3">
+    <h1 style="font-size:clamp(30px,5vw,52px)">Les <span class="q">familles</span></h1>
+    <p class="subtitle">Voici comment ton stress se répartit. La famille la plus fournie est souvent la porte d'entrée la plus forte&nbsp;: c'est par là qu'on commence le travail.</p>
+
+    <div class="section-label">Niveau de stress par contexte</div>
+    <div class="ctxrecap" id="ctxRecap"></div>
+
+    <div class="section-label">Famille dominante</div>
+    <div class="dominant" id="dominant">
+      <div class="k">Porte d'entrée</div>
+      <div class="v" id="domName">—</div>
+      <p id="domText"></p>
+    </div>
+
+    <div class="section-label">Répartition des symptômes</div>
+    <div class="fambars" id="fambars"></div>
+
+    <div class="famcols" id="famcols"></div>
+
+    <div class="actions">
+      <button class="btn ghost" onclick="goStep(2)">← Modifier</button>
+      <button class="btn" onclick="downloadReal()">Télécharger l'image</button>
+      <button class="btn" onclick="sendReal()" id="mailBtn">Envoyer par mail</button>
+      <button class="btn" onclick="resetAll()">Nouvelle session</button>
+    </div>
+  </section>
+
+  <div class="foot">Frankton Préparation Mentale · Livraison de Mental. Prêt à Performer.</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- Data ---------- */
+const FAMILIES = {
+  soma:{label:'SOMATIQUE', color:'#E84545', cards:['FATIGUE','APPARITION DE ROUGEURS','DOULEUR DANS LE DOS','TENSION MUSCULAIRE','SUEUR FROIDE','SOUFFLE COUPÉ','ENVIE DE VOMIR','TRANSPIRATION',"ENVIE D'ALLER AUX TOILETTES",'ESTOMAC NOUÉ','SURACTIVITÉ OU APATHIE','HAUSSE DU RYTHME CARDIAQUE','MAUX DE TÊTE']},
+  emo:{label:'ÉMOTIONNEL', color:'#F5A623', cards:['ANXIÉTÉ','SENTIMENT DE CRAINTE','IRRITABILITÉ',"SENTIMENT D'AGRESSIVITÉ",'CONFUSION','PEUR ENVAHISSANTE','SENTIMENT DE SOLITUDE','AGITATION']},
+  comp:{label:'COMPORTEMENTAL', color:'#639922', cards:['PROCRASTINATION',"PERTE DE L'APPÉTIT",'BESOIN DE CONTRÔLE','TENDANCE À FAIRE LE CLOWN','DÉBIT VERBAL PERTURBÉ',"TENDANCE À S'ISOLER",'BESOIN URGENT DE MANGER','FUITE','TENDANCE À SE RENFERMER SUR SOI',"PRISE D'ALCOOL, DE TABAC, DE DROGUES"]},
+  cogn:{label:'COGNITIF', color:'#5b8def', cards:['TENDANCE À PENSER NÉGATIVEMENT','ESPRIT DANS LE BROUILLARD','JUGEMENTS HÂTIFS','AUGMENTATION DU FLUX DE PENSÉE','INCAPACITÉ À SE CONCENTRER','CENTRATION SUR LE NÉGATIF','ATTENTION FLOTTANTE',"TENDANCE À L'ANTICIPATION",'PERTE DE MÉMOIRE','INSOMNIE']}
+};
+const DOM_TEXT = {
+  soma:"Ton stress s'exprime d'abord dans le corps. Ce sont des signaux concrets et repérables — un bon point de départ, car on peut agir dessus directement (respiration, relâchement, routines physiques) pour faire baisser la tension avant qu'elle ne gagne le reste.",
+  emo:"Ton stress passe surtout par les émotions. Le travail portera sur l'accueil et la régulation émotionnelle : nommer ce qui se joue, éviter que l'émotion ne prenne toute la place et ne dicte la réaction.",
+  comp:"Ton stress se traduit surtout par des comportements. Ce sont souvent des stratégies d'évitement ou de décharge. Les repérer permet de les remplacer progressivement par des réponses plus utiles.",
+  cogn:"Ton stress s'installe d'abord dans le mental : pensées, anticipation, rumination. Le levier principal sera cognitif — recentrer l'attention, désamorcer les scénarios, revenir au présent et au contrôlable."
+};
+
+let deck=[];             // {name,fam}
+let selected=new Set();
+let contexts=[];         // {label, level, editable}
+
+const $=id=>document.getElementById(id);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function lvColor(v){ return v<=3?'var(--green)':v<=6?'var(--amber)':'var(--red)'; }
+
+function startGame(){
+  deck=[];
+  Object.keys(FAMILIES).forEach(f=>FAMILIES[f].cards.forEach(n=>deck.push({name:n,fam:f})));
+  shuffle(deck);
+  selected.clear();
+  contexts=[
+    {label:'En match', level:0, editable:false},
+    {label:"À l'entraînement", level:0, editable:false},
+    {label:'Au quotidien', level:0, editable:false},
+    {label:'Pour…', level:0, editable:true}
+  ];
+  renderContexts();
+  renderGrid();
+  goStep(1);
+}
+
+/* ---------- Contexts ---------- */
+function renderContexts(){
+  const box=$('ctxBox'); box.innerHTML='';
+  contexts.forEach((c,idx)=>{
+    const card=document.createElement('div'); card.className='ctxcard';
+    const head=document.createElement('div'); head.className='ctxhead';
+    if(c.editable){
+      const inp=document.createElement('input'); inp.value=c.label; inp.placeholder='Pour… (précise)';
+      inp.oninput=()=>{ c.label=inp.value; };
+      head.appendChild(inp);
+    } else head.textContent=c.label;
+    const levels=document.createElement('div'); levels.className='levels';
+    for(let n=1;n<=10;n++){
+      const b=document.createElement('button'); b.className='lv'+(c.level===n?' on':''); b.textContent=n;
+      if(c.level===n){ b.style.background=lvColor(n); }
+      b.onclick=()=>{ c.level = (c.level===n?0:n); renderContexts(); };
+      levels.appendChild(b);
+    }
+    const foot=document.createElement('div'); foot.className='ctxfoot';
+    foot.textContent = c.level? ('Niveau '+c.level+'/10') : 'Non évalué';
+    card.append(head,levels,foot); box.appendChild(card);
+  });
+}
+
+/* ---------- Symptom grid ---------- */
+function renderGrid(){
+  const g=$('grid'); g.innerHTML='';
+  deck.forEach(c=>{
+    const el=document.createElement('div'); el.className='gcard'+(selected.has(c.name)?' sel':'');
+    el.textContent=c.name;
+    el.onclick=()=>{ selected.has(c.name)?selected.delete(c.name):selected.add(c.name); renderGrid(); };
+    g.appendChild(el);
+  });
+  $('selCount').textContent=selected.size;
+  $('revealBtn').disabled=selected.size===0;
+}
+
+/* ---------- Reveal ---------- */
+function famSelected(f){ return FAMILIES[f].cards.filter(n=>selected.has(n)); }
+function ratedContexts(){ return contexts.filter(c=>c.level>0 && !(c.editable && c.label.trim().replace(/…|\.\.\./g,'').trim()==='')); }
+
+function reveal(){
+  // recap contextes
+  const rec=$('ctxRecap'); rec.innerHTML='';
+  const rated=ratedContexts();
+  if(!rated.length){ const s=document.createElement('span'); s.style.color='var(--muted)'; s.style.fontStyle='italic'; s.textContent='Aucun contexte évalué.'; rec.appendChild(s); }
+  rated.forEach(c=>{ const el=document.createElement('span'); el.className='cr'; el.innerHTML=c.label+' <b style="color:'+lvColor(c.level)+'">'+c.level+'/10</b>'; rec.appendChild(el); });
+
+  // familles
+  const counts={}; let max=0, domF=null, total=0;
+  Object.keys(FAMILIES).forEach(f=>{ const n=famSelected(f).length; counts[f]=n; total+=n; if(n>max){max=n;domF=f;} });
+
+  // dominant
+  const dom=$('dominant');
+  if(domF && max>0){
+    dom.style.borderLeftColor=FAMILIES[domF].color;
+    $('domName').textContent=FAMILIES[domF].label;
+    $('domName').style.color=FAMILIES[domF].color;
+    $('domText').innerHTML=DOM_TEXT[domF];
+  } else {
+    $('domName').textContent='—'; $('domName').style.color='var(--muted)'; $('domText').textContent='Aucun symptôme sélectionné.';
+  }
+
+  // barres
+  const fb=$('fambars'); fb.innerHTML='';
+  const maxForScale=Math.max(1,max);
+  Object.keys(FAMILIES).forEach(f=>{
+    const row=document.createElement('div'); row.className='fbrow';
+    const nm=document.createElement('span'); nm.className='fn'; nm.textContent=FAMILIES[f].label; nm.style.color=FAMILIES[f].color;
+    const bar=document.createElement('span'); bar.className='fbar';
+    const i=document.createElement('i'); i.style.width=(counts[f]/maxForScale*100)+'%'; i.style.background=FAMILIES[f].color; bar.appendChild(i);
+    const c=document.createElement('span'); c.className='fc'; c.textContent=counts[f];
+    row.append(nm,bar,c); fb.appendChild(row);
+  });
+
+  // colonnes détaillées
+  const fc=$('famcols'); fc.innerHTML='';
+  Object.keys(FAMILIES).forEach(f=>{
+    const col=document.createElement('div'); col.className='famcol'; col.style.borderTopColor=FAMILIES[f].color;
+    const h=document.createElement('h4'); h.innerHTML=FAMILIES[f].label+' <span style="color:'+FAMILIES[f].color+'">'+counts[f]+'</span>';
+    col.appendChild(h);
+    const ul=document.createElement('ul');
+    const arr=famSelected(f);
+    if(!arr.length){ const li=document.createElement('li'); li.className='none'; li.textContent='—'; ul.appendChild(li); }
+    else arr.forEach(n=>{ const li=document.createElement('li'); li.textContent=n; ul.appendChild(li); });
+    col.appendChild(ul); fc.appendChild(col);
+  });
+
+  goStep(3);
+}
+
+/* ---------- Nav ---------- */
+function goStep(n){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); $('step'+n).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+function resetAll(){ selected.clear(); contexts=[]; goStep(0); }
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(m,e){const t=$('toast');t.textContent=m;t.classList.toggle('err',!!e);t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),3200);}
+
+/* ---------- Canvas ---------- */
+const CV={dark:'#1A1A2E',ink:'#eef0f8',mut:'#9a9ec4',surf:'#26264a',red:'#E84545',amber:'#F5A623',green:'#639922',blue:'#5b8def'};
+const FAMCOL={soma:CV.red,emo:CV.amber,comp:CV.green,cogn:CV.blue};
+let _cv;
+function setupCanvas(W,H){_cv=document.createElement('canvas');_cv.width=W;_cv.height=H;const x=_cv.getContext('2d');x.fillStyle=CV.dark;x.fillRect(0,0,W,H);return x;}
+function roundRect(x,rx,ry,w,h,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+w,ry,rx+w,ry+h,r);x.arcTo(rx+w,ry+h,rx,ry+h,r);x.arcTo(rx,ry+h,rx,ry,r);x.arcTo(rx,ry,rx+w,ry,r);x.closePath();}
+function wrap(x,t,rx,ry,mw,lh){const w=t.split(' ');let l='',yy=ry;for(const wd of w){const tt=l+wd+' ';if(x.measureText(tt).width>mw&&l){x.fillText(l,rx,yy);l=wd+' ';yy+=lh;}else l=tt;}x.fillText(l,rx,yy);return yy;}
+function clean(s){return s.replace(/&nbsp;/g,' ').replace(/&#39;/g,"'");}
+
+function downloadReal(){
+  const W=1080,pad=72;
+  const counts={}; let max=0,domF=null;
+  Object.keys(FAMILIES).forEach(f=>{const n=famSelected(f).length;counts[f]=n;if(n>max){max=n;domF=f;}});
+  const rated=ratedContexts();
+  const maxRows=Math.max(...Object.keys(FAMILIES).map(f=>famSelected(f).length),1);
+  const H=Math.min(1900, 760 + maxRows*30 + 120);
+  const x=setupCanvas(W,H);
+  x.fillStyle=CV.mut;x.font='700 22px Archivo, sans-serif';x.fillText('FRANKTON · PRÉPARATION MENTALE',pad,84);
+  x.fillStyle=CV.ink;x.font="800 64px 'Barlow Condensed', sans-serif";x.fillText('STRESS',pad,160);
+
+  // contextes
+  let y=210;
+  x.fillStyle=CV.mut;x.font="700 20px 'Barlow Condensed', sans-serif";x.fillText('NIVEAU PAR CONTEXTE',pad,y); y+=32;
+  x.font="700 24px 'Barlow Condensed', sans-serif";
+  if(!rated.length){x.fillStyle=CV.mut;x.fillText('Aucun contexte évalué',pad,y);y+=6;}
+  rated.forEach(c=>{ x.fillStyle=CV.ink; x.fillText(clean(c.label),pad,y);
+    const col=c.level<=3?CV.green:c.level<=6?CV.amber:CV.red;
+    x.fillStyle=col;x.textAlign='right';x.fillText(c.level+'/10',W-pad,y);x.textAlign='left'; y+=32; });
+
+  // dominant
+  y+=14;
+  roundRect(x,pad,y,W-2*pad,120,16);x.fillStyle=CV.surf;x.fill();
+  if(domF&&max>0){ x.fillStyle=FAMCOL[domF];x.fillRect(pad,y,5,120);
+    x.fillStyle=CV.mut;x.font="700 16px 'Barlow Condensed', sans-serif";x.fillText("PORTE D'ENTRÉE",pad+28,y+34);
+    x.fillStyle=FAMCOL[domF];x.font="800 40px 'Barlow Condensed', sans-serif";x.fillText(clean(FAMILIES[domF].label),pad+28,y+82); }
+  else { x.fillStyle=CV.mut;x.font="800 32px 'Barlow Condensed', sans-serif";x.fillText('—',pad+28,y+70); }
+  y+=150;
+
+  // barres familles
+  x.fillStyle=CV.mut;x.font="700 20px 'Barlow Condensed', sans-serif";x.fillText('RÉPARTITION DES SYMPTÔMES',pad,y);y+=34;
+  const scale=Math.max(1,max);
+  Object.keys(FAMILIES).forEach(f=>{
+    x.fillStyle=FAMCOL[f];x.font="800 22px 'Barlow Condensed', sans-serif";x.fillText(clean(FAMILIES[f].label),pad,y+18);
+    const bx=pad+300,bw=W-pad-300-70;
+    roundRect(x,bx,y+2,bw,20,6);x.fillStyle=CV.surf;x.fill();
+    roundRect(x,bx,y+2,bw*(counts[f]/scale),20,6);x.fillStyle=FAMCOL[f];x.fill();
+    x.fillStyle=CV.ink;x.font="800 22px 'Barlow Condensed', sans-serif";x.textAlign='right';x.fillText(counts[f],W-pad,y+19);x.textAlign='left';
+    y+=40;
+  });
+
+  // listes par famille (2 colonnes)
+  y+=10;
+  x.fillStyle=CV.mut;x.font="700 20px 'Barlow Condensed', sans-serif";x.fillText('DÉTAIL',pad,y);y+=30;
+  const colW=(W-2*pad-30)/2; const startY=y; let cy=[startY,startY];
+  const famKeys=Object.keys(FAMILIES);
+  famKeys.forEach((f,i)=>{
+    const colIdx=i%2; const cx=pad+colIdx*(colW+30);
+    const arr=famSelected(f); if(!arr.length) return;
+    x.fillStyle=FAMCOL[f];x.font="800 20px 'Barlow Condensed', sans-serif";x.fillText(clean(FAMILIES[f].label),cx,cy[colIdx]); cy[colIdx]+=28;
+    x.fillStyle=CV.ink;x.font="600 18px 'Barlow Condensed', sans-serif";
+    arr.forEach(n=>{ x.fillText('· '+clean(n),cx,cy[colIdx]); cy[colIdx]+=26; });
+    cy[colIdx]+=10;
+  });
+
+  x.fillStyle=CV.mut;x.font='400 20px Archivo, sans-serif';x.textAlign='center';x.fillText('Mieux définir son stress, c\'est déjà le réguler. · Frankton',W/2,H-36);x.textAlign='left';
+  const a=document.createElement('a');a.download='stress.png';a.href=_cv.toDataURL('image/png');a.click();toast('Image téléchargée.');
+}
+
+/* ---------- EmailJS ---------- */
+const EMAILJS_PUBLIC='0MtCqya8qs7Xxmls3',EMAILJS_SERVICE='service_qiyusj5',EMAILJS_TEMPLATE='template_cx5bh3d',TO_EMAIL='contact@franktontactical.fr';
+try{emailjs.init({publicKey:EMAILJS_PUBLIC});}catch(e){}
+function sendReal(){
+  const btn=$('mailBtn'); btn.disabled=true; const old=btn.textContent; btn.textContent='Envoi…';
+  const counts={};let max=0,domF=null;
+  Object.keys(FAMILIES).forEach(f=>{const n=famSelected(f).length;counts[f]=n;if(n>max){max=n;domF=f;}});
+  const rated=ratedContexts();
+  const ctxTxt=rated.length?rated.map(c=>'  • '+c.label+' : '+c.level+'/10').join('\n'):'  —';
+  const famTxt=Object.keys(FAMILIES).map(f=>{
+    const arr=famSelected(f);
+    return FAMILIES[f].label+' ('+arr.length+') :\n'+(arr.length?arr.map(n=>'    - '+n).join('\n'):'    —');
+  }).join('\n\n');
+  const msg=`Outil : STRESS
+
+Niveau par contexte :
+${ctxTxt}
+
+Famille dominante : ${domF&&max>0?FAMILIES[domF].label:'—'}
+
+Répartition des symptômes :
+${famTxt}
+
+— Frankton Préparation Mentale`;
+  emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{sujet:'STRESS',subject:'STRESS',message:msg,content:msg,to_email:TO_EMAIL,email:TO_EMAIL})
+  .then(()=>{toast('Envoyé à '+TO_EMAIL);btn.disabled=false;btn.textContent=old;})
+  .catch(err=>{console.error(err);toast('Envoi impossible. Vérifie les variables du template EmailJS.',true);btn.disabled=false;btn.textContent='Réessayer l\'envoi';});
+}
+</script>
+</body>
+</html>
