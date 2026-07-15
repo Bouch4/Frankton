@@ -15,6 +15,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--black);color:var(--ink);font-family:'Barlow Condensed',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{overflow-x:hidden}
   body{min-height:100vh}
 
   /* bandeau haut */
@@ -28,8 +29,10 @@
   .wrap{max-width:940px;margin:0 auto;padding:0 18px 70px}
 
   /* hero */
-  .hero{position:relative;padding:44px 0 34px;overflow:hidden}
-  .hero .xmark{position:absolute;left:-70px;top:-30px;width:280px;height:280px;opacity:.55;pointer-events:none}
+  .hero{position:relative;padding:44px 0 34px}
+  /* le X déborde du bord de l'écran, comme sur franktontactical.fr */
+  .hero .xmark{position:absolute;left:calc(50% - 50vw - 78px);top:-46px;width:330px;height:330px;opacity:.5;pointer-events:none;z-index:0}
+  @media(max-width:700px){ .hero .xmark{width:240px;height:240px;left:calc(50% - 50vw - 66px);top:-24px;opacity:.42} }
   .hero .inner{position:relative;z-index:2}
   .eyebrow{font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--orange)}
   .wordmark{width:min(440px,84%);height:auto;display:block;margin:14px 0 16px}
