@@ -10,11 +10,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root{
-    --dark:#1A1A2E; --dark-2:#20203a; --surface:#26264a; --surface-2:#2f2f57;
-    --red:#E84545; --amber:#F5A623; --green:#639922; --blue:#5b8def;
-    --ink:#eef0f8; --muted:#9a9ec4; --line:rgba(255,255,255,.10); --ok:#39c07a;
-    --soma:#E84545; --emo:#F5A623; --comp:#639922; --cogn:#5b8def;
+    --dark:#000000; --dark-2:#0d0d0d; --surface:#0d0d0d; --surface-2:#161616;
+    --red:#E84545; --amber:#FB8601; --green:#639922; --blue:#5b8def;
+    --ink:#FFFFFF; --muted:#9a9a9a; --line:rgba(255,255,255,.13); --ok:#39c07a;
+    --soma:#E84545; --emo:#FB8601; --comp:#639922; --cogn:#5b8def;
   }
+  .fk-topbar{background:#000;border-bottom:1px solid rgba(255,255,255,.08);padding:12px 20px;text-align:center;margin:-24px -16px 22px}
+  .fk-topbar span{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:12px;color:#fff}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--dark);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   body{min-height:100vh;padding:24px 16px 64px}
@@ -28,7 +30,7 @@
   .step{display:none} .step.active{display:block;animation:fade .35s ease}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  .startcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-top:28px}
+  .startcard{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:30px 28px;margin-top:28px}
   .startcard ol{margin:14px 0 0 20px;color:var(--muted);font-size:14.5px;line-height:1.8}
   .startcard b{color:var(--ink)}
 
@@ -37,11 +39,11 @@
 
   /* contexts */
   .ctx{display:flex;flex-direction:column;gap:14px}
-  .ctxcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .ctxcard{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:18px 20px}
   .ctxhead{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:19px;letter-spacing:.02em;margin-bottom:12px}
-  .ctxhead input{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:18px;letter-spacing:.02em;padding:6px 12px;border-radius:9px;width:min(320px,80%)}
+  .ctxhead input{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:18px;letter-spacing:.02em;padding:6px 12px;border-radius:3px;width:min(320px,80%)}
   .levels{display:flex;flex-wrap:wrap;gap:7px}
-  .lv{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;cursor:pointer;transition:.12s}
+  .lv{width:44px;height:44px;border-radius:3px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;cursor:pointer;transition:.12s}
   .lv:hover{border-color:var(--muted)}
   .lv.on{color:#fff;border-color:transparent}
   .ctxfoot{color:var(--muted);font-size:12.5px;margin-top:10px}
@@ -50,13 +52,13 @@
   .count{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:var(--muted);margin:4px 0 14px}
   .count b{color:var(--amber);font-size:20px}
   .grid{display:flex;flex-wrap:wrap;gap:10px}
-  .gcard{flex:1 1 180px;max-width:230px;min-height:66px;background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:12px 14px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.02em;line-height:1.1;cursor:pointer;transition:.15s;user-select:none;position:relative}
+  .gcard{flex:1 1 180px;max-width:230px;min-height:66px;background:var(--surface-2);border:1px solid var(--line);border-radius:3px;padding:12px 14px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.02em;line-height:1.1;cursor:pointer;transition:.15s;user-select:none;position:relative}
   .gcard:hover{transform:translateY(-2px);border-color:var(--muted)}
   .gcard.sel{background:var(--red);border-color:var(--red);color:#fff}
   .gcard.sel::after{content:"✓";position:absolute;top:6px;right:9px;font-size:12px;opacity:.85}
 
   /* reveal families */
-  .dominant{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin-bottom:22px;border-left:4px solid var(--red)}
+  .dominant{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:24px 26px;margin-bottom:22px;border-left:4px solid var(--red)}
   .dominant .k{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--muted)}
   .dominant .v{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:40px;line-height:1;margin:4px 0 10px}
   .dominant p{color:var(--ink);font-size:14.5px;line-height:1.6}
@@ -64,37 +66,38 @@
   .fambars{display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
   .fbrow{display:flex;align-items:center;gap:14px}
   .fbrow .fn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:16px;width:150px;flex:none}
-  .fbrow .fbar{flex:1;height:20px;border-radius:6px;background:var(--surface-2);overflow:hidden}
-  .fbrow .fbar i{display:block;height:100%;border-radius:6px}
+  .fbrow .fbar{flex:1;height:20px;border-radius:2px;background:var(--surface-2);overflow:hidden}
+  .fbrow .fbar i{display:block;height:100%;border-radius:2px}
   .fbrow .fc{font-family:'Barlow Condensed',sans-serif;font-weight:800;min-width:40px;text-align:right}
 
   .famcols{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
-  .famcol{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 16px 18px;border-top:3px solid var(--muted)}
+  .famcol{flex:1 1 220px;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px 16px 18px;border-top:3px solid var(--muted)}
   .famcol h4{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:18px;letter-spacing:.03em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
   .famcol h4 span{font-size:22px}
   .famcol ul{list-style:none;display:flex;flex-direction:column;gap:6px}
-  .famcol li{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.02em}
+  .famcol li{background:var(--surface-2);border:1px solid var(--line);border-radius:3px;padding:7px 11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.02em}
   .famcol .none{color:var(--muted);font-size:12.5px;font-style:italic}
 
   .ctxrecap{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
-  .ctxrecap .cr{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:14px}
+  .ctxrecap .cr{background:var(--surface-2);border:1px solid var(--line);border-radius:3px;padding:8px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:14px}
   .ctxrecap .cr b{font-size:18px;margin-left:6px}
 
   .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-  .btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:16px;padding:14px 26px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:.18s}
+  .btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:16px;padding:14px 26px;border-radius:3px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:.18s}
   .btn:hover{border-color:var(--ink)}
   .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
   .btn.primary:hover{filter:brightness(1.08)}
   .btn.ghost{background:transparent}
   .btn:disabled{opacity:.4;cursor:not-allowed}
 
-  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--surface-2);border:1px solid var(--line);color:var(--ink);padding:14px 22px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--surface-2);border:1px solid var(--line);color:var(--ink);padding:14px 22px;border-radius:3px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.5)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.err{border-color:var(--red)}
   .foot{margin-top:40px;color:var(--muted);font-size:12px;letter-spacing:.04em;text-align:center}
 </style>
 </head>
 <body>
+<div class="fk-topbar"><span>Frankton Tactical · Préparation mentale</span></div>
 <div class="wrap">
   <div class="top">
     <div class="brand"><b>FRANKTON</b> · Préparation Mentale</div>
@@ -176,7 +179,7 @@
 /* ---------- Data ---------- */
 const FAMILIES = {
   soma:{label:'SOMATIQUE', color:'#E84545', cards:['FATIGUE','APPARITION DE ROUGEURS','DOULEUR DANS LE DOS','TENSION MUSCULAIRE','SUEUR FROIDE','SOUFFLE COUPÉ','ENVIE DE VOMIR','TRANSPIRATION',"ENVIE D'ALLER AUX TOILETTES",'ESTOMAC NOUÉ','SURACTIVITÉ OU APATHIE','HAUSSE DU RYTHME CARDIAQUE','MAUX DE TÊTE']},
-  emo:{label:'ÉMOTIONNEL', color:'#F5A623', cards:['ANXIÉTÉ','SENTIMENT DE CRAINTE','IRRITABILITÉ',"SENTIMENT D'AGRESSIVITÉ",'CONFUSION','PEUR ENVAHISSANTE','SENTIMENT DE SOLITUDE','AGITATION']},
+  emo:{label:'ÉMOTIONNEL', color:'#FB8601', cards:['ANXIÉTÉ','SENTIMENT DE CRAINTE','IRRITABILITÉ',"SENTIMENT D'AGRESSIVITÉ",'CONFUSION','PEUR ENVAHISSANTE','SENTIMENT DE SOLITUDE','AGITATION']},
   comp:{label:'COMPORTEMENTAL', color:'#639922', cards:['PROCRASTINATION',"PERTE DE L'APPÉTIT",'BESOIN DE CONTRÔLE','TENDANCE À FAIRE LE CLOWN','DÉBIT VERBAL PERTURBÉ',"TENDANCE À S'ISOLER",'BESOIN URGENT DE MANGER','FUITE','TENDANCE À SE RENFERMER SUR SOI',"PRISE D'ALCOOL, DE TABAC, DE DROGUES"]},
   cogn:{label:'COGNITIF', color:'#5b8def', cards:['TENDANCE À PENSER NÉGATIVEMENT','ESPRIT DANS LE BROUILLARD','JUGEMENTS HÂTIFS','AUGMENTATION DU FLUX DE PENSÉE','INCAPACITÉ À SE CONCENTRER','CENTRATION SUR LE NÉGATIF','ATTENTION FLOTTANTE',"TENDANCE À L'ANTICIPATION",'PERTE DE MÉMOIRE','INSOMNIE']}
 };
@@ -311,7 +314,7 @@ let toastT;
 function toast(m,e){const t=$('toast');t.textContent=m;t.classList.toggle('err',!!e);t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),3200);}
 
 /* ---------- Canvas ---------- */
-const CV={dark:'#1A1A2E',ink:'#eef0f8',mut:'#9a9ec4',surf:'#26264a',red:'#E84545',amber:'#F5A623',green:'#639922',blue:'#5b8def'};
+const CV={dark:'#000000',ink:'#FFFFFF',mut:'#9a9a9a',surf:'#0d0d0d',red:'#E84545',amber:'#FB8601',green:'#639922',blue:'#5b8def'};
 const FAMCOL={soma:CV.red,emo:CV.amber,comp:CV.green,cogn:CV.blue};
 let _cv;
 function setupCanvas(W,H){_cv=document.createElement('canvas');_cv.width=W;_cv.height=H;const x=_cv.getContext('2d');x.fillStyle=CV.dark;x.fillRect(0,0,W,H);return x;}
