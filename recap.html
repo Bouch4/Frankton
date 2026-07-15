@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Récap de séance — Frankton</title>
+<meta name="description" content="La synthèse de la séance : tous les outils réalisés, en une seule page.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  :root{--dark:#000000;--dark-2:#0d0d0d;--surface:#0d0d0d;--surface-2:#161616;
+        --red:#E84545;--amber:#FB8601;--green:#639922;--blue:#5b8def;--purple:#b06fd6;
+        --ink:#FFFFFF;--muted:#9a9a9a;--line:rgba(255,255,255,.13);--ok:#39c07a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--dark);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{min-height:100vh;padding:24px 16px 64px}
+  .fk-topbar{background:#000;border-bottom:1px solid rgba(255,255,255,.08);padding:12px 20px;text-align:center;margin:-24px -16px 22px}
+  .fk-topbar span{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:12px;color:#fff}
+  .wrap{max-width:940px;margin:0 auto}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+  .brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.14em;font-size:14px;color:var(--muted);text-transform:uppercase}
+  .brand b{color:var(--ink)}
+  .back{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:18px;color:var(--amber);text-decoration:none;border:2px solid var(--amber);padding:11px 22px;border-radius:3px;transition:.15s;cursor:pointer;background:none;display:inline-block}
+  .back:hover{background:var(--amber);color:#000}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(38px,7vw,64px);line-height:.92;text-transform:uppercase}
+  h1 .q{color:var(--amber)}
+  .subtitle{color:var(--muted);font-size:15px;margin-top:8px;max-width:60ch;line-height:1.55}
+  .idbox{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 8px}
+  .idbox input{flex:1 1 240px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink);padding:12px 14px;font-family:'Archivo',sans-serif;font-size:15px;border-radius:2px}
+  .idbox input:focus{outline:none;border-color:var(--amber)}
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--muted);margin:26px 0 12px;display:flex;align-items:center;gap:10px}
+  .section-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .cards{display:flex;flex-direction:column;gap:14px}
+  .rcard{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:20px 22px;position:relative}
+  .rcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+  .rcard .rh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .rcard .rt{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:24px;letter-spacing:.02em;color:var(--accent)}
+  .rcard .rd{font-size:12px;color:var(--muted)}
+  .kv{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:10px}
+  .kv .k{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px;color:var(--muted)}
+  .kv .v{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1}
+  .det{font-size:13.5px;color:var(--muted);line-height:1.55}
+  .det b{color:var(--ink);font-weight:600}
+  .r-pourqui{--accent:var(--red)} .r-ego{--accent:var(--green)} .r-stress{--accent:var(--amber)} .r-moti{--accent:var(--blue)}
+  .empty{background:var(--surface);border:1px dashed var(--line);border-radius:3px;padding:34px 22px;text-align:center;color:var(--muted);font-size:14.5px;line-height:1.6}
+  .empty a{color:var(--amber);text-decoration:none;font-weight:600}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:16px;padding:14px 26px;border-radius:2px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn:hover{border-color:var(--ink)}
+  .btn.primary{background:var(--amber);border-color:var(--amber);color:#000}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--surface-2);border:1px solid var(--line);color:var(--ink);padding:14px 22px;border-radius:2px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{border-color:var(--red)}
+  .foot{margin-top:40px;color:var(--muted);font-size:12px;text-align:center;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="fk-topbar"><span>Frankton Tactical · Préparation mentale</span></div>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><b>FRANKTON</b> · Préparation Mentale</div>
+    <a class="back" href="index.html">← Accueil</a>
+  </div>
+
+  <h1>Récap de <span class="q">séance</span></h1>
+  <p class="subtitle">Tout ce qui a été fait sur cet appareil, rassemblé en une seule page. Les outils s'ajoutent ici automatiquement au fur et à mesure que tu les termines.</p>
+
+  <div class="idbox">
+    <input type="text" id="client" placeholder="Nom du client (optionnel)">
+    <input type="date" id="dateS">
+  </div>
+
+  <div class="section-label">La séance</div>
+  <div class="cards" id="cards"></div>
+
+  <div class="actions">
+    <button class="btn primary" onclick="downloadRecap()" id="btnImg">Télécharger l'image</button>
+    <button class="btn" onclick="sendRecap()" id="mailBtn">Envoyer par mail</button>
+    <button class="btn" onclick="clearAll()">Vider le récap</button>
+  </div>
+
+  <div class="foot">Frankton Préparation Mentale · Livraison de mental · Prêt à performer</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const TOOLS=[
+  {k:'pourqui', cls:'r-pourqui', label:'Pour qui je joue ?', color:'#E84545'},
+  {k:'ego',     cls:'r-ego',     label:'Ego / Tâche',        color:'#639922'},
+  {k:'stress',  cls:'r-stress',  label:'Stress',             color:'#FB8601'},
+  {k:'moti',    cls:'r-moti',    label:'Motivations profondes', color:'#5b8def'}
+];
+let sessions={};
+
+function readAll(){
+  sessions={};
+  TOOLS.forEach(t=>{
+    try{
+      const raw=localStorage.getItem('frankton_last_'+t.k);
+      if(raw) sessions[t.k]=JSON.parse(raw);
+    }catch(e){}
+  });
+}
+function fmtDate(ts){ try{ return new Date(ts).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+
+function render(){
+  readAll();
+  const box=$('cards'); box.innerHTML='';
+  const found=TOOLS.filter(t=>sessions[t.k]);
+  if(!found.length){
+    box.innerHTML='<div class="empty">Aucun outil terminé pour l\'instant.<br>Fais une session depuis <a href="jeux.html">Outils / Jeux</a> et reviens ici : elle apparaîtra automatiquement.</div>';
+    $('btnImg').disabled=true; $('mailBtn').disabled=true; return;
+  }
+  $('btnImg').disabled=false; $('mailBtn').disabled=false;
+  found.forEach(t=>{
+    const s=sessions[t.k];
+    const c=document.createElement('div'); c.className='rcard '+t.cls;
+    let kv='', det='';
+    (s.summary.stats||[]).forEach(st=>{ kv+=`<div><div class="k">${st[0]}</div><div class="v" style="color:${t.color}">${st[1]}</div></div>`; });
+    (s.summary.lines||[]).forEach(l=>{ det+=`<div>${l}</div>`; });
+    c.innerHTML=`<div class="rh"><span class="rt">${t.label}</span><span class="rd">${fmtDate(s.date)}</span></div>
+      ${kv?`<div class="kv">${kv}</div>`:''}${det?`<div class="det">${det}</div>`:''}`;
+    box.appendChild(c);
+  });
+}
+
+function clearAll(){
+  if(!confirm('Vider le récap ? Les sessions enregistrées sur cet appareil seront effacées.')) return;
+  TOOLS.forEach(t=>{ try{ localStorage.removeItem('frankton_last_'+t.k); }catch(e){} });
+  render(); toast('Récap vidé.');
+}
+
+let toastT;
+function toast(m,e){ const t=$('toast'); t.textContent=m; t.classList.toggle('err',!!e); t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),3000); }
+
+/* ---------- export image ---------- */
+function roundRect(x,rx,ry,w,h,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+w,ry,rx+w,ry+h,r);x.arcTo(rx+w,ry+h,rx,ry+h,r);x.arcTo(rx,ry+h,rx,ry,r);x.arcTo(rx,ry,rx+w,ry,r);x.closePath();}
+function wrap(x,t,rx,ry,mw,lh){const w=t.split(' ');let l='',yy=ry;for(const wd of w){const tt=l+wd+' ';if(x.measureText(tt).width>mw&&l){x.fillText(l,rx,yy);l=wd+' ';yy+=lh;}else l=tt;}x.fillText(l,rx,yy);return yy;}
+
+function downloadRecap(){
+  readAll();
+  const found=TOOLS.filter(t=>sessions[t.k]);
+  const W=1080, pad=72;
+  const H=Math.max(900, 300 + found.length*230 + 90);
+  const c=document.createElement('canvas'); c.width=W;c.height=H;
+  const x=c.getContext('2d');
+  x.fillStyle='#000'; x.fillRect(0,0,W,H);
+  x.fillStyle='#9a9a9a'; x.font='700 22px Archivo, sans-serif';
+  x.fillText('FRANKTON · PRÉPARATION MENTALE',pad,80);
+  x.fillStyle='#fff'; x.font="800 60px 'Barlow Condensed', sans-serif";
+  x.fillText('RÉCAP DE SÉANCE',pad,150);
+  const cl=$('client').value.trim(), dt=$('dateS').value;
+  x.fillStyle='#FB8601'; x.font="700 26px 'Barlow Condensed', sans-serif";
+  let sub=[cl,dt?new Date(dt).toLocaleDateString('fr-FR'):''].filter(Boolean).join('  ·  ');
+  if(sub) x.fillText(sub,pad,186);
+
+  let y=240;
+  found.forEach(t=>{
+    const s=sessions[t.k];
+    roundRect(x,pad,y,W-2*pad,200,3); x.fillStyle='#0d0d0d'; x.fill();
+    x.fillStyle=t.color; x.fillRect(pad,y,4,200);
+    x.fillStyle=t.color; x.font="800 30px 'Barlow Condensed', sans-serif";
+    x.fillText(t.label.toUpperCase(),pad+26,y+42);
+    let sx=pad+26;
+    (s.summary.stats||[]).forEach(st=>{
+      x.fillStyle='#9a9a9a'; x.font='700 15px Archivo, sans-serif'; x.fillText(st[0].toUpperCase(),sx,y+80);
+      x.fillStyle='#fff'; x.font="800 44px 'Barlow Condensed', sans-serif"; x.fillText(String(st[1]),sx,y+126);
+      sx+=Math.max(150, x.measureText(String(st[1])).width+120);
+    });
+    x.fillStyle='#9a9a9a'; x.font='400 18px Archivo, sans-serif';
+    const txt=(s.summary.lines||[]).join(' · ').replace(/<[^>]+>/g,'');
+    if(txt) wrap(x,txt,pad+26,y+164,W-2*pad-52,24);
+    y+=230;
+  });
+  x.fillStyle='#9a9a9a'; x.font='400 20px Archivo, sans-serif'; x.textAlign='center';
+  x.fillText('Livraison de mental · Prêt à performer',W/2,H-40); x.textAlign='left';
+  const a=document.createElement('a'); a.download='recap-seance.png'; a.href=c.toDataURL('image/png'); a.click();
+  toast('Image téléchargée.');
+}
+
+/* ---------- email ---------- */
+const EMAILJS_PUBLIC='0MtCqya8qs7Xxmls3',EMAILJS_SERVICE='service_qiyusj5',EMAILJS_TEMPLATE='template_cx5bh3d',TO_EMAIL='contact@franktontactical.fr';
+try{ emailjs.init({publicKey:EMAILJS_PUBLIC}); }catch(e){}
+function sendRecap(){
+  readAll();
+  const found=TOOLS.filter(t=>sessions[t.k]);
+  if(!found.length){ toast('Rien à envoyer.',true); return; }
+  const btn=$('mailBtn'); btn.disabled=true; const old=btn.textContent; btn.textContent='Envoi…';
+  const cl=$('client').value.trim(), dt=$('dateS').value;
+  let msg='RÉCAP DE SÉANCE\n';
+  if(cl) msg+='Client : '+cl+'\n';
+  if(dt) msg+='Date : '+new Date(dt).toLocaleDateString('fr-FR')+'\n';
+  msg+='\n';
+  found.forEach(t=>{
+    const s=sessions[t.k];
+    msg+='── '+t.label.toUpperCase()+'  ('+fmtDate(s.date)+')\n';
+    (s.summary.stats||[]).forEach(st=>{ msg+='   '+st[0]+' : '+st[1]+'\n'; });
+    (s.summary.lines||[]).forEach(l=>{ msg+='   '+l.replace(/<[^>]+>/g,'')+'\n'; });
+    msg+='\n';
+  });
+  msg+='— Frankton Préparation Mentale';
+  const sujet='RÉCAP DE SÉANCE'+(cl?' — '+cl:'');
+  emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{sujet,subject:sujet,message:msg,content:msg,to_email:TO_EMAIL,email:TO_EMAIL})
+  .then(()=>{ toast('Récap envoyé à '+TO_EMAIL); btn.disabled=false; btn.textContent=old; })
+  .catch(err=>{ console.error(err); toast('Envoi impossible.',true); btn.disabled=false; btn.textContent=old; });
+}
+
+$('dateS').value=new Date().toISOString().slice(0,10);
+render();
+</script>
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});}
+</script>
+</body>
+</html>

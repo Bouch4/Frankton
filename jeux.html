@@ -23,8 +23,8 @@
   .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:40px;flex-wrap:wrap}
   .brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.14em;font-size:14px;color:var(--muted);text-transform:uppercase}
   .brand b{color:var(--ink)}
-  .back{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:9px 16px;border-radius:3px;transition:.15s}
-  .back:hover{border-color:var(--ink);color:var(--ink)}
+  .back{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:18px;color:var(--amber);text-decoration:none;border:2px solid var(--amber);padding:11px 22px;border-radius:3px;transition:.15s;cursor:pointer;background:none;display:inline-block}
+  .back:hover{background:var(--amber);color:#000}
 
   .hero{margin-bottom:34px}
   .eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:13px;color:var(--amber)}
@@ -46,6 +46,7 @@
   .t-ego{--accent:var(--green)}
   .t-stress{--accent:var(--amber)}
   .t-moti{--accent:var(--blue)}
+  .t-recap{--accent:var(--amber)}
 
   .foot{margin-top:48px;color:var(--muted);font-size:12.5px;letter-spacing:.03em;text-align:center;line-height:1.7}
   .foot a{color:var(--muted);text-decoration:none}
@@ -108,6 +109,15 @@
       <div class="body">
         <div class="tname">Stress</div>
         <div class="tdesc">Cartographie ton stress sur ses quatre fronts et trouve ta porte d'entrée dominante.</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="tool t-recap" href="recap.html">
+      <div class="glyph">▣</div>
+      <div class="body">
+        <div class="tname">Récap de séance</div>
+        <div class="tdesc">Rassemble en une seule page tous les outils faits pendant la séance, et exporte le tout d'un coup.</div>
       </div>
       <div class="arrow">›</div>
     </a>
