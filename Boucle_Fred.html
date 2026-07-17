@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Ma Boucle — Frankton</title>
+<style>
+  :root{
+    --dark:#1A1A2E; --red:#E84545; --amber:#C77A00; --amber-bg:#FFF7E6;
+    --grey:#f3f4f6; --line:#e2e2e8; --txt:#1A1A2E; --muted:#6b6b76;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,Arial,Helvetica,sans-serif;color:var(--txt);
+    margin:0;background:#eef0f4;line-height:1.5;}
+  .app{max-width:560px;margin:0 auto;background:#fff;min-height:100vh;
+    box-shadow:0 0 40px rgba(0,0,0,.06);}
+  header{background:var(--dark);color:#fff;padding:18px 20px 16px;position:sticky;top:0;z-index:5;}
+  header .brand{font-size:11px;letter-spacing:2px;color:#b9b9c8;text-transform:uppercase;}
+  header h1{font-size:22px;margin:2px 0 0;font-weight:800;}
+  header .tag{font-size:12px;color:#E8b0b0;margin-top:3px;}
+  header .redbar{height:3px;background:var(--red);margin:12px -20px -16px;}
+  main{padding:20px;}
+  h2{font-size:15px;color:var(--red);margin:0 0 4px;text-transform:uppercase;letter-spacing:.5px;}
+  h2 .step{color:var(--muted);font-weight:600;font-size:12px;letter-spacing:0;}
+  .q{font-size:17px;font-weight:700;margin:2px 0 12px;}
+  .hint{font-size:12.5px;color:var(--muted);margin:-6px 0 12px;}
+  textarea,input[type=text]{width:100%;border:1.5px solid var(--line);border-radius:10px;
+    padding:12px;font:inherit;font-size:15px;resize:vertical;background:#fcfcfd;}
+  textarea:focus,input:focus{outline:none;border-color:var(--red);}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 14px;font-size:13.5px;cursor:pointer;user-select:none;transition:.15s;}
+  .chip:active{transform:scale(.96);}
+  .chip.on{background:var(--dark);color:#fff;border-color:var(--dark);}
+  .emo .chip.on{border-color:transparent;}
+  .slider-wrap{margin:6px 0 4px;}
+  input[type=range]{width:100%;accent-color:var(--red);}
+  .intensity{display:flex;justify-content:space-between;align-items:baseline;}
+  .intensity b{font-size:26px;}
+  .intensity small{color:var(--muted);font-size:12px;}
+  .nav{display:flex;gap:10px;margin-top:22px;}
+  .btn{flex:1;border:none;border-radius:12px;padding:14px;font:inherit;font-size:15px;
+    font-weight:700;cursor:pointer;transition:.15s;}
+  .btn:active{transform:scale(.98);}
+  .btn.primary{background:var(--red);color:#fff;}
+  .btn.dark{background:var(--dark);color:#fff;}
+  .btn.ghost{background:#fff;color:var(--dark);border:1.5px solid var(--line);flex:0 0 auto;padding:14px 18px;}
+  .btn.full{width:100%;}
+  .progress{display:flex;gap:5px;margin-bottom:16px;}
+  .progress i{flex:1;height:5px;border-radius:3px;background:var(--line);}
+  .progress i.on{background:var(--red);}
+  .loop{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0 4px;}
+  .loop span{font-size:11px;font-weight:700;padding:5px 9px;border-radius:8px;background:var(--grey);color:var(--muted);}
+  .loop span.on{background:var(--red);color:#fff;}
+  .loop .arw{background:none;color:var(--line);padding:5px 0;}
+  .card{border:1.5px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;}
+  .card h3{margin:0 0 8px;font-size:14px;color:var(--dark);}
+  .kv{font-size:13.5px;margin:5px 0;}
+  .kv b{color:var(--muted);font-weight:600;}
+  .banner{background:var(--amber-bg);border-left:4px solid var(--amber);border-radius:8px;
+    padding:12px 14px;font-size:13.5px;color:#7a5600;margin:12px 0;}
+  .banner.red{background:#fff0f0;border-color:var(--red);color:#a12b2b;}
+  .sub-block{margin:0 0 16px;}
+  .sub-block label{display:block;font-size:13.5px;font-weight:700;margin:0 0 6px;}
+  /* breathing */
+  .breath{display:flex;flex-direction:column;align-items:center;padding:10px 0 4px;}
+  .ball{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff7a7a,#E84545);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:19px;
+    transition:transform .2s linear;box-shadow:0 10px 30px rgba(232,69,69,.35);}
+  .breath .phase{margin-top:16px;font-size:15px;color:var(--muted);min-height:22px;}
+  .breath .cyc{font-size:12px;color:var(--muted);margin-top:2px;}
+  .journal-item{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+  .journal-item .top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);}
+  .journal-item .situ{font-size:14px;font-weight:600;margin:3px 0;}
+  .journal-item .emo{font-size:12.5px;}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin-right:4px;}
+  .tag-ok{color:#1f7a3d;font-size:11.5px;font-weight:700;}
+  .tag-no{color:var(--red);font-size:11.5px;font-weight:700;}
+  .empty{text-align:center;color:var(--muted);font-size:13.5px;padding:26px 10px;}
+  .foot{font-size:10.5px;color:#9a9aa4;text-align:center;padding:16px;border-top:1px solid var(--line);}
+  .count{font-size:12.5px;color:var(--muted);margin-bottom:14px;}
+  .count b{color:var(--dark);}
+  .link{background:none;border:none;color:var(--red);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;padding:0;}
+  .hidden{display:none;}
+  .row2{display:flex;gap:10px;}
+  .row2>*{flex:1;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">Frankton · Préparation Mentale</div>
+    <h1>Ma Boucle</h1>
+    <div class="tag">Situation → Pensée → Émotion → Comportement → Conséquence</div>
+    <div class="redbar"></div>
+  </header>
+  <main id="main"></main>
+  <div class="foot" id="foot">Brouillon — à valider avant publication. Tes données restent sur cet appareil.</div>
+</div>
+
+<script>
+/* ---------- state ---------- */
+const EMO = [
+  {n:"Fierté",      c:"#2E9E5B"},
+  {n:"Joie",        c:"#28A745"},
+  {n:"Excitation",  c:"#3BA55C"},
+  {n:"Confiance",   c:"#1F8F73"},
+  {n:"Sérénité",    c:"#4C9E8A"},
+  {n:"Frustration", c:"#E07A2F"},
+  {n:"Colère",      c:"#D64545"},
+  {n:"Anxiété",     c:"#8E6BD6"},
+  {n:"Peur",        c:"#6B5BD6"},
+  {n:"Honte",       c:"#B84A8A"},
+  {n:"Gêne",        c:"#C86AA0"},
+  {n:"Tristesse",   c:"#4A72B8"},
+  {n:"Abattement",  c:"#3C5A94"},
+  {n:"Doute",       c:"#6b6b76"},
+];
+const TRIGGERS = ["Team WOD","Être observé","Coach qui regarde","Comparaison / classement","WOD exposé","Score affiché"];
+const BEHAV = ["Crispation","Précipitation","Je ralentis / j'abandonne mentalement","Sur-contrôle","Évitement","Je m'énerve"];
+const TOOLS = ["Respiration 4/6","Mot de fierté","Focus sur 1 critère interne","Body scan éclair"];
+
+let entry = blank();
+function blank(){return {situ:"",trig:[],pensee:"",emo:"",emoInt:5,behav:[],behavTxt:"",conseq:"",confirm:"",
+  pour:"",contre:"",alt:"",extCrit:"",intCrit:"",tool:"",date:null};}
+
+function load(){try{return JSON.parse(localStorage.getItem("boucleFred")||"[]");}catch(e){return window._mem||[];}}
+function save(list){try{localStorage.setItem("boucleFred",JSON.stringify(list));}catch(e){window._mem=list;}}
+
+let step = 0; // 0 home
+const M = document.getElementById("main");
+
+/* ---------- helpers ---------- */
+function chipRow(items, selected, multi, onpick, cls=""){
+  const wrap=document.createElement("div"); wrap.className="chips "+cls;
+  items.forEach(it=>{
+    const name=typeof it==="string"?it:it.n;
+    const c=document.createElement("div"); c.className="chip"; c.textContent=name;
+    const isOn = multi ? selected.includes(name) : selected===name;
+    if(isOn){c.classList.add("on"); if(typeof it==="object"){c.style.background=it.c;c.style.color="#fff";}}
+    c.onclick=()=>onpick(name); wrap.appendChild(c);
+  });
+  return wrap;
+}
+function progress(n){
+  const p=document.createElement("div");p.className="progress";
+  for(let i=1;i<=5;i++){const s=document.createElement("i");if(i<=n)s.classList.add("on");p.appendChild(s);}
+  return p;
+}
+function loopViz(active){
+  const parts=["Situation","Pensée","Émotion","Comportement","Conséquence"];
+  const w=document.createElement("div");w.className="loop";
+  parts.forEach((p,i)=>{
+    const s=document.createElement("span");s.textContent=p;if(i===active)s.classList.add("on");w.appendChild(s);
+    if(i<parts.length-1){const a=document.createElement("span");a.className="arw";a.textContent="→";w.appendChild(a);}
+  });
+  return w;
+}
+function nav(backLbl, nextLbl, onBack, onNext, nextDark){
+  const d=document.createElement("div");d.className="nav";
+  if(backLbl){const b=document.createElement("button");b.className="btn ghost";b.textContent=backLbl;b.onclick=onBack;d.appendChild(b);}
+  const n=document.createElement("button");n.className="btn "+(nextDark?"dark":"primary");n.textContent=nextLbl;n.onclick=onNext;d.appendChild(n);
+  return d;
+}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+
+/* ---------- screens ---------- */
+function render(){
+  M.innerHTML="";
+  if(step===0) return home();
+  if(step>=1&&step<=5) return wizard(step);
+  if(step===6) return sortie();
+  if(step===7) return outil();
+  if(step===8) return resume();
+}
+
+function home(){
+  const list=load();
+  M.appendChild(el("h2",null,"Mon journal <span class='step'>· 2 semaines</span>"));
+  M.appendChild(el("div","q","Rendre visible la boucle, puis en sortir."));
+  M.appendChild(el("p","hint","À remplir à chaud, juste après une situation où le regard extérieur t'a fait décrocher. Une entrée prend 3–4 minutes."));
+  const start=el("button","btn primary full");start.textContent="+  Nouvelle entrée";
+  start.onclick=()=>{entry=blank();step=1;render();};
+  M.appendChild(start);
+  M.appendChild(el("div","count",`<b>${list.length}</b> entrée${list.length>1?"s":""} enregistrée${list.length>1?"s":""}${list.length?" · objectif indicatif : ~1 par jour sur 2 semaines":""}`));
+  if(!list.length){
+    M.appendChild(el("div","empty","Aucune entrée pour l'instant.<br>Ta première boucle apparaîtra ici."));
+  }else{
+    list.slice().reverse().forEach((e,idx)=>{
+      const real=list.length-1-idx;
+      const it=el("div","journal-item");
+      const emo=EMO.find(x=>x.n===e.emo);
+      it.innerHTML=`<div class="top"><span>${e.date||""}</span>`+
+        (e.tool?`<span class="tag-ok">✓ recentré</span>`:`<span class="tag-no">boucle non refermée</span>`)+`</div>`+
+        `<div class="situ">${escapeHtml(e.situ||e.trig.join(", ")||"(situation)")}</div>`+
+        `<div class="emo">`+(emo?`<span class="dot" style="background:${emo.c}"></span>`:"")+
+        `${e.emo||"—"} · intensité ${e.emoInt}/10</div>`;
+      it.onclick=()=>viewEntry(real);
+      M.appendChild(it);
+    });
+    const exp=el("button","link");exp.textContent="Exporter le journal (texte)";exp.style.marginTop="6px";
+    exp.onclick=exportJournal;M.appendChild(exp);
+  }
+  document.getElementById("foot").classList.remove("hidden");
+}
+
+function wizard(n){
+  M.appendChild(progress(n));
+  M.appendChild(loopViz(n-1));
+  if(n===1){
+    M.appendChild(el("h2",null,"1. Situation <span class='step'>· le déclencheur</span>"));
+    M.appendChild(el("div","q","Raconte précisément ce qui s'est passé."));
+    M.appendChild(el("p","hint","Sois le plus factuel possible : <b>quand</b> (moment, quelle partie du WOD), <b>où</b> (box, compétition, à la maison), <b>qui</b> était là, et <b>ce qui s'est concrètement passé</b>. Comme si tu rembobinais la scène."));
+    const t=el("textarea");t.rows=5;t.placeholder="Ex. : Vendredi soir, Team WOD à la box. Dernier round de thrusters, tout le monde avait fini et regardait la fin de mon chrono. Le coach a annoncé mon temps à voix haute…";
+    t.value=entry.situ;t.oninput=e=>entry.situ=e.target.value;M.appendChild(t);
+    M.appendChild(nav(null,"Suivant →",null,()=>{step=2;render();}));
+  }
+  if(n===2){
+    M.appendChild(el("h2",null,"2. Pensée automatique"));
+    M.appendChild(el("div","q","Qu'est-ce qui t'a traversé la tête ?"));
+    M.appendChild(el("p","hint","La première phrase, brute, sans la corriger. Ex. : « je vais me griller devant tout le monde », « je suis à la traîne »."));
+    const t=el("textarea");t.rows=3;t.value=entry.pensee;t.placeholder="Ma pensée, mot pour mot…";
+    t.oninput=e=>entry.pensee=e.target.value;M.appendChild(t);
+    M.appendChild(nav("← Retour","Suivant →",()=>{step=1;render();},()=>{step=3;render();}));
+  }
+  if(n===3){
+    M.appendChild(el("h2",null,"3. Émotion"));
+    M.appendChild(el("div","q","Quelle émotion, et à quelle intensité ?"));
+    M.appendChild(el("p","hint","Il n'y a pas de bonne ou mauvaise réponse : l'émotion peut être positive (fierté, joie…) comme inconfortable. Choisis celle qui colle le plus à l'instant."));
+    M.appendChild(chipRow(EMO,entry.emo,false,(v)=>{entry.emo=v;render();},"emo"));
+    const w=el("div","slider-wrap");
+    const head=el("div","intensity",`<small>Intensité</small><b>${entry.emoInt}<small> /10</small></b>`);
+    w.appendChild(head);
+    const r=document.createElement("input");r.type="range";r.min=0;r.max=10;r.value=entry.emoInt;
+    r.oninput=e=>{entry.emoInt=+e.target.value;head.innerHTML=`<small>Intensité</small><b>${entry.emoInt}<small> /10</small></b>`;};
+    w.appendChild(r);M.appendChild(w);
+    M.appendChild(nav("← Retour","Suivant →",()=>{step=2;render();},()=>{step=4;render();}));
+  }
+  if(n===4){
+    M.appendChild(el("h2",null,"4. Comportement"));
+    M.appendChild(el("div","q","Qu'est-ce que tu as fait, concrètement, sous le coup ?"));
+    M.appendChild(el("p","hint","Décris l'action, pas le ressenti. Par exemple : je me suis crispé et j'ai précipité mes mouvements · j'ai lâché mentalement / ralenti · j'ai sur-contrôlé ma technique · j'ai évité de regarder les autres · je me suis énervé sur moi-même · ou au contraire je suis resté sur mon rythme."));
+    const t=el("textarea");t.rows=4;t.value=entry.behavTxt;t.placeholder="Ce que j'ai fait, précisément…";
+    t.oninput=e=>entry.behavTxt=e.target.value;M.appendChild(t);
+    M.appendChild(nav("← Retour","Suivant →",()=>{step=3;render();},()=>{step=5;render();}));
+  }
+  if(n===5){
+    M.appendChild(el("h2",null,"5. Conséquence"));
+    M.appendChild(el("div","q","Qu'est-ce que ça a donné, au final ?"));
+    const t=el("textarea");t.rows=2;t.value=entry.conseq;t.placeholder="Le résultat concret (score, ressenti, ce qui a suivi)…";
+    t.oninput=e=>entry.conseq=e.target.value;M.appendChild(t);
+    M.appendChild(el("p","hint","La question clé :"));
+    M.appendChild(el("div","q","Est-ce que le résultat a « donné raison » à ta pensée de départ ?"));
+    M.appendChild(el("p","hint","Autrement dit : après coup, est-ce que tu t'es dit « voilà, c'est bien ce que je pensais » ? <b>Exemple :</b> pensée de départ « je vais me griller ». Comme tu t'es crispé, tu rates deux reps et tu finis dernier → tu te dis « j'avais raison, je me suis grillé ». La pensée s'est <b>auto-réalisée</b> : c'est ça, refermer la boucle. Réponds <b>Oui</b> si le résultat t'a conforté dans ta pensée, <b>Non</b> s'il l'a démentie."));
+    M.appendChild(chipRow(["Oui","En partie","Non"],entry.confirm,false,(v)=>{entry.confirm=v;render();}));
+    if(entry.confirm==="Oui"||entry.confirm==="En partie"){
+      M.appendChild(el("div","banner red","C'est la boucle qui se referme : ta pensée a orienté ton comportement, dont le résultat vient <b>reconfirmer la pensée</b>. C'est exactement là qu'on va intervenir."));
+    }
+    M.appendChild(nav("← Retour","Sortir de la boucle →",()=>{step=4;render();},()=>{step=6;render();},true));
+  }
+}
+
+function sortie(){
+  M.appendChild(el("h2",null,"Sortir de la boucle <span class='step'>· recentrage</span>"));
+  M.appendChild(el("div","q","On reprend la main sur ce qui dépend de toi."));
+
+  const b1=el("div","sub-block");
+  b1.appendChild(el("label",null,"a. Passer ta pensée au tribunal des faits <span style='color:var(--muted);font-weight:600'>(facultatif)</span>"));
+  b1.appendChild(el("p","hint","Cette étape n'est <b>pas obligatoire</b> : tu peux aller directement à la pensée + juste si tu veux. Mais chercher les faits <b>POUR</b> (qui donnent raison à la pensée) et <b>CONTRE</b> (qui la contredisent) aide à la remettre à sa place. Des faits, pas des impressions."));
+  const exBox=el("details");exBox.style.margin="0 0 10px";
+  exBox.innerHTML="<summary style='cursor:pointer;font-size:13px;color:var(--red);font-weight:600'>Voir des exemples ▾</summary>"+
+    "<div class='banner' style='margin-top:8px'><b>1 · « Je vais me griller devant tout le monde. »</b><br>POUR : j'ai fini dernier, le coach a dit mon temps à voix haute.<br>CONTRE : personne n'a commenté, deux gars m'ont checké, la semaine passée j'ai battu mon record.<br><b>+ juste :</b> « j'ai fini dernier ce soir, et personne ne m'a jugé — ce qui compte c'est mon effort. »</div>"+
+    "<div class='banner'><b>2 · « Je suis à la traîne, je ne progresse pas. »</b><br>POUR : trois gars du groupe soulèvent plus lourd que moi.<br>CONTRE : j'ai pris 10 kg au back squat en 4 mois, je fais des WOD que je ne finissais pas avant.<br><b>+ juste :</b> « je ne suis pas le plus fort du groupe, mais je progresse à mon rythme. »</div>"+
+    "<div class='banner'><b>3 · « Si je rate ce mouvement, tout le monde va me juger. »</b><br>POUR : j'ai loupé mon premier muscle-up en plein cours.<br>CONTRE : les autres ratent aussi, un coéquipier m'a encouragé, moi-même je ne juge personne qui rate.<br><b>+ juste :</b> « rater fait partie de l'apprentissage, ici on est tous en train de bosser. »</div>";
+  b1.appendChild(exBox);
+  const p=el("textarea");p.rows=2;p.placeholder="Preuves POUR (faits qui donnent raison à la pensée)…";p.value=entry.pour;p.oninput=e=>entry.pour=e.target.value;
+  const c=el("textarea");c.rows=2;c.placeholder="Preuves CONTRE (faits qui la contredisent)…";c.value=entry.contre;c.oninput=e=>entry.contre=e.target.value;c.style.marginTop="8px";
+  const a=el("textarea");a.rows=2;a.placeholder="Ma pensée alternative, plus juste…";a.value=entry.alt;a.oninput=e=>entry.alt=e.target.value;a.style.marginTop="8px";
+  b1.append(p,c,a);M.appendChild(b1);
+
+  const b2=el("div","sub-block");
+  b2.appendChild(el("label",null,"b. Externe → interne"));
+  b2.appendChild(el("p","hint","Le critère <b>externe</b> ne dépend pas de toi (le regard, le classement, le chrono des autres). Le critère <b>interne</b>, si : c'est ce sur quoi tu as vraiment la main. On déplace le curseur de l'un vers l'autre."));
+  b2.appendChild(el("div","banner","<b>Exemples :</b><br>• Externe : « finir dans les premiers » → Interne : « tenir mon rythme de respiration jusqu'au bout ».<br>• Externe : « faire mieux que le voisin » → Interne : « garder une technique propre sur chaque rep ».<br>• Externe : « que le coach me trouve bon » → Interne : « donner mon effort maximal sur ce WOD ».<br>• Externe : « mon temps affiché au tableau » → Interne : « ne pas lâcher mentalement dans le dernier round »."));
+  const row=el("div","row2");
+  const ex=el("input");ex.type="text";ex.placeholder="Critère EXTERNE en jeu";ex.value=entry.extCrit;ex.oninput=e=>entry.extCrit=e.target.value;
+  const inp=el("input");inp.type="text";inp.placeholder="MON critère interne";inp.value=entry.intCrit;inp.oninput=e=>entry.intCrit=e.target.value;
+  row.append(ex,inp);b2.appendChild(row);M.appendChild(b2);
+
+  const b3=el("div","sub-block");
+  b3.appendChild(el("label",null,"c. Déclencher un outil"));
+  b3.appendChild(chipRow(TOOLS,entry.tool,false,(v)=>{entry.tool=v;render();}));
+  M.appendChild(b3);
+
+  M.appendChild(nav("← Retour",entry.tool==="Respiration 4/6"?"Lancer la respiration →":"Terminer →",
+    ()=>{step=5;render();},
+    ()=>{ if(entry.tool==="Respiration 4/6"){step=7;render();} else {step=8;render();} },true));
+}
+
+/* 4/6 breathing */
+function outil(){
+  M.appendChild(el("h2",null,"Respiration 4/6"));
+  M.appendChild(el("div","q","Inspire 4 secondes, expire 6 secondes."));
+  const wrap=el("div","breath");
+  const ball=el("div","ball","4/6");
+  const phase=el("div","phase","Prêt ? On y va doucement.");
+  const cyc=el("div","cyc","Cycle 0 / 5");
+  wrap.append(ball,phase,cyc);M.appendChild(wrap);
+  let running=false,cycle=0,timer=null;
+  const startBtn=el("button","btn primary full");startBtn.textContent="Démarrer";
+  startBtn.style.marginTop="18px";
+  function phaseIn(){phase.textContent="Inspire…";ball.style.transitionDuration="4s";ball.style.transform="scale(1.35)";ball.textContent="Inspire";}
+  function phaseOut(){phase.textContent="Expire…";ball.style.transitionDuration="6s";ball.style.transform="scale(0.75)";ball.textContent="Expire";}
+  function run(){
+    running=true;startBtn.textContent="En cours…";startBtn.disabled=true;
+    cycle=0;const loop=()=>{
+      if(cycle>=5){phase.textContent="Bien. Tu peux repartir recentré.";ball.style.transform="scale(1)";ball.textContent="✓";
+        startBtn.textContent="Terminer";startBtn.disabled=false;startBtn.onclick=()=>{step=8;render();};return;}
+      cycle++;cyc.textContent="Cycle "+cycle+" / 5";phaseIn();
+      timer=setTimeout(()=>{phaseOut();timer=setTimeout(loop,6000);},4000);
+    };loop();
+  }
+  startBtn.onclick=run;
+  M.appendChild(startBtn);
+  const skip=el("button","link");skip.textContent="Passer";skip.style.display="block";skip.style.margin="14px auto 0";
+  skip.onclick=()=>{if(timer)clearTimeout(timer);step=8;render();};
+  M.appendChild(skip);
+}
+
+function resume(){
+  entry.date=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
+  M.appendChild(el("h2",null,"Récapitulatif"));
+  M.appendChild(el("div","q","Ta boucle, du déclencheur au recentrage."));
+  const card=el("div","card");
+  const emo=EMO.find(x=>x.n===entry.emo);
+  card.innerHTML=
+    kv("Situation", escapeHtml(entry.situ||entry.trig.join(", ")||"—"))+
+    kv("Pensée auto.", escapeHtml(entry.pensee||"—"))+
+    kv("Émotion", (emo?`<span class="dot" style="background:${emo.c}"></span>`:"")+(entry.emo||"—")+` · ${entry.emoInt}/10`)+
+    kv("Comportement", escapeHtml([...entry.behav,entry.behavTxt].filter(Boolean).join(" · ")||"—"))+
+    kv("Conséquence", escapeHtml(entry.conseq||"—")+(entry.confirm?` (a confirmé la pensée : ${entry.confirm.toLowerCase()})`:""));
+  M.appendChild(card);
+  const card2=el("div","card");
+  card2.style.borderColor="#f0d8b0";card2.style.background="#fffdf7";
+  card2.innerHTML="<h3 style='color:#7a5600'>Recentrage</h3>"+
+    kv("Pensée + juste", escapeHtml(entry.alt||"—"))+
+    kv("Mon critère interne", escapeHtml(entry.intCrit||"—"))+
+    kv("Outil déclenché", escapeHtml(entry.tool||"—"));
+  M.appendChild(card2);
+  const d=el("div","nav");
+  const again=el("button","btn ghost");again.textContent="← Modifier";again.onclick=()=>{step=6;render();};
+  const sv=el("button","btn primary");sv.textContent="Enregistrer dans mon journal";
+  sv.onclick=()=>{const l=load();l.push(entry);save(l);step=0;render();window.scrollTo(0,0);};
+  d.append(again,sv);M.appendChild(d);
+}
+
+function viewEntry(i){
+  const l=load();const e=l[i];if(!e)return;
+  M.innerHTML="";
+  M.appendChild(el("h2",null,"Entrée du "+(e.date||"")));
+  const emo=EMO.find(x=>x.n===e.emo);
+  const card=el("div","card");
+  card.innerHTML=
+    kv("Situation",escapeHtml(e.situ||e.trig.join(", ")||"—"))+
+    kv("Pensée auto.",escapeHtml(e.pensee||"—"))+
+    kv("Émotion",(emo?`<span class="dot" style="background:${emo.c}"></span>`:"")+(e.emo||"—")+` · ${e.emoInt}/10`)+
+    kv("Comportement",escapeHtml([...(e.behav||[]),e.behavTxt].filter(Boolean).join(" · ")||"—"))+
+    kv("Conséquence",escapeHtml(e.conseq||"—"))+
+    kv("Pensée + juste",escapeHtml(e.alt||"—"))+
+    kv("Critère interne",escapeHtml(e.intCrit||"—"))+
+    kv("Outil",escapeHtml(e.tool||"—"));
+  M.appendChild(card);
+  const d=el("div","nav");
+  const back=el("button","btn ghost");back.textContent="← Journal";back.onclick=()=>{step=0;render();};
+  const del=el("button","btn dark");del.textContent="Supprimer";
+  del.onclick=()=>{if(confirm("Supprimer cette entrée ?")){l.splice(i,1);save(l);step=0;render();}};
+  d.append(back,del);M.appendChild(d);
+}
+
+/* ---------- utils ---------- */
+function kv(k,v){return `<div class="kv"><b>${k} :</b> ${v}</div>`;}
+function toggle(arr,v){const i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v);}
+function escapeHtml(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function exportJournal(){
+  const l=load();let out="MA BOUCLE — Journal (Frankton Préparation Mentale)\n\n";
+  l.forEach((e,i)=>{out+=`--- Entrée ${i+1} · ${e.date||""} ---\n`+
+    `Situation : ${e.situ||e.trig.join(", ")}\nPensée : ${e.pensee}\nÉmotion : ${e.emo} ${e.emoInt}/10\n`+
+    `Comportement : ${[...(e.behav||[]),e.behavTxt].filter(Boolean).join(" · ")}\nConséquence : ${e.conseq} (confirme : ${e.confirm})\n`+
+    `Pensée + juste : ${e.alt}\nCritère interne : ${e.intCrit}\nOutil : ${e.tool}\n\n`;});
+  const blob=new Blob([out],{type:"text/plain"});const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="journal_boucle_fred.txt";a.click();
+}
+render();
+</script>
+</body>
+</html>
