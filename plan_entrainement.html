@@ -714,7 +714,7 @@ function updateProgress(week) {
 }
 
 function sendReport() {
-  const weekLabels = {
+  var weekLabels = {
     1: 'Semaine 1 - Trouver et ancrer le geste',
     2: 'Semaine 2 - Protocole physique + Scan corporel',
     3: 'Semaine 3 - Signaux avant-coureurs',
@@ -726,96 +726,84 @@ function sendReport() {
     9: 'Semaine 9 - Mission, Capital et boucle complete',
     10: 'Semaine 10 - Boucle complete a voix haute',
     11: 'Semaine 11 - Boucle complete a voix basse',
-    12: 'Semaine 12 - Boucle complete en silence',
+    12: 'Semaine 12 - Boucle complete en silence'
   };
 
   if (!currentWeek) return;
 
-  // Taches cochees
-  const weeks3 = ['10','11','12'];
-  const keys = currentWeek == '5' ? ['1','2','3','4','3b'] : weeks3.includes(String(currentWeek)) ? ['1','2','3'] : ['1','2','3','4'];
-  const scanKey = currentWeek + '-scan';
-  
-  let tachesDone = [];
-  let tachesLeft = [];
-  
-  keys.forEach(k => {
-    const id = currentWeek + '-' + k;
-    const el = document.getElementById('t-' + id);
+  var weeks3 = ['10','11','12'];
+  var keys = currentWeek == '5' ? ['1','2','3','4','3b'] : weeks3.includes(String(currentWeek)) ? ['1','2','3'] : ['1','2','3','4'];
+  var scanKey = currentWeek + '-scan';
+
+  var tachesDone = [];
+  var tachesLeft = [];
+
+  keys.forEach(function(k) {
+    var id = currentWeek + '-' + k;
+    var el = document.getElementById('t-' + id);
     if (el) {
-      const title = el.querySelector('.task-title') ? el.querySelector('.task-title').textContent : id;
+      var title = el.querySelector('.task-title') ? el.querySelector('.task-title').textContent : id;
       if (taskState[id]) tachesDone.push('[OK] ' + title);
       else tachesLeft.push('[ ] ' + title);
     }
   });
 
-  // Scan
-  const scanEl = document.getElementById('t-' + scanKey);
+  var scanEl = document.getElementById('t-' + scanKey);
   if (scanEl) {
-    const scanTitle = scanEl.querySelector('.task-title') ? scanEl.querySelector('.task-title').textContent : 'Scan corporel';
+    var scanTitle = scanEl.querySelector('.task-title') ? scanEl.querySelector('.task-title').textContent : 'Scan corporel';
     if (taskState[scanKey]) tachesDone.push('[OK] ' + scanTitle);
     else tachesLeft.push('[ ] ' + scanTitle);
   }
 
-  // Notes
-  const notesEl = document.getElementById('notes-' + currentWeek);
-  const notes = notesEl ? notesEl.value.trim() : '';
+  var notesEl = document.getElementById('notes-' + currentWeek);
+  var notes = notesEl ? notesEl.value.trim() : '';
 
-  // Construire le message
-  const total = keys.length + (scanEl ? 1 : 0);
-  const done = tachesDone.length;
+  var total = keys.length + (scanEl ? 1 : 0);
+  var done = tachesDone.length;
+  var weekLabel = weekLabels[currentWeek] || ('Semaine ' + currentWeek);
 
-  let summary = '=== RAPPORT PIERRE ===
-
-';
-  summary += weekLabels[currentWeek] + '
-';
-  summary += 'Progression : ' + done + ' / ' + total + ' taches
-
-';
-  
+  var lines = [];
+  lines.push('=== RAPPORT PIERRE ===');
+  lines.push('');
+  lines.push(weekLabel);
+  lines.push('Progression : ' + done + ' / ' + total + ' taches');
+  lines.push('');
   if (tachesDone.length > 0) {
-    summary += 'TACHES COMPLETEES :
-' + tachesDone.join('
-') + '
-
-';
+    lines.push('TACHES COMPLETEES :');
+    tachesDone.forEach(function(t) { lines.push(t); });
+    lines.push('');
   }
   if (tachesLeft.length > 0) {
-    summary += 'TACHES RESTANTES :
-' + tachesLeft.join('
-') + '
-
-';
+    lines.push('TACHES RESTANTES :');
+    tachesLeft.forEach(function(t) { lines.push(t); });
+    lines.push('');
   }
-  if (notes) {
-    summary += 'NOTES :
-' + notes;
-  } else {
-    summary += 'NOTES : (aucune note)';
-  }
+  lines.push('NOTES :');
+  lines.push(notes || '(aucune note)');
 
-  const btn = document.getElementById('send-btn');
+  var summary = lines.join('\n');
+
+  var btn = document.getElementById('send-btn');
   btn.textContent = 'Envoi en cours...';
   btn.disabled = true;
 
   emailjs.send('service_qiyusj5', 'template_cx5bh3d', {
-    sujet: 'Rapport Pierre - ' + weekLabels[currentWeek],
+    sujet: 'Rapport Pierre - ' + weekLabel,
     summary: summary
-  }).then(() => {
+  }).then(function() {
     btn.style.display = 'none';
     btn.textContent = 'Envoyer mon rapport';
     btn.disabled = false;
-    const confirm = document.getElementById('send-confirm');
+    var confirm = document.getElementById('send-confirm');
     confirm.style.display = 'block';
-    setTimeout(() => {
+    setTimeout(function() {
       confirm.style.display = 'none';
       btn.style.display = 'block';
     }, 3000);
-  }).catch((err) => {
+  }).catch(function(err) {
     btn.textContent = 'Envoyer mon rapport';
     btn.disabled = false;
-    alert('Erreur envoi : ' + JSON.stringify(err));
+    alert('Erreur : ' + JSON.stringify(err));
   });
 }
 </script>
