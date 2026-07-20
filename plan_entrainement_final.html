@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan d'Entraînement Frankton</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background:#f5f5f5; color:#1A1A2E; }
+.header { background:#1A1A2E; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; }
+.header-title { color:#E84545; font-weight:700; font-size:15px; letter-spacing:.04em; }
+.header-sub { color:#888; font-size:12px; }
+.layout { display:flex; min-height:calc(100vh - 52px); }
+.timeline { width:280px; min-width:280px; background:#fff; border-right:1px solid #e0e0e0; padding:24px 16px; overflow-y:auto; }
+.timeline-intro { font-size:12px; color:#888; line-height:1.6; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #f0f0f0; }
+.week-item { position:relative; padding-left:36px; cursor:pointer; }
+.week-dot { position:absolute; left:0; top:16px; width:14px; height:14px; border-radius:50%; background:#e0e0e0; border:2px solid #fff; box-shadow:0 0 0 2px #e0e0e0; transition:all .2s; z-index:1; }
+.week-line { position:absolute; left:6px; top:30px; width:2px; background:#e0e0e0; bottom:-20px; }
+.week-item:last-child .week-line { display:none; }
+.week-card { background:#f8f8f8; border-radius:8px; padding:12px 14px; margin-bottom:20px; border:1.5px solid transparent; transition:all .2s; }
+.week-card:hover { border-color:#E84545; }
+.week-item.active .week-dot { background:#E84545; box-shadow:0 0 0 2px #fde8e8; }
+.week-item.active .week-card { border-color:#E84545; background:#fff; }
+.week-item.done .week-dot { background:#1D9E75; box-shadow:0 0 0 2px #e0faf4; }
+.week-item.done .week-card { border-left:3px solid #1D9E75; }
+.week-label { font-size:10px; font-weight:700; color:#E84545; letter-spacing:.06em; text-transform:uppercase; margin-bottom:3px; }
+.week-item.done .week-label { color:#1D9E75; }
+.week-title { font-size:13px; font-weight:600; color:#1A1A2E; margin-bottom:4px; }
+.week-preview { font-size:11px; color:#888; }
+.progress-bar-wrap { background:#f0f0f0; border-radius:4px; height:6px; margin:8px 0 4px; overflow:hidden; }
+.progress-bar { height:100%; background:#1D9E75; border-radius:4px; transition:width .3s; }
+.progress-label { font-size:11px; color:#888; }
+.panel { flex:1; background:#fff; padding:32px 36px; overflow-y:auto; }
+.panel-empty { display:flex; align-items:center; justify-content:center; height:100%; color:#aaa; font-size:14px; text-align:center; flex-direction:column; gap:8px; }
+.panel-empty span { font-size:32px; }
+.week-header { margin-bottom:28px; padding-bottom:20px; border-bottom:2px solid #E84545; }
+.week-header-label { font-size:11px; font-weight:700; color:#E84545; letter-spacing:.07em; text-transform:uppercase; margin-bottom:6px; }
+.week-header-title { font-size:24px; font-weight:700; color:#1A1A2E; margin-bottom:8px; }
+.week-header-goal { font-size:14px; color:#555; line-height:1.6; }
+.highlight { background:#FDF0F0; border-left:3px solid #E84545; padding:10px 16px; border-radius:0 6px 6px 0; margin:16px 0; font-size:14px; color:#333; font-style:italic; line-height:1.6; }
+.highlight-green { background:#F0FAF6; border-left-color:#1D9E75; }
+.highlight-blue { background:#F0F4FF; border-left-color:#534AB7; }
+.section-title { font-size:11px; font-weight:700; color:#1A1A2E; text-transform:uppercase; letter-spacing:.06em; margin:24px 0 10px; }
+.task-list { display:flex; flex-direction:column; gap:10px; }
+.task { background:#f8f8f8; border-radius:8px; padding:14px 16px; border:1px solid #eee; display:flex; gap:12px; align-items:flex-start; cursor:pointer; transition:all .15s; }
+.task:hover { border-color:#E84545; }
+.task.done-task { border-color:#1D9E75; background:#f8fffe; }
+.task-check { width:20px; height:20px; border-radius:5px; border:1.5px solid #ccc; background:#fff; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+.task.done-task .task-check { background:#1D9E75; border-color:#1D9E75; }
+.task.done-task .task-check::after { content:'✓'; font-size:11px; color:#fff; font-weight:700; }
+.task-body { flex:1; }
+.task-title { font-size:14px; font-weight:600; color:#1A1A2E; margin-bottom:3px; }
+.task.done-task .task-title { color:#888; text-decoration:line-through; }
+.task-desc { font-size:13px; color:#666; line-height:1.6; }
+.signal-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0; }
+.signal-box { background:#f8f8f8; border-radius:8px; padding:12px 14px; border:1px solid #eee; }
+.signal-box-title { font-size:11px; font-weight:700; color:#1A1A2E; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px; }
+.signal-box ul { padding-left:14px; }
+.signal-box li { font-size:13px; color:#555; line-height:1.8; }
+.geste-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0; }
+.geste-box { background:#f8f8f8; border-radius:8px; padding:12px 14px; border:1px solid #eee; }
+.geste-box-title { font-size:13px; font-weight:600; color:#1A1A2E; margin-bottom:4px; }
+.geste-box-desc { font-size:12px; color:#666; line-height:1.6; }
+.geste-box.propose { background:#FDF0F0; border-color:#f5b5b5; }
+.geste-box.propose .geste-box-title { color:#E84545; }
+.step-row { display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; }
+.step-num { width:28px; height:28px; border-radius:6px; background:#E84545; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.step-text { font-size:14px; color:#333; padding-top:4px; line-height:1.5; }
+.débrief-box { background:#f8f8f8; border-radius:8px; padding:16px; margin-top:8px; }
+.débrief-box textarea { width:100%; background:transparent; border:none; outline:none; font-size:13px; color:#333; line-height:1.7; resize:none; font-family:inherit; min-height:80px; }
+.débrief-box textarea::placeholder { color:#bbb; }
+.consigne-box { background:#FDF0F0; border-left:4px solid #E84545; border-radius:0 8px 8px 0; padding:16px 20px; margin:12px 0; }
+.consigne-moment { font-size:11px; font-weight:700; color:#E84545; text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px; }
+.consigne-text { font-size:14px; color:#1A1A2E; line-height:1.6; margin-bottom:10px; }
+@media (max-width:700px) {
+  .layout { flex-direction:column; }
+  .timeline { width:100%; min-width:unset; border-right:none; border-bottom:1px solid #e0e0e0; padding:16px; }
+  .panel { padding:20px 16px; }
+  .signal-grid, .geste-grid { grid-template-columns:1fr; }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("0MtCqya8qs7Xxmls3");</script>
+</head>
+<body>
+<div class="header">
+  <div class="header-title">FRANKTON PLAN D'ENTRAÎNEMENT</div>
+  <div class="header-sub">Boucle de Crise — 12 semaines</div>
+</div>
+<div class="layout">
+<div class="timeline">
+  <div class="timeline-intro">
+  <p style="font-weight:600; color:var(--color-text-primary); margin-bottom:8px;">12 semaines pour installer un réflexe.</p>
+  <p style="margin-bottom:8px;">La Leadership Loop c'est ton outil de prise de décision en situation de leadership. Elle te permet de vérifier que ta décision est alignee avec un leadership efficace et en priorité avec tes 4 lois du combat : Cover and Move, Simple, Prioritize, Decentralized Command.</p>
+  <p style="margin-bottom:8px;">Le problème qu'on a identifié ensemble : c'est pas que tu la connais pas. C'est que tu y penses pas au moment où tu en as besoin. Tu es dans le flux, tu decides et c'est apres que tu realises que tu aurais pu l'utiliser. Ce qui te manque c'est pas la connaissance. C'est le déclencheur automatique.</p>
+  <p style="font-weight:600; color:var(--color-text-primary); margin-bottom:4px;">Ce qu'on va construire ensemble :</p>
+  <p style="margin-bottom:8px;">Un geste d'abord. Discret, ancré dans le corps, qui coupe le flux automatique avant que tu plonges dans l'action. Une respiration ensuite 4/6, 3 cycles qui rouvre ton cerveau décisionnel en 30 secondes.</p>
+  <p style="margin-bottom:8px;">Puis ton scan corporel. Apprendre à lire ce qui se passe dans ton corps avant que ça parte tension dans les epaules, machoires serrees, respiration qui se raccourcit, pensee qui tourne. Ces signaux sont la depuis toujours. On va juste apprendre à les voir en temps réel et à les utiliser comme déclencheur.</p>
+  <p style="margin-bottom:8px;">Ensuite ta Leadership Loop, par couches. Les 4 lois du combat en premier ancrées comme des réflexes. Puis les items de profondeur : Ego, Émotions, Perspective. Et là on rentre dans les outils concrets le dialogue interne pour contrôler ce que tu te dis sous pression, la roue de Plutchik pour nommer précisément ce que tu ressens au moment où tu le ressens, l'imagerie mentale pour voir la situation depuis un autre angle et sortir du tunnel.</p>
+  <p style="margin-bottom:8px;">Les 3 dernières semaines, tu deroules la boucle entiere à voix haute, puis à voix basse, puis en silence. Comme une poesie qu'on apprend a l'école on commence par le premier couplet, pas par la fin.</p>
+  <p style="margin-bottom:8px;"><strong>Ce que tu gagnes :</strong> un protocole qui se déclenche seul, quand tu en as besoin, sans effort conscient. Pas un outil que tu consultes un réflexe que tu actives.</p>
+  <p style="color:#E84545; font-weight:600;">Règle unique : on ne passe pas à la semaine suivante si l'objectif de la semaine en cours n'est pas solide.</p>
+</div>
+
+  <div class="week-item" id="wi-1" onclick="showWeek(1)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 1</div>
+      <div class="week-title">Trouver et ancrer le geste</div>
+      <div class="week-preview">La fondation du protocole</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-1" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-1">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-2" onclick="showWeek(2)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 2</div>
+      <div class="week-title">Protocole physique + Scan corporel</div>
+      <div class="week-preview">Geste + souffle + Petit Bambou</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-2" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-2">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-3" onclick="showWeek(3)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 3</div>
+      <div class="week-title">Identifier ses signaux</div>
+      <div class="week-preview">Apprendre a se lire</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-3" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-3">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-4" onclick="showWeek(4)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 4</div>
+      <div class="week-title">Ancrer la question d'entrée</div>
+      <div class="week-preview">Automatiser le déclencheur</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-4" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-4">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-5" onclick="showWeek(5)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 5</div>
+      <div class="week-title">Entraîner la mini-boucle</div>
+      <div class="week-preview">Sur situations réelles légères</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-5" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-5">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-6" onclick="showWeek(6)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 6</div>
+      <div class="week-title">Ego Dialogue interne</div>
+      <div class="week-preview">Observer ses pensees automatiques</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-6" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-6">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-7" onclick="showWeek(7)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 7</div>
+      <div class="week-title">Émotions Roue de Plutchik</div>
+      <div class="week-preview">Nommer pour reprendre le controle</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-7" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-7">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-8" onclick="showWeek(8)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 8</div>
+      <div class="week-title">Perspective + Imagerie mentale</div>
+      <div class="week-preview">Voir depuis un autre angle</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-8" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-8">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-9" onclick="showWeek(9)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 9</div>
+      <div class="week-title">Mission, Capital et boucle complete</div>
+      <div class="week-preview">Tout se connecte</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-9" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-9">0 / 4 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-10" onclick="showWeek(10)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 10</div>
+      <div class="week-title">Boucle complete à voix haute</div>
+      <div class="week-preview">Nommer chaque étape à voix haute</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-10" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-10">0 / 3 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-11" onclick="showWeek(11)">
+    <div class="week-dot"></div><div class="week-line"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 11</div>
+      <div class="week-title">Boucle complete à voix basse</div>
+      <div class="week-preview">Intérioriser la séquence</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-11" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-11">0 / 3 taches</div>
+    </div>
+  </div>
+
+  <div class="week-item" id="wi-12" onclick="showWeek(12)">
+    <div class="week-dot"></div>
+    <div class="week-card">
+      <div class="week-label">Semaine 12</div>
+      <div class="week-title">Boucle complete en silence</div>
+      <div class="week-preview">Le test final tout dans la tête</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="pb-12" style="width:0%"></div></div>
+      <div class="progress-label" id="pl-12">0 / 3 taches</div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel">
+<div class="panel-empty" id="empty"><span>→</span>Clique sur une semaine<br>pour voir les exercices</div>
+
+<!-- SEMAINE 1 GESTE -->
+<div id="w-1" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 1 Séance avec ton preparateur</div>
+    <div class="week-header-title">Trouver et ancrer le geste</div>
+    <div class="week-header-goal">Cette semaine pose la fondation de tout le protocole. Sans geste ancré et sans rythme respiratoire valide, rien ne tient. On ne passe pas à la semaine 2 avant que ces deux éléments soient trouves et testes.</div>
+  </div>
+  <div class="highlight">Ce n'est pas une semaine d'entraînement. C'est une semaine de construction. Le geste doit venir de toi pas d'un modele impose.</div>
+
+  <div class="section-title">Pourquoi un geste ?</div>
+  <div class="highlight highlight-blue">Le geste c'est ton signal de départ. Il dit à ton cerveau : stop, nouveau départ, nouvelle séquence. Sans ce signal physique, ton cerveau reste dans le flux automatique et ta Leadership Loop ne se déclenche jamais. Le geste c'est la cle qui ouvre la porte.</div>
+  <div class="section-title">Trouver le geste</div>
+  <div class="geste-grid">
+    <div class="geste-box">
+      <div class="geste-box-title">Double tap sur la cuisse</div>
+      <div class="geste-box-desc">Deux tapes de la main sur la cuisse. Discret en toute situation debout, assis, en véhicule.</div>
+    </div>
+    <div class="geste-box">
+      <div class="geste-box-title">Hook grip x2</div>
+      <div class="geste-box-desc">Pouce a l'intérieur de l'index, replace dessus, puis remet une fois a l'intérieur. Deux fois. Invisible dans la poche où le long du corps.</div>
+    </div>
+    <div class="geste-box">
+      <div class="geste-box-title">Pouce / annulaire x2</div>
+      <div class="geste-box-desc">Deux taps pouce contre annulaire. Tres discret fonctionne en réunion, en briefing, en toute situation.</div>
+    </div>
+    <div class="geste-box">
+      <div class="geste-box-title">Faire tourner le bracelet de montre</div>
+      <div class="geste-box-desc">Une rotation du bracelet. Geste naturel et banal personne ne le remarque. Fonctionne partout.</div>
+    </div>
+  </div>
+  <div class="highlight highlight-blue">Criteres : Discret (utilisable en groupe). Physique (ancré dans le corps). Unique (non utilisé dans un autre contexte).</div>
+
+  <div class="section-title">En séance Associer geste et souffle</div>
+  <div style="margin-bottom:12px;">
+    <div class="step-row"><div class="step-num">1</div><div class="step-text">Faire le geste. Une fois. Lentement.</div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-text">Enchainer immédiatement 3 cycles 4/6 (4 temps inspiration, 6 temps expiration).</div></div>
+    <div class="step-row"><div class="step-num">3</div><div class="step-text">Silence. Observer ce qui se passe dans le corps.</div></div>
+    <div class="step-row"><div class="step-num">4</div><div class="step-text">Répéter 5 fois le matin, seul, sans parler entre les répétitions. C'est le matin de la semaine 1 qui installe l'association.</div></div>
+  </div>
+  <div class="highlight">L'association se cree dans la répétition silencieuse pas dans l'explication. Chaque répétition est un fil qui relie le geste au souffle. C'est ce fil qui deviendra le réflexe automatique.</div>
+
+  <div class="section-title">Cette semaine Consigne quotidienne</div>
+  <div class="consigne-box">
+    <div class="consigne-moment">Matin</div>
+    <div class="consigne-text">Geste + 3 cycles 4/6. 5 fois de suite. Avant de commencer la journée. C'est la répétition du matin qui installe l'association.</div>
+    <div class="consigne-moment">Soir</div>
+    <div class="consigne-text">Geste + 3 cycles 4/6. 1 fois. Avant de dormir.</div>
+    <div class="consigne-moment">Journée</div>
+    <div class="consigne-text">Faire le geste avant chaque décision, même banale. Pas encore la boucle juste le geste.</div>
+  </div>
+
+  <div class="section-title">Taches de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-1-1" onclick="toggleTask('1-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Séance avec le preparateur geste trouve et valide</div><div class="task-desc">Le geste a été testé en séance. Il produit une sensation de coupure. Il est discret et vient du client.</div></div></div>
+    <div class="task" id="t-1-2" onclick="toggleTask('1-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Rythme respiratoire valide 4/6 ou 4/4</div><div class="task-desc">Le rythme a été testé en séance. Il est confortable et tient naturellement sur 3 cycles.</div></div></div>
+    <div class="task" id="t-1-3" onclick="toggleTask('1-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Pratique quotidienne matin et soir</div><div class="task-desc">Geste + souffle, deux fois par jour, tous les jours de la semaine.</div></div></div>
+    <div class="task" id="t-1-4" onclick="toggleTask('1-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Débrief le geste est-il fluide et naturel ?</div><div class="task-desc">Si non : continuer la semaine 1. Ne pas passer à la semaine 2 avant que le geste soit automatique.</div></div></div>
+  </div>
+  <div class="section-title">Mon geste / Mon rythme</div>
+  <div class="débrief-box"><textarea placeholder="Geste retenu : ...\nRythme retenu : ...\nObservations : ..." id="notes-1"></textarea></div>
+</div>
+
+<!-- SEMAINE 2 PROTOCOLE PHYSIQUE -->
+<div id="w-2" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 2</div>
+    <div class="week-header-title">Installer le protocole physique</div>
+    <div class="week-header-goal">Objectif : le geste et le souffle deviennent automatiques. Tu n'as pas besoin de stress pour pratiquer le réflexe se construit dans le calme.</div>
+  </div>
+  <div class="highlight">Ne pas passer à la semaine 3 si le geste et le souffle ne sont pas fluides sans effort cognitif.</div>
+  <div class="section-title">Exercices quotidiens</div>
+  <div class="task-list">
+    <div class="task" id="t-2-1" onclick="toggleTask('2-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Matin Geste + 3 cycles 4/6 au reveil</div><div class="task-desc">Avant de te lever. Geste d'abord, puis 3 cycles dans ton rythme valide (4/6 ou 4/4). Tous les jours. L'objectif cette semaine : que l'association soit fluide sans avoir a y penser.</div></div></div>
+    <div class="task" id="t-2-2" onclick="toggleTask('2-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir Geste + 3 cycles</div><div class="task-desc">Faire le geste, enchainer le souffle. Associer les deux systématiquement. C'est la répétition qui cree le lien.</div></div></div>
+    <div class="task" id="t-2-3" onclick="toggleTask('2-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Journée Geste avant chaque décision</div><div class="task-desc">N'importe quelle décision, même banale. L'objectif n'est pas la décision c'est d'automatiser le geste.</div></div></div>
+    <div class="task" id="t-2-4" onclick="toggleTask('2-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Débrief de fin de semaine</div><div class="task-desc">Le geste arrive-t-il sans y penser ? Le souffle est-il fluide sans compter ? Si non continuer la semaine 2.</div></div></div>
+  </div>
+    <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-3-scan" onclick="toggleTask('3-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+<div class="section-title">Notes</div>
+  <div class="débrief-box"><textarea placeholder="Ce qui a bien marche, ce qui a accroche..." id="notes-2"></textarea></div>
+</div>
+
+<!-- SEMAINE 3 SIGNAUX -->
+<div id="w-3" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 3</div>
+    <div class="week-header-title">Identifier ses signaux avant-coureurs</div>
+    <div class="week-header-goal">Objectif : apprendre a se lire. Le problème n'est pas de gerer une crise c'est de ne pas penser à prendre du recul avant d'agir. Cette semaine on identifie les signaux personnels qui doivent déclencher le protocole.</div>
+  </div>
+  <div class="highlight highlight-blue">Un signal avant-coureur c'est ce qui se passe dans ton corps ou ta tete juste avant que tu plonges dans l'action sans recul. Pas apres avant. C'est lui qui devient ton vrai déclencheur.</div>
+  <div class="highlight highlight-green">Continuer la routine du geste et du souffle cette semaine matin x5 et soir x1. On ne lache pas ce qui a été installe, on rajoute le travail sur les signaux par-dessus.</div>
+  <div class="section-title">Signaux possibles a observer cette semaine</div>
+  <div class="signal-grid">
+    <div class="signal-box">
+      <div class="signal-box-title">Physiques</div>
+      <ul>
+        <li>Tension dans les epaules</li>
+        <li>Respiration qui se raccourcit</li>
+        <li>Machoires serrees</li>
+        <li>Rythme cardiaque qui monte</li>
+        <li>Posture qui se ferme</li>
+      </ul>
+    </div>
+    <div class="signal-box">
+      <div class="signal-box-title">Cognitifs</div>
+      <ul>
+        <li>Pensee qui tourne en boucle</li>
+        <li>Vision tunnel sur un détail</li>
+        <li>Reponses plus courtes</li>
+        <li>Tu n'écoutes plus vraiment</li>
+        <li>Tu veux agir avant d'avoir analyse</li>
+      </ul>
+    </div>
+  </div>
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-3-1" onclick="toggleTask('3-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Observer sans agir 3 situations</div><div class="task-desc">Sur 3 situations où tu aurais normalement plonge dans l'action : pause 5 secondes et observer ce qui se passe dans ton corps juste avant. Nommer le signal. Pas encore la boucle.</div></div></div>
+    <div class="task" id="t-3-2" onclick="toggleTask('3-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Retrospectivement une situation passee</div><div class="task-desc">Choisir une situation recente où tu as agi sans recul. Quel signal était present juste avant ? Tu le reconnaitras plus facilement la prochaine fois.</div></div></div>
+    <div class="task" id="t-3-3" onclick="toggleTask('3-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Nommer ses 2 signaux prioritaires</div><div class="task-desc">Sur tous les signaux observes : identifier les 2 qui reviennent le plus souvent. Ce sont eux qui deviendront les vrais déclencheurs du protocole.</div></div></div>
+    <div class="task" id="t-3-4" onclick="toggleTask('3-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Débrief de fin de semaine</div><div class="task-desc">Tu arrives à les reconnaître en temps réel ou seulement apres coup ? Semaine 4 quand tu peux les nommer pendant la situation.</div></div></div>
+  </div>
+  <div class="section-title">Mes 2 signaux prioritaires</div>
+  <div class="débrief-box"><textarea placeholder="Signal 1 : ...\nSignal 2 : ..." id="notes-3"></textarea></div>
+</div>
+
+<!-- SEMAINE 4 QUESTION D'ENTREE -->
+<div id="w-4" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 4</div>
+    <div class="week-header-title">Ancrer la question d'entrée</div>
+    <div class="week-header-goal">Objectif : quand un signal avant-coureur apparait, la séquence STOP / SOUFFLE / question d'entrée se lance automatiquement. Le signal devient le déclencheur plus besoin d'y penser.</div>
+  </div>
+  <div class="highlight">La question d'entrée : <b>"Mon équipe est-elle couverte et alerte ?"</b> Elle doit arriver spontanément apres le souffle, sans effort de memoire. Si OUI tu enchaines les 4 étapes. Si NON tu couvres d'abord avant de continuer.</div>
+  <div class="highlight highlight-blue">Les 4 étapes dans l'ordre : <b>1. Couvrir et avancer</b> l'équipe est securisee, qui fait quoi si ça deraille ? <b>2. Simplifier</b> objectif en un mot. <b>3. Prioriser</b> seule action a fort impact maintenant. <b>4. Déléguer</b> qui decide sans moi ?</div>
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-4-1" onclick="toggleTask('4-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Matin Séquence complete en 2 minutes</div><div class="task-desc">Geste STOP → 3 cycles 4/6 → question d'entrée à voix haute. Tous les jours avant de commencer la journée.</div></div></div>
+    <div class="task" id="t-4-2" onclick="toggleTask('4-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Journée Séquence des que le signal apparait</div><div class="task-desc">Des que tu sens l'un de tes 2 signaux : STOP / SOUFFLE / question. Pas encore les 4 étapes juste les trois premieres.</div></div></div>
+    <div class="task" id="t-4-3" onclick="toggleTask('4-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Exercice Replay mental</div><div class="task-desc">Choisir une situation où tu as agi sans recul. La repasser mentalement avec le protocole : à quel moment aurais-tu lancé le geste ? La question d'entrée t'aurait-elle changé quelque chose ?</div></div></div>
+    <div class="task" id="t-4-4" onclick="toggleTask('4-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Débrief de fin de semaine</div><div class="task-desc">La séquence arrive-t-elle spontanément quand le signal apparait ? Ou dois-tu encore y penser deliberement ? Semaine 5 quand c'est spontané.</div></div></div>
+  </div>
+    <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-4-scan" onclick="toggleTask('4-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+<div class="section-title">Notes</div>
+  <div class="débrief-box"><textarea placeholder="Situations où ça a fonctionne, où ça a accroche..." id="notes-4"></textarea></div>
+</div>
+
+<!-- SEMAINE 5 MINI-BOUCLE -->
+<div id="w-5" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 5</div>
+    <div class="week-header-title">Entraîner la mini-boucle</div>
+    <div class="week-header-goal">Objectif : les 4 étapes se deroulent fluides des que le signal apparait. La prise de recul devient un réflexe de performance pas une réaction à une crise.</div>
+  </div>
+  <div class="highlight highlight-green">À ce stade le protocole n'est plus un outil de gestion de crise. C'est un outil de qualité de décision. Tu l'utilises parce qu'il te rend plus efficace.</div>
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-5-1" onclick="toggleTask('5-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Une situation par jour boucle complete</div><div class="task-desc">Sur une situation de tension légère : lancer le protocole complet et derouler les 4 étapes. Couvrir → Simplifier → Prioriser → Déléguer. Observer ce que ça a changé dans la décision prise.</div></div></div>
+    <div class="task" id="t-5-2" onclick="toggleTask('5-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Journal de 3 lignes quotidien</div><div class="task-desc">Situation / étape où ça a accroche / ajustement. Pas besoin de détail juste noter l'accroc et ce qui a été ajuste.</div></div></div>
+    <div class="task" id="t-5-3" onclick="toggleTask('5-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Exercice chronometre Formulation d'objectif en 10 secondes</div><div class="task-desc">Structure : Verbe + Cible + Contrainte.<br><br>
+<b>A ne pas faire :</b> "Il faudrait qu'on essaie de voir si on peut avancer sur le truc du nord avant que ça devienne un problème." → Pas de verbe d'action, pas de cible, pas de contrainte.<br>
+<b>Ce qu'on veut :</b> "Securiser le perimetre nord avant le lever du jour." → Net, tout le monde sait quoi faire.<br><br>
+<b>Exemple quotidien a ne pas faire :</b> "Il faudrait que je m'occupe du rapport quelque part cette semaine." → Vague, pas de deadline.<br>
+<b>Ce qu'on veut :</b> "Finir le rapport avant la réunion de jeudi 15h." → Direct, actionnable, mesurable.<br><br>
+Faire l'exercice 3 fois par jour sur des situations réelles. Le premier jet est souvent le bon.</div></div></div>
+<div class="task" id="t-5-3b" onclick="toggleTask('5-3b')"><div class="task-check"></div><div class="task-body"><div class="task-title">Mémoriser la Leadership Loop Groupe 1</div><div class="task-desc">Cette semaine : mémoriser les 5 items opérationnels dans l'ordre, comme une poesie.<br><br>
+<b>Groupe 1 L'action :</b><br>
+1. Temps<br>
+2. Couvrir et avancer<br>
+3. Simplifier<br>
+4. Prioriser<br>
+5. Déléguer<br><br>
+Les reciter à voix haute chaque matin apres le geste et le souffle. Jusqu'a ce que ça sorte sans effort.</div></div></div>
+    <div class="task" id="t-5-4" onclick="toggleTask('5-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Débrief de fin de semaine</div><div class="task-desc">Quelle étape reste hesitante ? C'est sur elle que se concentre le travail semaine 6. Est-ce que prendre du recul a changé quelque chose dans tes décisions cette semaine ?</div></div></div>
+  </div>
+    <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-5-scan" onclick="toggleTask('5-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-6-scan" onclick="toggleTask('6-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-7-scan" onclick="toggleTask('7-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-8-scan" onclick="toggleTask('8-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-9-scan" onclick="toggleTask('9-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-10-scan" onclick="toggleTask('10-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-11-scan" onclick="toggleTask('11-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+  <div class="section-title">Routine hebdomadaire Scan corporel</div>
+  <div class="task-list">
+    <div class="task" id="t-12-scan" onclick="toggleTask('12-scan')"><div class="task-check"></div><div class="task-body"><div class="task-title">Soir au couche Scan corporel Petit Bambou</div><div class="task-desc">Une fois cette semaine, le soir avant de dormir. Lancer un scan corporel guide sur Petit Bambou. Observer ce qui a changé dans le corps par rapport aux semaines precedentes.</div></div></div>
+  </div>
+
+<div class="section-title">Notes</div>
+  <div class="débrief-box"><textarea placeholder="Étape qui accroche, observations, ajustements..." id="notes-5"></textarea></div>
+</div>
+
+<!-- SEMAINE 6 EGO + DIALOGUE INTERNE -->
+<div id="w-6" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 6 Groupe 2 : Ego</div>
+    <div class="week-header-title">Ego et dialogue interne</div>
+    <div class="week-header-goal">Objectif : prendre conscience de ce que tu te dis sous pression. Pas encore le modifier juste l'observer. Tu ne peux pas travailler quelque chose que tu ne vois pas.</div>
+  </div>
+  <div class="highlight highlight-blue">Sous pression, c'est souvent ta voix intérieure qui impose le plan plutot que la situation. "J'ai raison", "c'est mon plan", "les autres ont tort". Ce n'est pas de la confiance c'est de l'ego qui parle à travers tes pensees automatiques. Le dialogue interne te permet de t'en rendre compte avant que ça affecte tes décisions.</div>
+  <div class="highlight highlight-green">Continuer la routine du geste et du souffle matin x5 et soir x1. On ne lache pas ce qui a été installe.</div>
+
+  <div class="section-title">Jours 1-2 Observer</div>
+  <div class="task-list">
+    <div class="task" id="t-6-1" onclick="toggleTask('6-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Tenir un journal de pensees automatiques</div><div class="task-desc">Dans les situations de tension cette semaine, noter tes pensees exactement comme elles arrivent. Pas les analyser juste les voir. "C'est nul", "j'aurais du", "c'est leur faute". L'objectif c'est juste de les capturer.</div></div></div>
+  </div>
+
+  <div class="section-title">Jours 3-4 Qualifier</div>
+  <div class="task-list">
+    <div class="task" id="t-6-2" onclick="toggleTask('6-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Pour chaque pensee notee : utile ou pas utile ?</div><div class="task-desc">Une seule question par pensee : est-ce que cette pensee m'aide a avancer ou pas ? Pas de jugement sur toi juste utile ou pas utile. C'est tout.</div></div></div>
+  </div>
+
+  <div class="section-title">Jours 5-7 Reformuler</div>
+  <div class="task-list">
+    <div class="task" id="t-6-3" onclick="toggleTask('6-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Transformer les pensees "pas utiles" en pensees d'action</div><div class="task-desc">
+      <b>Pas utile :</b> "Je gere pas" → <b>Reformulation :</b> "Quelle est la prochaine action possible ?"<br>
+      <b>Pas utile :</b> "C'est leur faute" → <b>Reformulation :</b> "Qu'est-ce qui est sous mon controle maintenant ?"<br>
+      <b>Pas utile :</b> "J'aurais du faire autrement" → <b>Reformulation :</b> "Qu'est-ce que je fais avec ce que j'ai maintenant ?"<br><br>
+      Pratiquer sur les pensees collectees jours 1-2.
+    </div></div></div>
+    <div class="task" id="t-6-4" onclick="toggleTask('6-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Journaling quotidien 3 lignes</div><div class="task-desc">Chaque soir : une pensee observee / utile ou pas / reformulation si pas utile. Ça doit prendre 2 minutes maximum.</div></div></div>
+  </div>
+
+  <div class="highlight">Lien avec la boucle : quand tu arrives a l'item 6 Ego la question c'est : "Est-ce que mes pensees automatiques en ce moment m'aident a decider, ou est-ce qu'elles imposent mon plan ?"</div>
+  <div class="section-title">Notes de la semaine</div>
+  <div class="débrief-box"><textarea placeholder="Pensees les plus frequentes observees, difficultés, ajustements..." id="notes-6"></textarea></div>
+</div>
+
+<!-- SEMAINE 7 ÉMOTIONS + ROUE DE PLUTCHIK -->
+<div id="w-7" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 7 Groupe 2 : Émotions</div>
+    <div class="week-header-title">Émotions et roue de Plutchik</div>
+    <div class="week-header-goal">Objectif : nommer précisément ce que tu ressens sous pression. Plus tu es précis dans le nom de l'émotion, plus tu reprends le controle sur elle. Vague = subis. Précis = gères.</div>
+  </div>
+  <div class="highlight highlight-blue">La roue de Plutchik identifie 8 émotions de base : joie, confiance, peur, surprise, tristesse, degout, colere, anticipation. Chacune a des variantes en intensité. Sous pression, on dit souvent "je suis stresse" alors qu'on est en réalité dans la peur, la colere où la frustration. Cette précision changé tout.</div>
+  <div class="highlight highlight-green">Continuer la routine du geste et du souffle matin x5 et soir x1.</div>
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-7-1" onclick="toggleTask('7-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Apprendre les 8 émotions de base</div><div class="task-desc">Joie · Confiance · Peur · Surprise · Tristesse · Degout · Colere · Anticipation. Les mémoriser comme une liste. Cette semaine tu dois pouvoir les citer sans reflexion.</div></div></div>
+    <div class="task" id="t-7-2" onclick="toggleTask('7-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Nommer l'émotion avec précision 3 situations</div><div class="task-desc">Sur 3 situations de tension cette semaine : au lieu de "je suis stresse", identifier quelle émotion parmi les 8 est vraiment présente. Puis affiner l'intensité faible, modérée ou forte.</div></div></div>
+    <div class="task" id="t-7-3" onclick="toggleTask('7-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Retrospectivement une situation de pression recente</div><div class="task-desc">Choisir une situation de la semaine passee. Identifier retrospectivement quelle émotion était présente et à quelle intensité. La précision vient avec la pratique.</div></div></div>
+    <div class="task" id="t-7-4" onclick="toggleTask('7-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Journaling quotidien l'émotion du jour</div><div class="task-desc">Chaque soir : quelle émotion dominante as-tu ressenti aujourd'hui sous pression ? Quel était son nom précis ? A quelle intensité ? Une ligne suffit.</div></div></div>
+  </div>
+  <div class="highlight">Lien avec la boucle : quand tu arrives a l'item 7 Émotions tu poses cette question : "Quelle émotion est la en ce moment, et est-ce qu'elle m'aide a decider ?" Nommer l'émotion cree une distance. Cette distance te redonne la main.</div>
+  <div class="section-title">Notes de la semaine</div>
+  <div class="débrief-box"><textarea placeholder="Émotions les plus frequentes, précision du nommage, ajustements..." id="notes-7"></textarea></div>
+</div>
+
+<!-- SEMAINE 8 PERSPECTIVE + IMAGERIE -->
+<div id="w-8" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 8 Groupe 2 : Perspective</div>
+    <div class="week-header-title">Perspective et imagerie mentale</div>
+    <div class="week-header-goal">Objectif : s'entraîner à voir la situation depuis un autre angle avant d'agir. Sous pression, le cerveau va naturellement en tunnel. L'imagerie mentale force le champ de vision a s'ouvrir.</div>
+  </div>
+  <div class="highlight highlight-blue">L'imagerie mentale contextualise te permet de te visualiser dans la situation depuis l'exterieur comme si tu regardais quelqu'un d'autre. Cette prise de distance est exactement ce que l'item 8 de ta Leadership Loop demande : chercher d'autres perspectives avant de decider.</div>
+  <div class="highlight highlight-green">Continuer la routine du geste et du souffle matin x5 et soir x1.</div>
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-8-1" onclick="toggleTask('8-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Imagerie dissociee vue de l'exterieur</div><div class="task-desc">Choisir une situation de tension passee. La revivre mentalement mais depuis l'exterieur comme si tu te regardais sur une camera. Observer ce que tu fais, comment tu reagis, ce que tu ne voyais pas depuis l'intérieur. 5 minutes. Noter ce qui changé dans ta perception.</div></div></div>
+    <div class="task" id="t-8-2" onclick="toggleTask('8-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">La question des 10 secondes</div><div class="task-desc">Sur 3 situations cette semaine, avant d'agir : poser à quelqu'un de confiance "Qu'est-ce que tu vois que je ne vois pas ?" Juste ça. 10 secondes. Noter ce que ça a changé dans ta décision.</div></div></div>
+    <div class="task" id="t-8-3" onclick="toggleTask('8-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Imagerie contextualise varier le point de vue</div><div class="task-desc">Reprendre la même situation et la vivre mentalement depuis le point de vue d'un autre membre de l'équipe. Qu'est-ce qu'il voit ? Qu'est-ce qui est different depuis sa position ? Cette perspective elargit ta carte mentale de la situation.</div></div></div>
+    <div class="task" id="t-8-4" onclick="toggleTask('8-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Journaling ce que l'autre angle a changé</div><div class="task-desc">Chaque soir : une situation / ce que tu voyais depuis l'intérieur / ce que tu as vu depuis l'exterieur / ce que ça a changé. Trois lignes maximum.</div></div></div>
+  </div>
+  <div class="highlight">Lien avec la boucle : quand tu arrives a l'item 8 Perspective tu te demandes : "Qu'est-ce que je ne vois pas depuis ma position ?" L'imagerie t'entrains à poser cette question spontanément.</div>
+  <div class="section-title">Notes de la semaine</div>
+  <div class="débrief-box"><textarea placeholder="Ce que l'angle exterieur a révèle, difficultés, ajustements..." id="notes-8"></textarea></div>
+</div>
+
+<!-- SEMAINE 9 GROUPE 3 + INTEGRATION COMPLETE -->
+<div id="w-9" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 9 Groupe 3 + Integration</div>
+    <div class="week-header-title">Mission, Capital et boucle complete</div>
+    <div class="week-header-goal">Objectif : mémoriser les items 9 et 10, puis integrer la Leadership Loop complete apres la mini-boucle. C'est la semaine ou tout se connecte.</div>
+  </div>
+  <div class="highlight highlight-green">À ce stade le protocole est un outil de performance durable. Tu l'utilises avant d'agir pas apres avoir rate le moment.</div>
+
+  <div class="section-title">Mémorisation Groupe 3</div>
+  <div class="task-list">
+    <div class="task" id="t-9-1" onclick="toggleTask('9-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Mémoriser les items 9 et 10</div><div class="task-desc">
+      <b>9. Mission</b> Ce que je fais fait-il encore avancer la mission globale ?<br>
+      <b>10. Capital leadership</b> Est-ce que ça va consommer ou génèrer de la confiance avec mon équipe ? Ça vaut le coup ?<br><br>
+      Les reciter chaque matin avec les groupes 1 et 2. Les 10 items dans l'ordre, à voix haute.
+    </div></div></div>
+  </div>
+
+  <div class="section-title">Integration boucle complete</div>
+  <div class="task-list">
+    <div class="task" id="t-9-2" onclick="toggleTask('9-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Reconstruction d'une situation réelle boucle complete</div><div class="task-desc">Choisir une situation degradee vécue. Reconstituer l'itération complete : mini-boucle d'abord, puis les 10 items de la Leadership Loop. Identifier à quel item la boucle aurait changé quelque chose.</div></div></div>
+    <div class="task" id="t-9-3" onclick="toggleTask('9-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Simulation boucle complete en conditions de pression</div><div class="task-desc">Une situation de pression élevée simulee. Lancer le protocole complet. Mesurer le temps de traversee de la boucle. L'objectif : que ça devienne fluide et rapide.</div></div></div>
+    <div class="task" id="t-9-4" onclick="toggleTask('9-4')"><div class="task-check"></div><div class="task-body"><div class="task-title">Débrief post-situation réelle</div><div class="task-desc">Apres chaque situation où la boucle a été utilisee : le signal a-t-il bien déclenche le protocole ? Quelle étape a été la plus utile ? Ou ça a accroche ? Une ligne de journal suffit.</div></div></div>
+  </div>
+  <div class="highlight">Tu as maintenant tous les outils. Le travail maintenant c'est la regularite pas l'apprentissage.</div>
+  <div class="section-title">Notes de suivi</div>
+  <div class="débrief-box"><textarea placeholder="Evolution observee, ce qui est fluide, ce qui accroche encore..." id="notes-9"></textarea></div>
+</div>
+
+
+<!-- SEMAINE 10 BOUCLE A VOIX HAUTE -->
+<div id="w-10" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 10</div>
+    <div class="week-header-title">Boucle complete à voix haute</div>
+    <div class="week-header-goal">Objectif : derouler la boucle complete en nommant chaque étape à voix haute au moment où tu la fais. La voix ancre la séquence dans le corps et dans la memoire. C'est un pont entre connaître et automatiser.</div>
+  </div>
+  <div class="highlight highlight-blue">Chaque étape se nomme à voix haute au moment où tu la fais. Pas avant, pas apres. Au moment. "STOP." geste. "SOUFFLE." 3 cycles. "Mon équipe est-elle couverte ?" reponse. "Simplifier." objectif en une phrase. Et ainsi de suite jusqu'a l'item 10.</div>
+  <div class="highlight highlight-green">Continuer le geste et le souffle chaque matin. La routine ne s'arrete jamais.</div>
+
+  <div class="section-title">La séquence complete à voix haute</div>
+  <div class="consigne-box">
+    <div class="consigne-moment">Protocole</div>
+    <div class="consigne-text">"STOP." → geste. "SOUFFLE." → 3 cycles 4/6. "Mon équipe est-elle couverte ?" → reponse.</div>
+    <div class="consigne-moment">Mini-boucle</div>
+    <div class="consigne-text">"Couvrir et avancer." → reponse. "Simplifier." → objectif en une phrase. "Prioriser." → seule action. "Déléguer." → qui prend quoi.</div>
+    <div class="consigne-moment">Leadership Loop</div>
+    <div class="consigne-text">"Temps." → combien j'ai. "Ego." → j'impose ou j'adapte. "Émotions." → ce que je ressens. "Perspective." → ce que je ne vois pas. "Mission." → ça fait encore avancer ? "Capital." → ça vaut le coup ?</div>
+  </div>
+
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-10-1" onclick="toggleTask('10-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Pratique quotidienne à voix haute 1 situation par jour</div><div class="task-desc">Choisir une situation de tension légère chaque jour. Lancer la boucle complete en nommant chaque étape à voix haute. Si c'est pas possible à voix haute (contexte opérationnel), murmurer. L'important c'est que les mots sortent.</div></div></div>
+    <div class="task" id="t-10-2" onclick="toggleTask('10-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Simulation en conditions réelles</div><div class="task-desc">Une fois cette semaine : situation de pression modérée a élevée. Boucle complete à voix haute. Observer ce qui accroche un item dont le nom ne sort pas spontanément signale que l'ancrage n'est pas encore complet sur cet item.</div></div></div>
+    <div class="task" id="t-10-3" onclick="toggleTask('10-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Note de fin de semaine</div><div class="task-desc">Quel item a le plus accroche ? Lequel est sorti le plus naturellement ? Une ligne. C'est tout ce qu'on demande maintenant.</div></div></div>
+  </div>
+  <div class="section-title">Note</div>
+  <div class="débrief-box"><textarea placeholder="Item le plus fluide / item le plus hesitant..." id="notes-10"></textarea></div>
+</div>
+
+<!-- SEMAINE 11 BOUCLE A VOIX BASSE -->
+<div id="w-11" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 11</div>
+    <div class="week-header-title">Boucle complete à voix basse</div>
+    <div class="week-header-goal">Objectif : commencer a interioriser. Les mots sont toujours la mais ne sortent plus à voix haute. Tu murmures où tu articules sans son. La séquence reste exactement la même seul le volume changé.</div>
+  </div>
+  <div class="highlight">C'est l'étape critique. La voix haute était un filet de securite. La voix basse t'oblige a avoir la séquence vraiment ancrée tu ne peux plus t'appuyer sur le son pour te guider.</div>
+  <div class="highlight highlight-green">Continuer le geste et le souffle chaque matin.</div>
+
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-11-1" onclick="toggleTask('11-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Pratique quotidienne à voix basse 1 situation par jour</div><div class="task-desc">Même exercice que semaine 10 même situation de tension, même séquence complete mais en murmurant ou en articulant sans son. Si un item ne sort pas, c'est normal. Revenir à voix haute sur cet item uniquement, puis reprendre à voix basse.</div></div></div>
+    <div class="task" id="t-11-2" onclick="toggleTask('11-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Simulation en conditions réelles</div><div class="task-desc">Une fois cette semaine : situation de pression modérée a élevée. Boucle complete à voix basse. C'est ici qu'on voit si la semaine 10 a vraiment ancré la séquence.</div></div></div>
+    <div class="task" id="t-11-3" onclick="toggleTask('11-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Note de fin de semaine</div><div class="task-desc">Est-ce que la séquence tient sans le support de la voix haute ? Quel item a encore besoin d'un coup de voix haute ?</div></div></div>
+  </div>
+  <div class="section-title">Note</div>
+  <div class="débrief-box"><textarea placeholder="Ce qui tient / ce qui nécessite encore voix haute..." id="notes-11"></textarea></div>
+</div>
+
+<!-- SEMAINE 12 BOUCLE EN SILENCE -->
+<div id="w-12" style="display:none;">
+  <div class="week-header">
+    <div class="week-header-label">Semaine 12</div>
+    <div class="week-header-title">Boucle complete en silence</div>
+    <div class="week-header-goal">Objectif : tout se passe dans la tête. La séquence est la ancrée, fluide, automatique. Tu n'as plus besoin de la voix pour la tenir. C'est le test final.</div>
+  </div>
+  <div class="highlight highlight-green">Si tu arrives ici et que la boucle tient en silence, tu as installe ce qu'on cherchait depuis le début : un outil qui se déclenche seul, quand tu en as besoin, sans effort conscient.</div>
+
+  <div class="section-title">Exercices de la semaine</div>
+  <div class="task-list">
+    <div class="task" id="t-12-1" onclick="toggleTask('12-1')"><div class="task-check"></div><div class="task-body"><div class="task-title">Pratique quotidienne en silence 1 situation par jour</div><div class="task-desc">Même séquence, même ordre, en silence total. Si un item disparait, revenir à voix basse sur cet item uniquement. L'objectif c'est que la séquence tienne sans aucun support externe.</div></div></div>
+    <div class="task" id="t-12-2" onclick="toggleTask('12-2')"><div class="task-check"></div><div class="task-body"><div class="task-title">Test final situation de forte pression</div><div class="task-desc">Une situation réelle ou simulee de pression élevée. Boucle complete en silence. C'est la que tu mesures si les 12 semaines ont produit l'automatisme cherche.</div></div></div>
+    <div class="task" id="t-12-3" onclick="toggleTask('12-3')"><div class="task-check"></div><div class="task-body"><div class="task-title">Bilan des 12 semaines</div><div class="task-desc">Une note courte : ce qui a changé depuis la semaine 1. Pas un rapport juste ce que tu remarques dans ta façon de decider et de prendre du recul. C'est le retour le plus important.</div></div></div>
+  </div>
+  <div class="highlight">La fin du programme n'est pas la fin du travail. C'est le début de l'utilisation réelle. Maintenant tu as l'outil utilise-le.</div>
+  <div class="section-title">Bilan final</div>
+  <div class="débrief-box"><textarea placeholder="Ce qui a changé depuis la semaine 1. Ce qui est fluide. Ce qui reste a affiner." id="notes-12"></textarea></div>
+</div>
+
+</div>
+</div>
+
+<!-- BOUTON ENVOI FLOTTANT -->
+<button id="send-btn" onclick="sendReport()" style="
+  position:fixed; bottom:24px; right:24px; z-index:999;
+  background:#E84545; color:#fff; border:none; border-radius:8px;
+  padding:12px 20px; font-size:14px; font-weight:600;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  cursor:pointer; box-shadow:0 4px 12px rgba(232,69,69,0.4);
+  display:none; transition:opacity .2s;
+">Envoyer mon rapport</button>
+
+<div id="send-confirm" style="
+  position:fixed; bottom:24px; right:24px; z-index:999;
+  background:#1D9E75; color:#fff; border-radius:8px;
+  padding:12px 20px; font-size:14px; font-weight:600;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  display:none;
+">✓ Rapport envoyé !</div>
+
+<script>
+let currentWeek = null;
+const taskState = {};
+
+
+
+function toggleTask(id) {
+  const el = document.getElementById('t-' + id);
+  const week = id.split('-')[0];
+  taskState[id] = !taskState[id];
+  el.classList.toggle('done-task', taskState[id]);
+  updateProgress(week);
+}
+
+function updateProgress(week) {
+  const weeks3 = ['10','11','12'];
+  const keys = week == '5' ? ['1','2','3','4','3b'] : weeks3.includes(week) ? ['1','2','3'] : ['1','2','3','4'];
+  const done = keys.filter(n => taskState[week + '-' + n]).length;
+  const total = keys.length;
+  document.getElementById('pb-' + week).style.width = (done / total * 100) + '%';
+  document.getElementById('pl-' + week).textContent = done + ' / ' + total + ' taches';
+  const wi = document.getElementById('wi-' + week);
+  if (done === total) { wi.classList.add('done'); wi.classList.remove('active'); }
+  else { wi.classList.remove('done'); }
+}
+
+function showWeek(n) {
+  if (currentWeek) {
+    document.getElementById('w-' + currentWeek).style.display = 'none';
+    document.getElementById('wi-' + currentWeek).classList.remove('active');
+  }
+  currentWeek = n;
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('w-' + n).style.display = 'block';
+  document.getElementById('wi-' + n).classList.add('active');
+  document.getElementById('send-btn').style.display = 'block';
+  if (window.innerWidth <= 700) {
+    document.getElementById('panel').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function sendReport() {
+  const weekLabels = {
+    1: 'Semaine 1 — Trouver et ancrer le geste',
+    2: 'Semaine 2 — Protocole physique + Scan corporel',
+    3: 'Semaine 3 — Signaux avant-coureurs',
+    4: "Semaine 4 — Question d'entrée",
+    5: 'Semaine 5 — Mini-boucle',
+    6: 'Semaine 6 — Ego et dialogue interne',
+    7: 'Semaine 7 — Émotions + Roue de Plutchik',
+    8: 'Semaine 8 — Perspective + Imagerie mentale',
+    9: 'Semaine 9 — Mission, Capital et boucle complète',
+    10: 'Semaine 10 — Boucle complète à voix haute',
+    11: 'Semaine 11 — Boucle complète à voix basse',
+    12: 'Semaine 12 — Boucle complète en silence',
+  };
+
+  if (!currentWeek) return;
+
+  // Tâches cochées
+  const weeks3 = ['10','11','12'];
+  const keys = currentWeek == '5' ? ['1','2','3','4','3b'] : weeks3.includes(String(currentWeek)) ? ['1','2','3'] : ['1','2','3','4'];
+  const scanKey = currentWeek + '-scan';
+  
+  let tachesDone = [];
+  let tachesLeft = [];
+  
+  keys.forEach(k => {
+    const id = currentWeek + '-' + k;
+    const el = document.getElementById('t-' + id);
+    if (el) {
+      const title = el.querySelector('.task-title') ? el.querySelector('.task-title').textContent : id;
+      if (taskState[id]) tachesDone.push('✓ ' + title);
+      else tachesLeft.push('○ ' + title);
+    }
+  });
+
+  // Scan
+  const scanEl = document.getElementById('t-' + scanKey);
+  if (scanEl) {
+    const scanTitle = scanEl.querySelector('.task-title') ? scanEl.querySelector('.task-title').textContent : 'Scan corporel';
+    if (taskState[scanKey]) tachesDone.push('✓ ' + scanTitle);
+    else tachesLeft.push('○ ' + scanTitle);
+  }
+
+  // Notes
+  const notesEl = document.getElementById('notes-' + currentWeek);
+  const notes = notesEl ? notesEl.value.trim() : '';
+
+  // Construire le message
+  const total = keys.length + (scanEl ? 1 : 0);
+  const done = tachesDone.length;
+
+  let summary = '=== RAPPORT PIERRE ===
+
+';
+  summary += weekLabels[currentWeek] + '
+';
+  summary += 'Progression : ' + done + ' / ' + total + ' tâches
+
+';
+  
+  if (tachesDone.length > 0) {
+    summary += 'TÂCHES COMPLÉTÉES :
+' + tachesDone.join('
+') + '
+
+';
+  }
+  if (tachesLeft.length > 0) {
+    summary += 'TÂCHES RESTANTES :
+' + tachesLeft.join('
+') + '
+
+';
+  }
+  if (notes) {
+    summary += 'NOTES :
+' + notes;
+  } else {
+    summary += 'NOTES : (aucune note)';
+  }
+
+  const btn = document.getElementById('send-btn');
+  btn.textContent = 'Envoi en cours...';
+  btn.disabled = true;
+
+  emailjs.send('service_qiyusj5', 'template_cx5bh3d', {
+    sujet: 'Rapport Pierre — ' + weekLabels[currentWeek],
+    summary: summary
+  }).then(() => {
+    btn.style.display = 'none';
+    btn.textContent = 'Envoyer mon rapport';
+    btn.disabled = false;
+    const confirm = document.getElementById('send-confirm');
+    confirm.style.display = 'block';
+    setTimeout(() => {
+      confirm.style.display = 'none';
+      btn.style.display = 'block';
+    }, 3000);
+  }).catch((err) => {
+    btn.textContent = 'Envoyer mon rapport';
+    btn.disabled = false;
+    alert('Erreur envoi : ' + JSON.stringify(err));
+  });
+}
+</script>
+</body>
+</html>
