@@ -79,6 +79,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   .signal-grid, .geste-grid { grid-template-columns:1fr; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div class="header">
@@ -656,6 +657,7 @@ function showWeek(n) {
   document.getElementById('empty').style.display = 'none';
   document.getElementById('w-' + n).style.display = 'block';
   document.getElementById('wi-' + n).classList.add('active');
+  document.getElementById('send-btn').style.display = 'block';
   if (window.innerWidth <= 700) {
     document.getElementById('panel').scrollIntoView({ behavior: 'smooth' });
   }
@@ -683,5 +685,8 @@ function updateProgress(week) {
 
 
 </script>
+
+<button id="send-btn" style="position:fixed;bottom:24px;right:24px;z-index:999;background:#E84545;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,sans-serif;cursor:pointer;box-shadow:0 4px 12px rgba(232,69,69,0.4);display:none;">Envoyer mon rapport</button>
+<div id="send-confirm" style="position:fixed;bottom:24px;right:24px;z-index:999;background:#1D9E75;color:#fff;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:none;">Rapport envoye !</div>
 </body>
 </html>
