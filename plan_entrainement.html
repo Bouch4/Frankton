@@ -79,8 +79,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   .signal-grid, .geste-grid { grid-template-columns:1fr; }
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("0MtCqya8qs7Xxmls3");</script>
 </head>
 <body>
 <div class="header">
@@ -102,7 +100,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   <p style="color:#E84545; font-weight:600;">Règle unique : on ne passe pas à la semaine suivante si l'objectif de la semaine en cours n'est pas solide.</p>
 </div>
 
-  <div class="week-item" id="wi-1" id="wi-click-1">
+  <div class="week-item" id="wi-1" onclick="showWeek(1)" id="wi-1">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 1</div>
@@ -113,7 +111,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-2" id="wi-click-2">
+  <div class="week-item" id="wi-2" onclick="showWeek(2)" id="wi-2">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 2</div>
@@ -124,7 +122,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-3" id="wi-click-3">
+  <div class="week-item" id="wi-3" onclick="showWeek(3)" id="wi-3">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 3</div>
@@ -135,7 +133,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-4" id="wi-click-4">
+  <div class="week-item" id="wi-4" onclick="showWeek(4)" id="wi-4">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 4</div>
@@ -146,7 +144,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-5" id="wi-click-5">
+  <div class="week-item" id="wi-5" onclick="showWeek(5)" id="wi-5">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 5</div>
@@ -157,7 +155,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-6" id="wi-click-6">
+  <div class="week-item" id="wi-6" onclick="showWeek(6)" id="wi-6">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 6</div>
@@ -168,7 +166,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-7" id="wi-click-7">
+  <div class="week-item" id="wi-7" onclick="showWeek(7)" id="wi-7">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 7</div>
@@ -179,7 +177,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-8" id="wi-click-8">
+  <div class="week-item" id="wi-8" onclick="showWeek(8)" id="wi-8">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 8</div>
@@ -190,7 +188,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-9" id="wi-click-9">
+  <div class="week-item" id="wi-9" onclick="showWeek(9)" id="wi-9">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 9</div>
@@ -201,7 +199,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-10" id="wi-click-10">
+  <div class="week-item" id="wi-10" onclick="showWeek(10)" id="wi-10">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 10</div>
@@ -212,7 +210,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-11" id="wi-click-11">
+  <div class="week-item" id="wi-11" onclick="showWeek(11)" id="wi-11">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 11</div>
@@ -223,7 +221,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-12" id="wi-click-12">
+  <div class="week-item" id="wi-12" onclick="showWeek(12)" id="wi-12">
     <div class="week-dot"></div>
     <div class="week-card">
       <div class="week-label">Semaine 12</div>
@@ -645,38 +643,9 @@ Les reciter à voix haute chaque matin apres le geste et le souffle. Jusqu'a ce 
 </div>
 </div>
 
-<!-- BOUTON ENVOI FLOTTANT -->
-<button id="send-btn" onclick="sendReport()" style="
-  position:fixed; bottom:24px; right:24px; z-index:999;
-  background:#E84545; color:#fff; border:none; border-radius:8px;
-  padding:12px 20px; font-size:14px; font-weight:600;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-  cursor:pointer; box-shadow:0 4px 12px rgba(232,69,69,0.4);
-  display:none; transition:opacity .2s;
-">Envoyer mon rapport</button>
-
-<div id="send-confirm" style="
-  position:fixed; bottom:24px; right:24px; z-index:999;
-  background:#1D9E75; color:#fff; border-radius:8px;
-  padding:12px 20px; font-size:14px; font-weight:600;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-  display:none;
-">✓ Rapport envoyé !</div>
-
 <script>
 let currentWeek = null;
 const taskState = {};
-
-document.addEventListener('DOMContentLoaded', function() {
-  for (let n = 1; n <= 12; n++) {
-    const el = document.getElementById('wi-click-' + n);
-    if (el) {
-      (function(week) {
-        el.addEventListener('click', function() { showWeek(week); });
-      })(n);
-    }
-  }
-});
 
 function showWeek(n) {
   if (currentWeek) {
@@ -687,7 +656,6 @@ function showWeek(n) {
   document.getElementById('empty').style.display = 'none';
   document.getElementById('w-' + n).style.display = 'block';
   document.getElementById('wi-' + n).classList.add('active');
-  document.getElementById('send-btn').style.display = 'block';
   if (window.innerWidth <= 700) {
     document.getElementById('panel').scrollIntoView({ behavior: 'smooth' });
   }
@@ -713,99 +681,7 @@ function updateProgress(week) {
   else { wi.classList.remove('done'); }
 }
 
-function sendReport() {
-  var weekLabels = {
-    1: 'Semaine 1 - Trouver et ancrer le geste',
-    2: 'Semaine 2 - Protocole physique + Scan corporel',
-    3: 'Semaine 3 - Signaux avant-coureurs',
-    4: "Semaine 4 - Question d'entree",
-    5: 'Semaine 5 - Mini-boucle',
-    6: 'Semaine 6 - Ego et dialogue interne',
-    7: 'Semaine 7 - Emotions + Roue de Plutchik',
-    8: 'Semaine 8 - Perspective + Imagerie mentale',
-    9: 'Semaine 9 - Mission, Capital et boucle complete',
-    10: 'Semaine 10 - Boucle complete a voix haute',
-    11: 'Semaine 11 - Boucle complete a voix basse',
-    12: 'Semaine 12 - Boucle complete en silence'
-  };
 
-  if (!currentWeek) return;
-
-  var weeks3 = ['10','11','12'];
-  var keys = currentWeek == '5' ? ['1','2','3','4','3b'] : weeks3.includes(String(currentWeek)) ? ['1','2','3'] : ['1','2','3','4'];
-  var scanKey = currentWeek + '-scan';
-
-  var tachesDone = [];
-  var tachesLeft = [];
-
-  keys.forEach(function(k) {
-    var id = currentWeek + '-' + k;
-    var el = document.getElementById('t-' + id);
-    if (el) {
-      var title = el.querySelector('.task-title') ? el.querySelector('.task-title').textContent : id;
-      if (taskState[id]) tachesDone.push('[OK] ' + title);
-      else tachesLeft.push('[ ] ' + title);
-    }
-  });
-
-  var scanEl = document.getElementById('t-' + scanKey);
-  if (scanEl) {
-    var scanTitle = scanEl.querySelector('.task-title') ? scanEl.querySelector('.task-title').textContent : 'Scan corporel';
-    if (taskState[scanKey]) tachesDone.push('[OK] ' + scanTitle);
-    else tachesLeft.push('[ ] ' + scanTitle);
-  }
-
-  var notesEl = document.getElementById('notes-' + currentWeek);
-  var notes = notesEl ? notesEl.value.trim() : '';
-
-  var total = keys.length + (scanEl ? 1 : 0);
-  var done = tachesDone.length;
-  var weekLabel = weekLabels[currentWeek] || ('Semaine ' + currentWeek);
-
-  var lines = [];
-  lines.push('=== RAPPORT PIERRE ===');
-  lines.push('');
-  lines.push(weekLabel);
-  lines.push('Progression : ' + done + ' / ' + total + ' taches');
-  lines.push('');
-  if (tachesDone.length > 0) {
-    lines.push('TACHES COMPLETEES :');
-    tachesDone.forEach(function(t) { lines.push(t); });
-    lines.push('');
-  }
-  if (tachesLeft.length > 0) {
-    lines.push('TACHES RESTANTES :');
-    tachesLeft.forEach(function(t) { lines.push(t); });
-    lines.push('');
-  }
-  lines.push('NOTES :');
-  lines.push(notes || '(aucune note)');
-
-  var summary = lines.join('\n');
-
-  var btn = document.getElementById('send-btn');
-  btn.textContent = 'Envoi en cours...';
-  btn.disabled = true;
-
-  emailjs.send('service_qiyusj5', 'template_cx5bh3d', {
-    sujet: 'Rapport Pierre - ' + weekLabel,
-    summary: summary
-  }).then(function() {
-    btn.style.display = 'none';
-    btn.textContent = 'Envoyer mon rapport';
-    btn.disabled = false;
-    var confirm = document.getElementById('send-confirm');
-    confirm.style.display = 'block';
-    setTimeout(function() {
-      confirm.style.display = 'none';
-      btn.style.display = 'block';
-    }, 3000);
-  }).catch(function(err) {
-    btn.textContent = 'Envoyer mon rapport';
-    btn.disabled = false;
-    alert('Erreur : ' + JSON.stringify(err));
-  });
-}
 </script>
 </body>
 </html>
