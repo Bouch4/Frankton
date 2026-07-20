@@ -667,7 +667,20 @@ Les reciter à voix haute chaque matin apres le geste et le souffle. Jusqu'a ce 
 let currentWeek = null;
 const taskState = {};
 
-
+function showWeek(n) {
+  if (currentWeek) {
+    document.getElementById('w-' + currentWeek).style.display = 'none';
+    document.getElementById('wi-' + currentWeek).classList.remove('active');
+  }
+  currentWeek = n;
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('w-' + n).style.display = 'block';
+  document.getElementById('wi-' + n).classList.add('active');
+  document.getElementById('send-btn').style.display = 'block';
+  if (window.innerWidth <= 700) {
+    document.getElementById('panel').scrollIntoView({ behavior: 'smooth' });
+  }
+}
 
 function toggleTask(id) {
   const el = document.getElementById('t-' + id);
@@ -687,21 +700,6 @@ function updateProgress(week) {
   const wi = document.getElementById('wi-' + week);
   if (done === total) { wi.classList.add('done'); wi.classList.remove('active'); }
   else { wi.classList.remove('done'); }
-}
-
-function showWeek(n) {
-  if (currentWeek) {
-    document.getElementById('w-' + currentWeek).style.display = 'none';
-    document.getElementById('wi-' + currentWeek).classList.remove('active');
-  }
-  currentWeek = n;
-  document.getElementById('empty').style.display = 'none';
-  document.getElementById('w-' + n).style.display = 'block';
-  document.getElementById('wi-' + n).classList.add('active');
-  document.getElementById('send-btn').style.display = 'block';
-  if (window.innerWidth <= 700) {
-    document.getElementById('panel').scrollIntoView({ behavior: 'smooth' });
-  }
 }
 
 function sendReport() {
