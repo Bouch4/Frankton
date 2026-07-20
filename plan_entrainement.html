@@ -102,7 +102,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
   <p style="color:#E84545; font-weight:600;">Règle unique : on ne passe pas à la semaine suivante si l'objectif de la semaine en cours n'est pas solide.</p>
 </div>
 
-  <div class="week-item" id="wi-1" onclick="showWeek(1)">
+  <div class="week-item" id="wi-1" id="wi-click-1">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 1</div>
@@ -113,7 +113,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-2" onclick="showWeek(2)">
+  <div class="week-item" id="wi-2" id="wi-click-2">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 2</div>
@@ -124,7 +124,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-3" onclick="showWeek(3)">
+  <div class="week-item" id="wi-3" id="wi-click-3">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 3</div>
@@ -135,7 +135,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-4" onclick="showWeek(4)">
+  <div class="week-item" id="wi-4" id="wi-click-4">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 4</div>
@@ -146,7 +146,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-5" onclick="showWeek(5)">
+  <div class="week-item" id="wi-5" id="wi-click-5">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 5</div>
@@ -157,7 +157,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-6" onclick="showWeek(6)">
+  <div class="week-item" id="wi-6" id="wi-click-6">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 6</div>
@@ -168,7 +168,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-7" onclick="showWeek(7)">
+  <div class="week-item" id="wi-7" id="wi-click-7">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 7</div>
@@ -179,7 +179,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-8" onclick="showWeek(8)">
+  <div class="week-item" id="wi-8" id="wi-click-8">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 8</div>
@@ -190,7 +190,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-9" onclick="showWeek(9)">
+  <div class="week-item" id="wi-9" id="wi-click-9">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 9</div>
@@ -201,7 +201,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-10" onclick="showWeek(10)">
+  <div class="week-item" id="wi-10" id="wi-click-10">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 10</div>
@@ -212,7 +212,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-11" onclick="showWeek(11)">
+  <div class="week-item" id="wi-11" id="wi-click-11">
     <div class="week-dot"></div><div class="week-line"></div>
     <div class="week-card">
       <div class="week-label">Semaine 11</div>
@@ -223,7 +223,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     </div>
   </div>
 
-  <div class="week-item" id="wi-12" onclick="showWeek(12)">
+  <div class="week-item" id="wi-12" id="wi-click-12">
     <div class="week-dot"></div>
     <div class="week-card">
       <div class="week-label">Semaine 12</div>
@@ -667,6 +667,17 @@ Les reciter à voix haute chaque matin apres le geste et le souffle. Jusqu'a ce 
 let currentWeek = null;
 const taskState = {};
 
+document.addEventListener('DOMContentLoaded', function() {
+  for (let n = 1; n <= 12; n++) {
+    const el = document.getElementById('wi-click-' + n);
+    if (el) {
+      (function(week) {
+        el.addEventListener('click', function() { showWeek(week); });
+      })(n);
+    }
+  }
+});
+
 function showWeek(n) {
   if (currentWeek) {
     document.getElementById('w-' + currentWeek).style.display = 'none';
@@ -704,23 +715,23 @@ function updateProgress(week) {
 
 function sendReport() {
   const weekLabels = {
-    1: 'Semaine 1 — Trouver et ancrer le geste',
-    2: 'Semaine 2 — Protocole physique + Scan corporel',
-    3: 'Semaine 3 — Signaux avant-coureurs',
-    4: "Semaine 4 — Question d'entrée",
-    5: 'Semaine 5 — Mini-boucle',
-    6: 'Semaine 6 — Ego et dialogue interne',
-    7: 'Semaine 7 — Émotions + Roue de Plutchik',
-    8: 'Semaine 8 — Perspective + Imagerie mentale',
-    9: 'Semaine 9 — Mission, Capital et boucle complète',
-    10: 'Semaine 10 — Boucle complète à voix haute',
-    11: 'Semaine 11 — Boucle complète à voix basse',
-    12: 'Semaine 12 — Boucle complète en silence',
+    1: 'Semaine 1 - Trouver et ancrer le geste',
+    2: 'Semaine 2 - Protocole physique + Scan corporel',
+    3: 'Semaine 3 - Signaux avant-coureurs',
+    4: "Semaine 4 - Question d'entree",
+    5: 'Semaine 5 - Mini-boucle',
+    6: 'Semaine 6 - Ego et dialogue interne',
+    7: 'Semaine 7 - Emotions + Roue de Plutchik',
+    8: 'Semaine 8 - Perspective + Imagerie mentale',
+    9: 'Semaine 9 - Mission, Capital et boucle complete',
+    10: 'Semaine 10 - Boucle complete a voix haute',
+    11: 'Semaine 11 - Boucle complete a voix basse',
+    12: 'Semaine 12 - Boucle complete en silence',
   };
 
   if (!currentWeek) return;
 
-  // Tâches cochées
+  // Taches cochees
   const weeks3 = ['10','11','12'];
   const keys = currentWeek == '5' ? ['1','2','3','4','3b'] : weeks3.includes(String(currentWeek)) ? ['1','2','3'] : ['1','2','3','4'];
   const scanKey = currentWeek + '-scan';
@@ -733,8 +744,8 @@ function sendReport() {
     const el = document.getElementById('t-' + id);
     if (el) {
       const title = el.querySelector('.task-title') ? el.querySelector('.task-title').textContent : id;
-      if (taskState[id]) tachesDone.push('✓ ' + title);
-      else tachesLeft.push('○ ' + title);
+      if (taskState[id]) tachesDone.push('[OK] ' + title);
+      else tachesLeft.push('[ ] ' + title);
     }
   });
 
@@ -742,8 +753,8 @@ function sendReport() {
   const scanEl = document.getElementById('t-' + scanKey);
   if (scanEl) {
     const scanTitle = scanEl.querySelector('.task-title') ? scanEl.querySelector('.task-title').textContent : 'Scan corporel';
-    if (taskState[scanKey]) tachesDone.push('✓ ' + scanTitle);
-    else tachesLeft.push('○ ' + scanTitle);
+    if (taskState[scanKey]) tachesDone.push('[OK] ' + scanTitle);
+    else tachesLeft.push('[ ] ' + scanTitle);
   }
 
   // Notes
@@ -759,19 +770,19 @@ function sendReport() {
 ';
   summary += weekLabels[currentWeek] + '
 ';
-  summary += 'Progression : ' + done + ' / ' + total + ' tâches
+  summary += 'Progression : ' + done + ' / ' + total + ' taches
 
 ';
   
   if (tachesDone.length > 0) {
-    summary += 'TÂCHES COMPLÉTÉES :
+    summary += 'TACHES COMPLETEES :
 ' + tachesDone.join('
 ') + '
 
 ';
   }
   if (tachesLeft.length > 0) {
-    summary += 'TÂCHES RESTANTES :
+    summary += 'TACHES RESTANTES :
 ' + tachesLeft.join('
 ') + '
 
@@ -789,7 +800,7 @@ function sendReport() {
   btn.disabled = true;
 
   emailjs.send('service_qiyusj5', 'template_cx5bh3d', {
-    sujet: 'Rapport Pierre — ' + weekLabels[currentWeek],
+    sujet: 'Rapport Pierre - ' + weekLabels[currentWeek],
     summary: summary
   }).then(() => {
     btn.style.display = 'none';
